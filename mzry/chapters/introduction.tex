@@ -7,22 +7,41 @@ ACM-ICPC（Association of Computing Machinery - ACM International Collegiate Pro
 ACM-ICPC以团队的形式代表各学校参赛，每队由3名队员组成\footnote{每位队员必须是在校学生，有一定的年龄限制，并且最多可以参加2次全
 球总决赛和5次区域选拔赛。}。比赛期间，每队使用1台电脑需要在5个小时内使用C、C++或Java中的一种编写程序解决7到10个问题。每个问题都有一组标准的测试数据以及对应的答案，选手程序完成之后提交裁判运行，裁判机运行选手提交的程序，通过其输出于标准答案想比较来得到结果，运行的结果会判定为``AC(正确)/WA（错误）/TLE（超时）/MLE（超出内存限制）/RE（运行错误）/PE（格式错误）''中的一种并及时通知参赛队。
 
+电子科技大学从2005年起便开始参加这项竞赛，在最近的第38届ACM-ICPC亚洲区域赛中国大陆赛区共有成都、杭州、南京、长沙、长春5站，其中成都站的比赛由电子科技大学承办，本届比赛中，电子科技大学学子共获4金7银5铜。其中UESTC\_Aspidochelone代表队在成都站排名第二，在南京站获得亚军殊荣，顺利晋级2014年夏季在俄罗斯叶卡捷琳堡举行的世界总决赛\footnote{见：\url{http://www.new1.uestc.edu.cn/news/index/id/1056}}。
+
 这项竞赛与其它竞赛最大的区别在于它采用的是机器评测的方法而不是依靠人的评价，它采用了黑盒测试\cite{beizer1995black}的思想来评判选手的程序。在黑盒测试中，测试者只知道程序的输入、输出和系统的功能，按照一定的规范设计出一系列测试案例来进行测试。在线程序评测系统（Online Judge）以此为基础，可以对多种语言的源代码进行自动编译、测试、分析及评判。除了被应用于程序设计竞赛，也有一些老师将其引入到日常的程序语言教学之中，并取得了很好的效果\cite{youfeng2009acm}\cite{guosongshan2007acm}。
 
-电子科技大学从2005年起便开始参加这项竞赛，在最近的第38届ACM-ICPC亚洲区域赛中国大陆赛区共有成都、杭州、南京、长沙、长春5站，其中成都站的比赛由电子科技大学承办，本届比赛中，电子科技大学学子共获4金7银5铜。其中UESTC\_Aspidochelone代表队在成都站排名第二，在南京站获得亚军殊荣，顺利晋级2014年夏季在俄罗斯叶卡捷琳堡举行的世界总决赛。
+目前已经存在许多不同种类的Online Judge，如表\ref{onlinejudges}所示：
+\threelinetable[htbp]{onlinejudges}{\textwidth}{lll}{几个著名的评测网站}
+{名称 & 来源 & 地址\\
+}{
+Topcoder & TopCoder, Inc & \url{http://community.topcoder.com/tc}\\
+Codeforces & 萨拉托夫州立大学 & \url{http://codeforces.com/}\\
+Project Euler & Colin Hughes & \url{https://projecteuler.net/}\\
+HDOJ & 杭州电子科技大学 & \url{http://acm.hdu.edu.cn/}\\
+POJ & 北京大学 & \url{http://poj.org/}\\
+Virtual Judge & 华中科技大学 & \url{http://acm.hust.edu.cn/vjudge/toIndex.action}\\
+ZOJ & 浙江大学 & \url{http://acm.zju.edu.cn/onlinejudge/}\\
+}{}
+
+其中HDOJ、POJ、ZOJ都属于传统的Online Judge，有着自己的题库和测评器。HDOJ如今已经成为了国内ACM竞赛界最为著名的Online Judge，每年暑假都会组织多校联合训练，平时还会承办各类程序设计竞赛（如腾讯编程马拉松）。ZOJ则是以每个月举行的浙大月赛而闻名。
+
+相反，Virtual Judge没有自己的题库和评测器，它的题库仅仅是提供了各个OJ题库的一个索引，用户可以在这些题目的基础上组织比赛，然后Virtual Judge将提交的代码送到对应的OJ上去测评，再将结果返回给用户。
+
+Topcoder采用Java applet载入平台，而不是建立于网页之上，它和codeforces都具有challenge环节，在这个环节选手可以互相查看对方代码（在一定条件下），并尝试用自己的测试用例来找出对方代码中的BUG。
 
 \section{研究意义}
 随着在线评测系统越来越广泛的应用到各个领域中，作者希望实现一个简单的、易扩展的在线评测系统来满足当今的需求，同时借此来了解互联网新技术的使用和创新方式。
 
 \section{研究现状}
-目前已经存在许多不同种类的Online Judge
+自从互联网诞生以来，网站从最初只能在浏览器中展现静态的文本或图像信息，发展成为功能丰富的各类Web应用，这期间动态技术起着重要的作用。
 
-\threelinetable[htbp]{onlinejudges}{\textwidth}{lll}{几个著名的评测网站}
-{a & b & c\\
-}{
-Topcoder & & \\
-Codeforces & & \\
+互联网诞生之初，Web开发还比较简单，开发者经常会去操作web服务器(主要还是他自己的机器)，并且他会写一些HTML页面放到服务器指定的文件夹(/www)下。这些HTML页面，就在浏览器请求页面时使用。但是这样做只能获取到静态内容。由此出现了CGI和Perl脚本，在web服务器端运行一段短小的代码，并能与文件系统或者数据库进行交互。
 
-}{
-\item[a] 这里还可以添加脚注！
-}
+当时组织CGI/Perl这样的脚本代码太混乱了。CGI伸缩性不是太好(经常是为每个请求分配一个新的进程)，也不太安全(直接使用文件系统或者环境变量)，同时也没提供一种结构化的方式去构造动态应用程序。直到出现了Java Server Pages(JSP)，微软的ASP，以及PHP等技术。
+
+同时，在Google的推广下AJAX（Asynchronous JavaScript and XML，异步的JavaScript与XML技术）开始流行起来，让事情变得很有意思。AJAX允许客户端的JavaScript脚本为局部页面提供请求服务，然后可以在无需回到服务器情况下动态刷新部分页面，也就是更新浏览器中的document对象，通常称作DOM，或者文档对象模型。虽然从服务器端返回的仍然是HTML，但浏览器上的代码能把这HTML片段内嵌到当前页面中。也就是说web应用的响应可以更快，这时我们真正用web应用取代了web页面。谷歌的GMail和谷歌地图都是当时AJAX的杀手级产品。随后用AJAX局部刷新就如雨后春笋般出现。
+
+在随后的几年时间里，AJAX成为了焦点，但在服务器端仍然使用着旧有的技术。大概在2007年，37signals公司公开其成员——Ruby on Rails。那个基于Ruby on Rails 5分钟构建博客的演示完全征服了全世界的开发者。一夜之间，所以谈论的焦点都是关于Rails，Rails的不同之处在于使用规定的方式去设计你的web应用程序，运用一种已经广泛在桌面应用开发，但未被搬到web应用上的开发模式。这种模式就叫做MVC（Model-View-Controller）模式。
+
+直到今天，MVC模式已经被应用于许许多多的框架之中，例如在服务器端运行的Spring MVC框架，在前端运行的AngularJS。这允许我们能够快速构建web服务，以及基于AngularJS的客户端接口，甚至和其它的服务，如PhoneGap或者其它原生移动开发工具一样，进行移动应用的开发。
