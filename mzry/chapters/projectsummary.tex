@@ -1,0 +1,53 @@
+% !Mode:: "TeX:UTF-8"
+
+\chapter{系统概要设计}
+\section{系统环境}
+在开始介绍系统的大体结构之前，首先介绍一下本系统的开发环境：
+\begin{enumerate}
+	\item 操作系统：OS X Mountain Lion 10.9.1
+	\item 部署环境：运行于Virtual Box下的最新版本Arch Linux
+	\item 建模软件：Visual Paradigm for UML
+	\item 编辑软件：Eclipse、WebStorm、Vim
+	\item 版本控制：Git
+	\item 持续集成：TeamCity\footnote{一款功能强大的持续集成（Continue Integration）工具，可以让团队快速实现持续继承：IDE工具集成、各种消息通知、各种报表、项目的管理、分布式的编译等等。}
+\end{enumerate}
+
+本系统涉及到了服务器端、浏览器端、评测器三个模块，它们所使用的编程语言也都不同。服务器端我们采用的是JDK7.0标准下的Java语言，项目通过maven来组织和管理。浏览器端核心框架为AngularJS和JQuery，前端UI采用Bootstrap3，项目通过Grunt来组织和管理，编程语言为Less和Coffeescript。评测器采用C++语言，使用32位Linux API实现。
+
+\section{系统框架设计}
+\subsection{系统总体技术架构}
+为确保系统的互操作性、适用性及长期的扩充性，我们应以标准的、开放的要求进行架构。本文所设计的在线评测系统，是在优化、改造原有设计的基础上，借助于分布式的应用模型及先进的MVC体系结构实现的。在服务器端我们集中安置了系统中的数据库、程序和一些其它的组件，而在客户端我们只需要浏览器，同一数据源为用户提供数据查询服务，如此一来也就确保了数据的完整性与及时性。在很多情况下，用户的需要会随时间的推移而改变，因此在业务的处理逻辑出现变化的情况下，我们只需要在服务器端进行程序的修改，随后就可以重新进行发布，这样就方便了程序的研发及发布，也不会对用户产生影响。本系统总体结构如图\ref{Architecture}所示。
+\pic[htbp]{系统总体技术架构}{}{Architecture}
+
+客户端发起一个HTTP请求后，经过一系列中间处理最终被分配到该连接对应的控制器上（Controller）。与标准MVC模型不同的是，我们通过一个叫做服务（Service）的中间件来和模型（Model）进行交互，服务调用Hibernate框架的数据访问对象（DAO）来进行数据的持久化操作。在一系列逻辑操作之后，控制器（Controller）根据结果来选择合适的视图（View）返回给客户端。
+
+评测器模块作为一个独立的模块存在于web框架之外，它通过服务（Service）来查找等待评测的任务队列、进行评测和更新任务队列。
+
+\subsection{系统模块结构}
+根据图\ref{Architecture}的结构图，服务器端的模块可以进一步细化为如下结构：
+\begin{itemize}
+	\item 配置模块（config）：负责项目的整体配置。
+	\item 数据库模块（db）：使用Hibernate框架来完成持久化操作。
+	\item 评测器模块（judge）：负责评测任务的调度和执行。
+	\item 服务模块（service）：充当控制器（Controller）和模型（Model）的桥梁。
+	\item 实用工具（util）：提供许多有价值的API。
+	\item 网站模块（web）：包含了控制器（Controller）和许多与服务无关的组件。
+\end{itemize}
+
+\subsubsection{配置模块}
+该模块承担的任务是对服务器的基本运行参数进行配置，例如Spring MVC框架的初始化配置、Hibernate框架的属性配置等。
+
+\subsubsection{数据库模块}
+该模块中包含了数据访问对象（DAO）以及相关的类，例如用于和数据库进行映射操作的实体类（Entity），可以转换为HQL语言\footnote{HQL是Hibernate Query Language的简写，即 hibernate 查询语言：HQL采用面向对象的查询方式。}查询条件的条件类（Condition）和用于将模型与控制器隔离开来而用到的数据传输对象（DTO）。
+
+\subsubsection{评测器模块}
+该模块包含了一个评测器服务（Judge Service），它产生许多个评测线程来进行多线程评测。
+
+\subsubsection{服务模块}
+这个模块的主要作用是提供丰富的模型操作API，例如模型实例的新建、修改、查找等操作。
+
+\subsubsection{实用工具}
+这个模块包含了所有供内部使用的公共API。
+
+\subsubsection{网站模块}
+该模块最主要的部分是控制器（Controller）模块，控制器负责处理来自客户端的HTTP请求，并通过一定的逻辑选择合适的服务（Service）来完成用户的请求，同时根据情况将合适的视图（View）返回给用户。

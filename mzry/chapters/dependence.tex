@@ -1,0 +1,64 @@
+% !Mode:: "TeX:UTF-8"
+
+\chapter{相关概念与技术}
+\section{互联网应用开发历史}
+自从互联网诞生以来，网站从最初只能在浏览器中展现静态的文本或图像信息，发展成为功能丰富的各类Web应用，这期间动态技术起着重要的作用。
+
+互联网诞生之初，Web开发还比较简单，开发者经常会去操作web服务器(主要还是他自己的机器)，并且他会写一些HTML页面放到服务器指定的文件夹(/www)下。这些HTML页面，就在浏览器请求页面时使用。但是这样做只能获取到静态内容。由此出现了CGI和Perl脚本，在web服务器端运行一段短小的代码，并能与文件系统或者数据库进行交互。
+
+当时组织CGI/Perl这样的脚本代码太混乱了。CGI伸缩性不是太好(经常是为每个请求分配一个新的进程)，也不太安全(直接使用文件系统或者环境变量)，同时也没提供一种结构化的方式去构造动态应用程序。直到出现了Java Server Pages(JSP)，微软的ASP，以及PHP等技术。
+
+同时，在Google的推广下AJAX（Asynchronous JavaScript and XML，异步的JavaScript与XML技术）开始流行起来，让事情变得很有意思。AJAX允许客户端的JavaScript脚本为局部页面提供请求服务，然后可以在无需回到服务器情况下动态刷新部分页面，也就是更新浏览器中的document对象，通常称作DOM，或者文档对象模型。虽然从服务器端返回的仍然是HTML，但浏览器上的代码能把这HTML片段内嵌到当前页面中。也就是说web应用的响应可以更快，这时我们真正用web应用取代了web页面。谷歌的GMail和谷歌地图都是当时AJAX的杀手级产品。随后用AJAX局部刷新就如雨后春笋般出现。
+
+在随后的几年时间里，AJAX成为了焦点，但在服务器端仍然使用着旧有的技术。大概在2007年，37signals公司公开其成员——Ruby on Rails。那个基于Ruby on Rails 5分钟构建博客的演示完全征服了全世界的开发者。一夜之间，所以谈论的焦点都是关于Rails，Rails的不同之处在于使用规定的方式去设计你的web应用程序，运用一种已经广泛在桌面应用开发，但未被搬到web应用上的开发模式。这种模式就叫做MVC（Model-View-Controller）模式。
+
+直到今天，MVC模式已经被应用于许许多多的框架之中，例如在服务器端运行的Spring MVC框架，在前端运行的AngularJS。这允许我们能够快速构建web服务，以及基于AngularJS的客户端接口，甚至和其它的服务，如PhoneGap或者其它原生移动开发工具一样，进行移动应用的开发。
+
+\section{系统架构}
+\subsection{B/S结构}
+浏览器-服务器（Browser/Server）结构，简称B/S结构，与C/S结构不同，其客户端不需要安装专门的软件，只需要浏览器即可，浏览器通过Web服务器与数据库进行交互，可以方便的在不同平台下工作；服务器端可采用高性能计算机，并安装Oracle、Sybase、Informix等大型数据库。B/S结构简化了客户端的工作，它是随着Internet技术兴起而产生的，对C/S技术的改进，但该结构下服务器端的工作较重，对服务器的性能要求更高。
+
+\subsection{MVC架构}
+MVC模式（Model-View-Controller）是软件工程中的一种软件架构模式，把软件系统分为三个基本部分：模型（Model）、视图（View）和控制器（Controller）。具体细节可以参考本文附带的外文资料\cite{MVCArchitecture}及其翻译。
+
+\section{开源框架}
+\subsection{Spring framework}
+Spring Framework是一个开源的Java／Java EE全功能栈（full-stack）的应用程序框架，以Apache许可证形式发布，也有.NET平台上的移植版本。该框架基于 Expert One-on-One Java EE Design and Development\cite{johnson2004expert}一书中的代码，最初由 Rod Johnson 和 Juergen Hoeller等开发。Spring Framework 提供了一个简易的开发方式，这种开发方式，将避免那些可能致使底层代码变得繁杂混乱的大量的属性文件和帮助类。
+
+Spring 中包含的关键特性：
+\begin{itemize}
+	\item 强大的基于JavaBeans的采用控制翻转（Inversion of Control，IoC）原则的配置管理，使得应用程序的组建更加快捷简易。
+	\item 一个可用于从applet到Java EE等不同运行环境的核心 Bean 工厂。
+	\item 数据库事务的一般化抽象层，允许声明式（Declarative）事务管理器，简化事务的划分使之与底层无关。
+内建的针对JTA和单个JDBC数据源的一般化策略，使Spring的事务支持不要求Java EE环境，这与一般的JTA或者EJB CMT相反。
+	\item JDBC抽象层提供了有针对性的异常等级（不再从SQL异常中提取原始代码），简化了错误处理，大大减少了程序员的编码量。再次利用JDBC时，你无需再写出另一个``终止（finally）''模块。并且面向JDBC的异常与Spring 通用数据访问对象（Data Access Object）异常等级相一致。
+	\item 以资源容器，DAO实现和事务策略等形式与 Hibernate，JDO和iBATIS SQL Maps集成。利用众多的翻转控制方便特性来全面支持，解决了许多典型的Hibernate集成问题。所有这些全部遵从Spring通用事务处理和通用数据访问对象异常等级规范。
+	\item 灵活的基于核心Spring功能的MVC网页应用程序框架。开发者通过策略接口将拥有对该框架的高度控制，因而该框架将适应于多种呈现（View）技术，例如JSP，FreeMarker，Velocity，Tiles，iText以及POI。值得注意的是，Spring 中间层可以轻易地结合于任何基于MVC框架的网页层，例如Struts，WebWork，或Tapestry。
+	\item 提供诸如事务管理等服务的面向方面编程框架。
+\end{itemize}
+
+在设计应用程序Model时，MVC模式（例如Struts）通常难于给出一个简洁明了的框架结构。Spring却具有能够让这部分工作变得简单的能力。程序开发员们可以使用Spring的JDBC抽象层重新设计那些复杂的框架结构。
+
+\subsection{Hibernate}
+Hibernate是一种Java语言下的对象关系映射解决方案。它是使用GNU宽通用公共许可证发行的自由、开源的软件。它为面向对象的领域模型到传统的关系型数据库的映射，提供了一个使用方便的框架。
+
+它的设计目标是将软件开发人员从大量相同的数据持久层相关编程工作中解放出来。无论是从设计草案还是从一个遗留数据库开始，开发人员都可以采用Hibernate。
+
+Hibernate不仅负责从Java类到数据库表的映射（还包括从Java数据类型到SQL数据类型的映射），还提供了面向对象的数据查询检索机制，从而极大地缩短的手动处理SQL和JDBC上的开发时间。
+
+\subsection{AngularJS}
+AngularJS是一款开源 JavaScript函式库，由Google维护，用来协助单一页面应用程式运行的。它的目标是透过MVC模式 (MVC) 功能增强基于浏览器的应用，使开发和测试变得更加容易。
+
+函式库读取包含附加自定义（标签属性）的HTML， 遵从这些自定义属性中的指令，并将页面中的输入或输出与由JavaScript变量表示的模型绑定起来。这些JavaScript变量的值可以手工设置，或者从静态或动态JSON资源中获取。
+
+AngularJS是建立在这样的信念上的：即声明式编程应该用于构建用户界面以及编写软件构建，而指令式编程非常适合来表示业务逻辑。框架采用并扩展了传统HTML，通过双向的数据绑定来适应动态内容，双向的数据绑定允许模型和视图之间的自动同步。因此，AngularJS使得对DOM的操作不再重要并提升了可测试性。
+
+设计目标：
+\begin{itemize}
+	\item 将应用逻辑与对DOM的操作解耦。这会提高代码的可测试性。
+	\item 将应用程序的测试看的跟应用程序的编写一样重要。代码的构成方式对测试的难度有巨大的影响。
+	\item 将应用程序的客户端与服务器端解耦。这允许客户端和服务器端的开发可以齐头并进，并且让双方的复用成为可能。
+	\item 指导开发者完成构建应用程序的整个历程: 从用户界面的设计，到编写业务逻辑，再到测试。
+\end{itemize}
+
+Angular遵循软件工程的MVC模式,并鼓励展现，数据，和逻辑组件之间的松耦合.通过依赖注入（dependency injection），Angular为客户端的Web应用带来了传统服务端的服务，例如独立于视图的控制。 因此，后端减少了许多负担，产生了更轻的Web应用。
