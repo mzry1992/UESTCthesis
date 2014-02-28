@@ -1,0 +1,32 @@
+\noindent
+\ttfamily
+\hlstd{}\hllin{001\ }\hlslc{\#数据驱动}\\
+\hllin{002\ }\hlstd{}\hlkwb{db.driver}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{com.mysql.jdbc.Driver}\\
+\hllin{003\ }\hlstd{}\hlslc{\#数据库连接地址}\\
+\hllin{004\ }\hlstd{}\hlkwb{db.url}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{jdbc:mysql://localhost:}\Righttorque\\
+\hllin{005\ }\hlstd{}\hlkwb{3306/uestcoj?useUnicode}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{true\&characterEncoding=UTF{-}8}\\
+\hllin{006\ }\hlstd{}\hlslc{\#数据库用户名及密码}\\
+\hllin{007\ }\hlstd{}\hlkwb{db.username}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{root}\\
+\hllin{008\ }\hlstd{}\hlkwb{db.password}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{root}\\
+\hllin{009\ }\hlstd{}\\
+\hllin{010\ }\hlslc{\#以下是数据库性能配置}\\
+\hllin{011\ }\hlstd{}\hlkwb{db.maxConnectionsPerPartition}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{30}\\
+\hllin{012\ }\hlstd{}\hlkwb{db.minConnectionsPerPartition}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{10}\\
+\hllin{013\ }\hlstd{}\hlkwb{db.partitionCount}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{3}\\
+\hllin{014\ }\hlstd{}\hlkwb{db.acquireIncrement}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{5}\\
+\hllin{015\ }\hlstd{}\hlkwb{db.statementsCacheSize}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{100}\\
+\hllin{016\ }\hlstd{}\hlkwb{db.idleMaxAge}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{5}\\
+\hllin{017\ }\hlstd{}\hlkwb{db.idleConnectionTestPeriod}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{5}\\
+\hllin{018\ }\hlstd{}\\
+\hllin{019\ }\hlslc{\#Hibernate配置}\\
+\hllin{020\ }\hlstd{}\hlkwb{hibernate.dialect}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{org.hibernate.dialect.MySQL5Dialect}\\
+\hllin{021\ }\hlstd{}\hlkwb{hibernate.show\textunderscore sql}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{false}\\
+\hllin{022\ }\hlstd{}\hlkwb{hibernate.format\textunderscore sql}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{false}\\
+\hllin{023\ }\hlstd{}\hlkwb{hibernate.current\textunderscore session\textunderscore context\textunderscore class}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{org.springframework.}\Righttorque\\
+\hllin{024\ }\hlstd{orm.hibernate4.SpringSessionContext}\\
+\hllin{025\ }\\
+\hllin{026\ }\hlkwb{sessionFactory.annotatedPackages}\hlstd{}\hlopt{=}\hlstd{}\hlkwc{cn.edu.uestc.acmicpc.db.}\Righttorque\\
+\hllin{027\ }\hlstd{entity}\\
+\mbox{}
+\normalfont
+\normalsize

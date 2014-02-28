@@ -1,0 +1,30 @@
+% !Mode:: "TeX:UTF-8"
+
+\chapter{系统详细设计}
+\section{服务器端详细设计}
+在系统设计过程中，最重要的是根据需求分析及用例模型构建系统静态模型和动态模型。顺序图展示对象之间的交互，这些交互是指在场景或用例的事件流中发生的。协作图是一种交互图，强调的是发送和接收消息的对象之间的组织结构，使用协作图来说明系统的动态情况。状态图说明对象在它的生命期中响应事件所经历的状态序列，以及它们对那些事件的响应。活动图是主要用于业务建模时，用于详述业务用例，描述一项业务的执行过程。设计时，描述操作的流程\cite{zhanghaipan1998}。
+
+\subsection{系统包图}
+包图说明了系统各个模块之间的依赖关系，在\ref{sec:serverModelStructure}中我们已经介绍过了系统的模块结构，根据这个结构，本系统的包结构如图\ref{ServerPackage}所示。由于本系统内容比较多，我们这里先给出大概的结构，后面再一一详细描述。
+\pic[htbp]{包图}{}{ServerPackage}
+
+\subsection{Config Package详细设计}
+\pic[htbp]{Config Package类图}{}{ConfigPackage}
+
+\subsubsection{ApplicationContextConfig}
+Spring框架有两种配置方式，一种是通过XML配置文件进行配置，这种方式将所有的配置信息写入一个指定的XML文件之中，这种方式略显麻烦，在本文中我们采用了另外一种方式，这种方式是利用Java的Annotation机制来进行配置。
+
+下面是ApplicationContextConfig.java的主要内容：
+
+\input{code/ApplicationContextConfig.java.tex}
+
+系统启动时默认将resources.properties文件中的键值对初始化成一个Environment实例，我们可以通过getProperty(String): String方法来获得对应的值。
+
+下面是\textbf{resources.properties}文件：
+
+\input{code/resources.ini.tex}
+
+有了\textbf{Environment}实例，我们就可以将配置信息从代码中分离开来。
+
+\subsubsection{WebMVCConfig}
+这个文件是SpringMVC框架的配置文件，与之前的ApplicationContextConfig类似，这里主要是配置与Web
