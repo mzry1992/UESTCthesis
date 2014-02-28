@@ -1,0 +1,64 @@
+\noindent
+\ttfamily
+\hlstd{}\hllin{001\ }\hlcom{/{*}{*}}\\
+\hllin{002\ }\hlcom{\ {*}\ Spring\ MVC\ configuration\ file.}\\
+\hllin{003\ }\hlcom{\ {*}/}\hlstd{}\\
+\hllin{004\ }\hlkwc{@Configuration}\\
+\hllin{005\ }\hlstd{}\hlslc{//\ 开启Web\ MVC模式}\\
+\hllin{006\ }\hlstd{}\hlkwc{@EnableWebMvc}\\
+\hllin{007\ }\hlstd{}\hlslc{//\ 指定Controller包位置}\\
+\hllin{008\ }\hlstd{}\hlkwc{@ComponentScan}\hlstd{}\hlopt{(}\hlstd{basePackages\ }\hlopt{=\ \{}\\
+\hllin{009\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlstr{"cn.edu.uestc.acmicpc.web.oj.controller"}\hlstd{}\\
+\hllin{010\ }\hlopt{\})}\\
+\hllin{011\ }\hlstd{}\hlslc{//\ 开启AspectJ代理}\\
+\hllin{012\ }\hlstd{}\hlkwc{@EnableAspectJAutoProxy}\hlstd{}\hlopt{(}\hlstd{proxyTargetClass\ }\hlopt{=\ }\hlstd{true}\hlopt{)}\\
+\hllin{013\ }\hlstd{}\hlkwa{public\ class\ }\hlstd{WebMVCConfig\ }\hlkwa{extends\ }\hlstd{WebMvcConfigurerAdapter\ }\hlopt{\{}\\
+\hllin{014\ }\hlstd{\\
+\hllin{015\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 注册静态资源代理}\\
+\hllin{016\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Override}\\
+\hllin{017\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ }\hlstd{}\hlkwb{void\ }\hlstd{}\hlkwd{addResourceHandlers}\hlstd{}\hlopt{(}\hlstd{ResourceHandlerRegistry\ \Righttorque\\
+\hllin{018\ }}\hlstd{\ \ }\hlstd{registry}\hlopt{)\ \{}\\
+\hllin{019\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{registry}\hlopt{.}\hlstd{}\hlkwd{addResourceHandler}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"/images/{*}{*}"}\hlstd{}\hlopt{).}\Righttorque\\
+\hllin{020\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{addResourceLocations}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"/images/{*}{*}"}\hlstd{}\hlopt{);}\\
+\hllin{021\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{registry}\hlopt{.}\hlstd{}\hlkwd{addResourceHandler}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"/plugins/{*}{*}"}\hlstd{}\hlopt{).}\Righttorque\\
+\hllin{022\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{addResourceLocations}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"/plugins/{*}{*}"}\hlstd{}\hlopt{);}\\
+\hllin{023\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{registry}\hlopt{.}\hlstd{}\hlkwd{addResourceHandler}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"/scripts/{*}{*}"}\hlstd{}\hlopt{).}\Righttorque\\
+\hllin{024\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{addResourceLocations}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"/scripts/{*}{*}"}\hlstd{}\hlopt{);}\\
+\hllin{025\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{registry}\hlopt{.}\hlstd{}\hlkwd{addResourceHandler}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"/styles/{*}{*}"}\hlstd{}\hlopt{).}\Righttorque\\
+\hllin{026\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{addResourceLocations}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"/styles/{*}{*}"}\hlstd{}\hlopt{);}\\
+\hllin{027\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{registry}\hlopt{.}\hlstd{}\hlkwd{addResourceHandler}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"/font/{*}{*}"}\hlstd{}\hlopt{).}\Righttorque\\
+\hllin{028\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{addResourceLocations}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"/font/{*}{*}"}\hlstd{}\hlopt{);}\\
+\hllin{029\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{030\ }\hlstd{\\
+\hllin{031\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 开启ServletHandler}\\
+\hllin{032\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Override}\\
+\hllin{033\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ }\hlstd{}\hlkwb{void\ }\hlstd{}\hlkwd{configureDefaultServletHandling}\hlstd{}\hlopt{(}\\
+\hllin{034\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{DefaultServletHandlerConfigurer\ \Righttorque\\
+\hllin{035\ }}\hlstd{\ \ \ \ \ \ }\hlstd{defaultServletHandlerConfigurer}\hlopt{)\ \{}\\
+\hllin{036\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{defaultServletHandlerConfigurer}\hlopt{.}\hlstd{}\hlkwd{enable}\hlstd{}\hlopt{();}\\
+\hllin{037\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{038\ }\hlstd{\\
+\hllin{039\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 注册消息转换器}\\
+\hllin{040\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Override}\\
+\hllin{041\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ }\hlstd{}\hlkwb{void\ }\hlstd{}\hlkwd{configureMessageConverters}\hlstd{}\hlopt{(}\hlstd{List}\hlopt{$<$}\Righttorque\\
+\hllin{042\ }\hlstd{}\hlstd{\ \ }\hlstd{HttpMessageConverter}\hlopt{$<$}\hlstd{?}\hlopt{$>$$>$\ }\hlstd{converters}\hlopt{)\ \{}\\
+\hllin{043\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{converters}\hlopt{.}\hlstd{}\hlkwd{addAll}\hlstd{}\hlopt{(}\hlstd{Arrays}\hlopt{.}\hlstd{}\hlkwd{asList}\hlstd{}\hlopt{(}\hlstd{WebMVCResource}\hlopt{.}\Righttorque\\
+\hllin{044\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{messageConverters}\hlstd{}\hlopt{()));}\\
+\hllin{045\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{046\ }\hlstd{\\
+\hllin{047\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 视图解析器}\\
+\hllin{048\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Bean}\\
+\hllin{049\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ }\hlstd{ViewResolver\ }\hlkwd{viewResolver}\hlstd{}\hlopt{()\ \{}\\
+\hllin{050\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{WebMVCResource}\hlopt{.}\hlstd{}\hlkwd{viewResolver}\hlstd{}\hlopt{();}\\
+\hllin{051\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{052\ }\hlstd{\\
+\hllin{053\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 启用多文件上传}\\
+\hllin{054\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Bean}\\
+\hllin{055\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ }\hlstd{MultipartResolver\ }\hlkwd{multipartResolver}\hlstd{}\hlopt{()\ \{}\\
+\hllin{056\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ new\ }\hlstd{}\hlkwd{CommonsMultipartResolver}\hlstd{}\hlopt{();}\\
+\hllin{057\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{058\ }\hlstd{}\\
+\hllin{059\ }\hlopt{\}}\hlstd{}\\
+\mbox{}
+\normalfont
+\normalsize

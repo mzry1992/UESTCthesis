@@ -99,61 +99,58 @@
 \hllin{097\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{ProblemTag}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
 \hllin{098\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{Status}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
 \hllin{099\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{Tag}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
-\hllin{100\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{TrainingContest}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
-\hllin{101\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{TrainingStatus}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
-\hllin{102\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{TrainingUser}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
-\hllin{103\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{User}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
-\hllin{104\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{UserSerialKey}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{);}\\
+\hllin{100\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{User}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{101\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{UserSerialKey}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{);}\\
+\hllin{102\ }\hlstd{\\
+\hllin{103\ }}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{localSessionFactoryBean}\hlopt{;}\\
+\hllin{104\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
 \hllin{105\ }\hlstd{\\
-\hllin{106\ }}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{localSessionFactoryBean}\hlopt{;}\\
-\hllin{107\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
-\hllin{108\ }\hlstd{\\
-\hllin{109\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
-\hllin{110\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Bean:\ transaction\ manager.}\\
-\hllin{111\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}}\\
-\hllin{112\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @return\ transactionManagerBean}\\
-\hllin{113\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
-\hllin{114\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 事务管理工具}\\
-\hllin{115\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Bean}\hlstd{}\hlopt{(}\hlstd{name\ }\hlopt{=\ }\hlstd{}\hlstr{"transactionManager"}\hlstd{}\hlopt{)}\\
-\hllin{116\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ }\hlstd{HibernateTransactionManager\ }\hlkwd{transactionManager}\hlstd{}\hlopt{()\ \{}\\
-\hllin{117\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{HibernateTransactionManager\ transactionManager\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\Righttorque\\
-\hllin{118\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{HibernateTransactionManager}\hlstd{}\hlopt{();}\\
-\hllin{119\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{transactionManager}\hlopt{.}\hlstd{}\hlkwd{setSessionFactory}\hlstd{}\hlopt{(}\hlstd{}\hlkwa{this}\hlstd{}\hlopt{.}\Righttorque\\
-\hllin{120\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{sessionFactory}\hlstd{}\hlopt{().}\hlstd{}\hlkwd{getObject}\hlstd{}\hlopt{());}\\
-\hllin{121\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{transactionManager}\hlopt{;}\\
-\hllin{122\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
-\hllin{123\ }\hlstd{\\
-\hllin{124\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
-\hllin{125\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Hibernate\ properties.}\\
-\hllin{126\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}}\\
-\hllin{127\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @return\ properties}\\
-\hllin{128\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
-\hllin{129\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ Hibernate配置}\\
-\hllin{130\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{private\ }\hlstd{Properties\ }\hlkwd{getHibernateProperties}\hlstd{}\hlopt{()\ \{}\\
-\hllin{131\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{Properties\ properties\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\hlstd{}\hlkwd{Properties}\hlstd{}\hlopt{();}\\
-\hllin{132\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{properties}\hlopt{.}\hlstd{}\hlkwd{setProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.dialect"}\hlstd{}\hlopt{,\ }\hlstd{environment}\hlopt{.}\Righttorque\\
-\hllin{133\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.dialect"}\hlstd{}\hlopt{));}\\
-\hllin{134\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{properties}\hlopt{.}\hlstd{}\hlkwd{setProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.show\textunderscore sql"}\hlstd{}\hlopt{,\ }\Righttorque\\
-\hllin{135\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{environment}\hlopt{.}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.show\textunderscore sql"}\hlstd{}\hlopt{));}\\
-\hllin{136\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{properties}\hlopt{.}\hlstd{}\hlkwd{setProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.format"}\hlstd{}\hlopt{,\ }\hlstd{environment}\hlopt{.}\Righttorque\\
-\hllin{137\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.format\textunderscore sql"}\hlstd{}\hlopt{));}\\
-\hllin{138\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{properties}\hlopt{.}\hlstd{}\hlkwd{setProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.}\Righttorque\\
-\hllin{139\ }\hlstr{}\hlstd{\ \ \ \ }\hlstr{current\textunderscore session\textunderscore context\textunderscore class"}\hlstd{}\hlopt{,}\\
-\hllin{140\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{environment}\hlopt{.}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.}\Righttorque\\
-\hllin{141\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{current\textunderscore session\textunderscore context\textunderscore class"}\hlstd{}\hlopt{));}\\
-\hllin{142\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{properties}\hlopt{;}\\
-\hllin{143\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
-\hllin{144\ }\hlstd{\\
-\hllin{145\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
-\hllin{146\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Simply\ get\ property\ in\ PropertySource.}\\
-\hllin{147\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}}\\
-\hllin{148\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @param\ name\ property\ name}\\
-\hllin{149\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @return\ property\ value}\\
-\hllin{150\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
-\hllin{151\ }}\hlstd{\ \ }\hlstd{}\hlkwa{private\ }\hlstd{String\ }\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlkwa{final\ }\hlstd{String\ name}\hlopt{)\ \{}\\
-\hllin{152\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{environment}\hlopt{.}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{name}\hlopt{);}\\
-\hllin{153\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
-\hllin{154\ }\hlstd{}\hlopt{\}}\hlstd{}\\
+\hllin{106\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
+\hllin{107\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Bean:\ transaction\ manager.}\\
+\hllin{108\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}}\\
+\hllin{109\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @return\ transactionManagerBean}\\
+\hllin{110\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
+\hllin{111\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 事务管理工具}\\
+\hllin{112\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Bean}\hlstd{}\hlopt{(}\hlstd{name\ }\hlopt{=\ }\hlstd{}\hlstr{"transactionManager"}\hlstd{}\hlopt{)}\\
+\hllin{113\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ }\hlstd{HibernateTransactionManager\ }\hlkwd{transactionManager}\hlstd{}\hlopt{()\ \{}\\
+\hllin{114\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{HibernateTransactionManager\ transactionManager\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\Righttorque\\
+\hllin{115\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{HibernateTransactionManager}\hlstd{}\hlopt{();}\\
+\hllin{116\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{transactionManager}\hlopt{.}\hlstd{}\hlkwd{setSessionFactory}\hlstd{}\hlopt{(}\hlstd{}\hlkwa{this}\hlstd{}\hlopt{.}\Righttorque\\
+\hllin{117\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{sessionFactory}\hlstd{}\hlopt{().}\hlstd{}\hlkwd{getObject}\hlstd{}\hlopt{());}\\
+\hllin{118\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{transactionManager}\hlopt{;}\\
+\hllin{119\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{120\ }\hlstd{\\
+\hllin{121\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
+\hllin{122\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Hibernate\ properties.}\\
+\hllin{123\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}}\\
+\hllin{124\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @return\ properties}\\
+\hllin{125\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
+\hllin{126\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ Hibernate配置}\\
+\hllin{127\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{private\ }\hlstd{Properties\ }\hlkwd{getHibernateProperties}\hlstd{}\hlopt{()\ \{}\\
+\hllin{128\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{Properties\ properties\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\hlstd{}\hlkwd{Properties}\hlstd{}\hlopt{();}\\
+\hllin{129\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{properties}\hlopt{.}\hlstd{}\hlkwd{setProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.dialect"}\hlstd{}\hlopt{,\ }\hlstd{environment}\hlopt{.}\Righttorque\\
+\hllin{130\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.dialect"}\hlstd{}\hlopt{));}\\
+\hllin{131\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{properties}\hlopt{.}\hlstd{}\hlkwd{setProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.show\textunderscore sql"}\hlstd{}\hlopt{,\ }\Righttorque\\
+\hllin{132\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{environment}\hlopt{.}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.show\textunderscore sql"}\hlstd{}\hlopt{));}\\
+\hllin{133\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{properties}\hlopt{.}\hlstd{}\hlkwd{setProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.format"}\hlstd{}\hlopt{,\ }\hlstd{environment}\hlopt{.}\Righttorque\\
+\hllin{134\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.format\textunderscore sql"}\hlstd{}\hlopt{));}\\
+\hllin{135\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{properties}\hlopt{.}\hlstd{}\hlkwd{setProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.}\Righttorque\\
+\hllin{136\ }\hlstr{}\hlstd{\ \ \ \ }\hlstr{current\textunderscore session\textunderscore context\textunderscore class"}\hlstd{}\hlopt{,}\\
+\hllin{137\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{environment}\hlopt{.}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.}\Righttorque\\
+\hllin{138\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{current\textunderscore session\textunderscore context\textunderscore class"}\hlstd{}\hlopt{));}\\
+\hllin{139\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{properties}\hlopt{;}\\
+\hllin{140\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{141\ }\hlstd{\\
+\hllin{142\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
+\hllin{143\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Simply\ get\ property\ in\ PropertySource.}\\
+\hllin{144\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}}\\
+\hllin{145\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @param\ name\ property\ name}\\
+\hllin{146\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @return\ property\ value}\\
+\hllin{147\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
+\hllin{148\ }}\hlstd{\ \ }\hlstd{}\hlkwa{private\ }\hlstd{String\ }\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlkwa{final\ }\hlstd{String\ name}\hlopt{)\ \{}\\
+\hllin{149\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{environment}\hlopt{.}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{name}\hlopt{);}\\
+\hllin{150\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{151\ }\hlstd{}\hlopt{\}}\hlstd{}\\
 \mbox{}
 \normalfont
 \normalsize
