@@ -23,7 +23,7 @@
 
 评测器模块作为一个独立的模块存在于web框架之外，它通过服务（Service）来查找等待评测的任务队列、进行评测和更新任务队列。
 
-\subsection{服务器端模块结构}
+\subsection{服务器端模块结构}\label{sec:serverModelStructure}
 根据图\ref{Architecture}的结构图，服务器端的模块可以进一步细化为如下结构：
 \begin{itemize}
 	\item 配置模块（config）：负责项目的整体配置。
@@ -54,4 +54,31 @@
 
 \section{浏览器端框架}
 \subsection{浏览器端总体技术架构}
-对于前端来说，它只关心服务器端提供了哪些API，以及如何使用这些API，而不用关心如何它是如何实现的。
+传统的Web应用允许用户端填写表单（form），当提交表单时就向Web服务器发送一个请求。服务器接收并处理传来的表单，然后送回一个新的网页，但这个做法浪费了许多带宽，因为在前后两个页面中的大部分HTML码往往是相同的。由于每次应用的沟通都需要向服务器发送请求，应用的回应时间依赖于服务器的回应时间。这导致了用户界面的回应比本机应用慢得多。
+
+与此不同，AJAX（Asynchronous JavaScript and XML\footnote{实际上数据格式可以由JSON代替，进一步减少数据量，形成所谓的AJAJ。本系统使用的便是更加轻便的JSON数据。}，异步的JavaScript与XML技术）应用可以仅向服务器发送并取回必须的数据，并在客户端采用JavaScript处理来自服务器的回应。因为在服务器和浏览器之间交换的数据大量减少（大约只有原来的5\%）,服务器回应更快了。同时，很多的处理工作可以在发出请求的客户端机器上完成，因此Web服务器的负荷也减少了。
+
+本系统的服务器端提供以下几种资源：
+\begin{enumerate}
+	\item 网页资源
+
+	这类资源包含网页HTML代码、样式列表（CSS）、浏览器脚本（JavaScript）、图片和字体，通过GET方式获得。
+	\item 数据资源
+
+	这类资源均为JSON格式的数据，它有两种不同的获取方式：
+	\begin{enumerate}
+		\item GET方式
+
+		这种方式和获取网页资源操作相同，区别在于服务器返回的是JSON数据。
+		\item POST方式
+
+		当客户端需要发送数据给服务器时，需要通过POST方式来传递数据，举个例子来说，当用户在登录窗口登录时，浏览器会将登录窗口的表单打包成一段JSON格式的数据，然后通过POST方式发送给服务器，服务器将登录状态等信息以JSON格式返回给前端，完成一次登录操作。
+	\end{enumerate}
+\end{enumerate}
+
+在\ref{sec:angularjs}中我们提到了AngularJS框架，它是本系统最底层的框架。
+
+\subsection{网站结构}
+\pic[htbp]{网站结构图}{}{front-end-structure}
+
+目前本项目域名为\url{http://acm.uestc.edu.cn/}，根据功能需要我们将其划分若干部分，如图\ref{front-end-structure}所示。

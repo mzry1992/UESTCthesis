@@ -1,0 +1,159 @@
+\noindent
+\ttfamily
+\hlstd{}\hllin{001\ }\hlcom{/{*}{*}}\\
+\hllin{002\ }\hlcom{\ {*}\ Application\ Context\ Configuration.}\\
+\hllin{003\ }\hlcom{\ {*}/}\hlstd{}\\
+\hllin{004\ }\hlkwc{@Configuration}\\
+\hllin{005\ }\hlstd{}\hlslc{//\ 设置Spring需要扫描的目录}\\
+\hllin{006\ }\hlstd{}\hlkwc{@ComponentScan}\hlstd{}\hlopt{(}\hlstd{basePackages\ }\hlopt{=\ \{}\\
+\hllin{007\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlstr{"cn.edu.uestc.acmicpc.db"}\hlstd{}\hlopt{,}\\
+\hllin{008\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlstr{"cn.edu.uestc.acmicpc.judge"}\hlstd{}\hlopt{,}\\
+\hllin{009\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlstr{"cn.edu.uestc.acmicpc.util"}\hlstd{}\hlopt{,}\\
+\hllin{010\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlstr{"cn.edu.uestc.acmicpc.service"}\hlstd{}\hlopt{,}\\
+\hllin{011\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlstr{"cn.edu.uestc.acmicpc.web.aspect"}\hlstd{}\\
+\hllin{012\ }\hlopt{\})}\\
+\hllin{013\ }\hlstd{}\hlslc{//\ 设置resources文件的地址}\\
+\hllin{014\ }\hlstd{}\hlkwc{@PropertySource}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"classpath:resources.properties"}\hlstd{}\hlopt{)}\\
+\hllin{015\ }\hlstd{}\hlslc{//\ 开启事务管理}\\
+\hllin{016\ }\hlstd{}\hlkwc{@EnableTransactionManagement}\\
+\hllin{017\ }\hlstd{}\hlkwa{public\ class\ }\hlstd{ApplicationContextConfig\ }\hlopt{\{}\\
+\hllin{018\ }\hlstd{\\
+\hllin{019\ }}\hlstd{\ \ }\hlstd{}\hlkwc{@Autowired}\\
+\hllin{020\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{private\ }\hlstd{Environment\ environment}\hlopt{;}\\
+\hllin{021\ }\hlstd{\\
+\hllin{022\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
+\hllin{023\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Bean:\ Judge\ service.}\\
+\hllin{024\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}}\\
+\hllin{025\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ JudgeService\ is\ a\ singleton\ instance\ and\ need\ start\ at\ }\Righttorque\\
+\hllin{026\ }\hlcom{}\hlstd{\ \ \ }\hlcom{first.}\\
+\hllin{027\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}}\\
+\hllin{028\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @return\ judgeService\ bean}\\
+\hllin{029\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
+\hllin{030\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 对Judge\ Service的配置}\\
+\hllin{031\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Bean}\hlstd{}\hlopt{(}\hlstd{name\ }\hlopt{=\ }\hlstd{}\hlstr{"judgeService"}\hlstd{}\hlopt{)}\\
+\hllin{032\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Scope}\hlstd{}\hlopt{(}\hlstd{ConfigurableBeanFactory}\hlopt{.}\hlstd{SCOPE\textunderscore SINGLETON}\hlopt{)}\\
+\hllin{033\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Lazy}\hlstd{}\hlopt{(}\hlstd{false}\hlopt{)}\\
+\hllin{034\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ }\hlstd{JudgeService\ }\hlkwd{judgeService}\hlstd{}\hlopt{()\ \{}\\
+\hllin{035\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ new\ }\hlstd{}\hlkwd{JudgeService}\hlstd{}\hlopt{();}\\
+\hllin{036\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{037\ }\hlstd{\\
+\hllin{038\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
+\hllin{039\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Bean:\ Data\ source}\\
+\hllin{040\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}}\\
+\hllin{041\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ We\ use\ BoneCP\ to\ manage\ connection\ poll.}\\
+\hllin{042\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}}\\
+\hllin{043\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @return\ dataSource\ bean}\\
+\hllin{044\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
+\hllin{045\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 对数据源的配置}\\
+\hllin{046\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Bean}\hlstd{}\hlopt{(}\hlstd{name\ }\hlopt{=\ }\hlstd{}\hlstr{"dataSource"}\hlstd{}\hlopt{,\ }\hlstd{destroyMethod\ }\hlopt{=\ }\hlstd{}\hlstr{"close"}\hlstd{}\hlopt{)}\\
+\hllin{047\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ }\hlstd{BoneCPDataSource\ }\hlkwd{dataSource}\hlstd{}\hlopt{()\ \{}\\
+\hllin{048\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{BoneCPDataSource\ dataSource\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\hlstd{}\hlkwd{BoneCPDataSource}\hlstd{}\hlopt{();}\\
+\hllin{049\ }\hlstd{\\
+\hllin{050\ }}\hlstd{\ \ \ \ }\hlstd{dataSource}\hlopt{.}\hlstd{}\hlkwd{setDriverClass}\hlstd{}\hlopt{(}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"db.driver"}\hlstd{}\hlopt{));}\\
+\hllin{051\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{dataSource}\hlopt{.}\hlstd{}\hlkwd{setJdbcUrl}\hlstd{}\hlopt{(}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"db.url"}\hlstd{}\hlopt{));}\\
+\hllin{052\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{dataSource}\hlopt{.}\hlstd{}\hlkwd{setUsername}\hlstd{}\hlopt{(}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"db.username"}\hlstd{}\hlopt{));}\\
+\hllin{053\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{dataSource}\hlopt{.}\hlstd{}\hlkwd{setPassword}\hlstd{}\hlopt{(}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"db.password"}\hlstd{}\hlopt{));}\\
+\hllin{054\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{dataSource}\hlopt{.}\hlstd{}\hlkwd{setMaxConnectionsPerPartition}\hlstd{}\hlopt{(}\hlstd{Integer\\
+\hllin{055\ }}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlopt{.}\hlstd{}\hlkwd{parseInt}\hlstd{}\hlopt{(}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"db.}\Righttorque\\
+\hllin{056\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{maxConnectionsPerPartition"}\hlstd{}\hlopt{)));}\\
+\hllin{057\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{dataSource}\hlopt{.}\hlstd{}\hlkwd{setMinConnectionsPerPartition}\hlstd{}\hlopt{(}\hlstd{Integer\\
+\hllin{058\ }}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlopt{.}\hlstd{}\hlkwd{parseInt}\hlstd{}\hlopt{(}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"db.}\Righttorque\\
+\hllin{059\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{minConnectionsPerPartition"}\hlstd{}\hlopt{)));}\\
+\hllin{060\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{dataSource}\hlopt{.}\hlstd{}\hlkwd{setPartitionCount}\hlstd{}\hlopt{(}\hlstd{Integer}\hlopt{.}\hlstd{}\hlkwd{parseInt}\hlstd{}\hlopt{(}\Righttorque\\
+\hllin{061\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"db.partitionCount"}\hlstd{}\hlopt{)));}\\
+\hllin{062\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{dataSource}\hlopt{.}\hlstd{}\hlkwd{setAcquireIncrement}\hlstd{}\hlopt{(}\hlstd{Integer}\hlopt{.}\hlstd{}\hlkwd{parseInt}\hlstd{}\hlopt{(}\Righttorque\\
+\hllin{063\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"db.acquireIncrement"}\hlstd{}\hlopt{)));}\\
+\hllin{064\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{dataSource}\hlopt{.}\hlstd{}\hlkwd{setStatementsCacheSize}\hlstd{}\hlopt{(}\hlstd{Integer}\hlopt{.}\hlstd{}\hlkwd{parseInt}\hlstd{}\hlopt{(}\Righttorque\\
+\hllin{065\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"db.statementsCacheSize"}\hlstd{}\hlopt{)));}\\
+\hllin{066\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{dataSource}\hlopt{;}\\
+\hllin{067\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{068\ }\hlstd{\\
+\hllin{069\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
+\hllin{070\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Bean:\ session\ factory.}\\
+\hllin{071\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}}\\
+\hllin{072\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @return\ sessionFactory\ bean}\\
+\hllin{073\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
+\hllin{074\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ Session\ Factory}\\
+\hllin{075\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Bean}\hlstd{}\hlopt{(}\hlstd{name\ }\hlopt{=\ }\hlstd{}\hlstr{"sessionFactory"}\hlstd{}\hlopt{)}\\
+\hllin{076\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Lazy}\hlstd{}\hlopt{(}\hlstd{false}\hlopt{)}\\
+\hllin{077\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ }\hlstd{LocalSessionFactoryBean\ }\hlkwd{sessionFactory}\hlstd{}\hlopt{()\ \{}\\
+\hllin{078\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{LocalSessionFactoryBean\ localSessionFactoryBean\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\Righttorque\\
+\hllin{079\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{LocalSessionFactoryBean}\hlstd{}\hlopt{();}\\
+\hllin{080\ }\hlstd{\\
+\hllin{081\ }}\hlstd{\ \ \ \ }\hlstd{localSessionFactoryBean}\hlopt{.}\hlstd{}\hlkwd{setDataSource}\hlstd{}\hlopt{(}\hlstd{}\hlkwa{this}\hlstd{}\hlopt{.}\hlstd{}\hlkwd{dataSource}\hlstd{}\hlopt{())}\Righttorque\\
+\hllin{082\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlopt{;}\\
+\hllin{083\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{localSessionFactoryBean}\hlopt{.}\hlstd{}\hlkwd{setHibernateProperties}\hlstd{}\hlopt{(}\hlstd{}\hlkwa{this}\hlstd{}\hlopt{.}\Righttorque\\
+\hllin{084\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{getHibernateProperties}\hlstd{}\hlopt{());}\\
+\hllin{085\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{localSessionFactoryBean}\hlopt{.}\hlstd{}\hlkwd{setAnnotatedClasses}\hlstd{}\hlopt{(}\hlstd{Article}\hlopt{.}\Righttorque\\
+\hllin{086\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{087\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{Code}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{088\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{CompileInfo}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{089\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{Contest}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{090\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{ContestProblem}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{091\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{ContestTeamInfo}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{092\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{ContestUser}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{093\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{Department}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{094\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{Language}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{095\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{Message}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{096\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{Problem}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{097\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{ProblemTag}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{098\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{Status}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{099\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{Tag}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{100\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{TrainingContest}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{101\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{TrainingStatus}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{102\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{TrainingUser}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{103\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{User}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{,}\\
+\hllin{104\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{UserSerialKey}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{);}\\
+\hllin{105\ }\hlstd{\\
+\hllin{106\ }}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{localSessionFactoryBean}\hlopt{;}\\
+\hllin{107\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{108\ }\hlstd{\\
+\hllin{109\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
+\hllin{110\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Bean:\ transaction\ manager.}\\
+\hllin{111\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}}\\
+\hllin{112\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @return\ transactionManagerBean}\\
+\hllin{113\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
+\hllin{114\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 事务管理工具}\\
+\hllin{115\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Bean}\hlstd{}\hlopt{(}\hlstd{name\ }\hlopt{=\ }\hlstd{}\hlstr{"transactionManager"}\hlstd{}\hlopt{)}\\
+\hllin{116\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ }\hlstd{HibernateTransactionManager\ }\hlkwd{transactionManager}\hlstd{}\hlopt{()\ \{}\\
+\hllin{117\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{HibernateTransactionManager\ transactionManager\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\Righttorque\\
+\hllin{118\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{HibernateTransactionManager}\hlstd{}\hlopt{();}\\
+\hllin{119\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{transactionManager}\hlopt{.}\hlstd{}\hlkwd{setSessionFactory}\hlstd{}\hlopt{(}\hlstd{}\hlkwa{this}\hlstd{}\hlopt{.}\Righttorque\\
+\hllin{120\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{sessionFactory}\hlstd{}\hlopt{().}\hlstd{}\hlkwd{getObject}\hlstd{}\hlopt{());}\\
+\hllin{121\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{transactionManager}\hlopt{;}\\
+\hllin{122\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{123\ }\hlstd{\\
+\hllin{124\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
+\hllin{125\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Hibernate\ properties.}\\
+\hllin{126\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}}\\
+\hllin{127\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @return\ properties}\\
+\hllin{128\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
+\hllin{129\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ Hibernate配置}\\
+\hllin{130\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{private\ }\hlstd{Properties\ }\hlkwd{getHibernateProperties}\hlstd{}\hlopt{()\ \{}\\
+\hllin{131\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{Properties\ properties\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\hlstd{}\hlkwd{Properties}\hlstd{}\hlopt{();}\\
+\hllin{132\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{properties}\hlopt{.}\hlstd{}\hlkwd{setProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.dialect"}\hlstd{}\hlopt{,\ }\hlstd{environment}\hlopt{.}\Righttorque\\
+\hllin{133\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.dialect"}\hlstd{}\hlopt{));}\\
+\hllin{134\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{properties}\hlopt{.}\hlstd{}\hlkwd{setProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.show\textunderscore sql"}\hlstd{}\hlopt{,\ }\Righttorque\\
+\hllin{135\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{environment}\hlopt{.}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.show\textunderscore sql"}\hlstd{}\hlopt{));}\\
+\hllin{136\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{properties}\hlopt{.}\hlstd{}\hlkwd{setProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.format"}\hlstd{}\hlopt{,\ }\hlstd{environment}\hlopt{.}\Righttorque\\
+\hllin{137\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.format\textunderscore sql"}\hlstd{}\hlopt{));}\\
+\hllin{138\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{properties}\hlopt{.}\hlstd{}\hlkwd{setProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.}\Righttorque\\
+\hllin{139\ }\hlstr{}\hlstd{\ \ \ \ }\hlstr{current\textunderscore session\textunderscore context\textunderscore class"}\hlstd{}\hlopt{,}\\
+\hllin{140\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{environment}\hlopt{.}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hibernate.}\Righttorque\\
+\hllin{141\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{current\textunderscore session\textunderscore context\textunderscore class"}\hlstd{}\hlopt{));}\\
+\hllin{142\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{properties}\hlopt{;}\\
+\hllin{143\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{144\ }\hlstd{\\
+\hllin{145\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
+\hllin{146\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Simply\ get\ property\ in\ PropertySource.}\\
+\hllin{147\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}}\\
+\hllin{148\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @param\ name\ property\ name}\\
+\hllin{149\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ @return\ property\ value}\\
+\hllin{150\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
+\hllin{151\ }}\hlstd{\ \ }\hlstd{}\hlkwa{private\ }\hlstd{String\ }\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{}\hlkwa{final\ }\hlstd{String\ name}\hlopt{)\ \{}\\
+\hllin{152\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{environment}\hlopt{.}\hlstd{}\hlkwd{getProperty}\hlstd{}\hlopt{(}\hlstd{name}\hlopt{);}\\
+\hllin{153\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{154\ }\hlstd{}\hlopt{\}}\hlstd{}\\
+\mbox{}
+\normalfont
+\normalsize

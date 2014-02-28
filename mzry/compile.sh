@@ -1,5 +1,8 @@
 jobname=thesis
 ./clean.sh
+cd code
+bash hl.sh
+cd ..
 rm $jobname.pdf
 pdflatex -shell-escape ./$jobname.tex
 makeindex -s $jobname.ist -t $jobname.glg -o $jobname.gls $jobname.glo
