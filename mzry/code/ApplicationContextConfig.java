@@ -87,9 +87,6 @@ public class ApplicationContextConfig {
         ProblemTag.class,
         Status.class,
         Tag.class,
-        TrainingContest.class,
-        TrainingStatus.class,
-        TrainingUser.class,
         User.class,
         UserSerialKey.class);
 

@@ -9,6 +9,7 @@
 \pic[htbp]{包图}{}{ServerPackage}
 
 \subsection{Config Package详细设计}
+
 \pic[htbp]{Config Package类图}{}{ConfigPackage}
 
 \subsubsection{ApplicationContextConfig}
@@ -26,5 +27,51 @@ Spring框架有两种配置方式，一种是通过XML配置文件进行配置�
 
 有了\textbf{Environment}实例，我们就可以将配置信息从代码中分离开来。
 
+\subsubsection{WebMVCResource}
+为了方便进行测试，我们将一些比较特殊的资源从WebMVCConfig.java中独立开来，放到WebMVCResource.java中。这里主要做了两件事情：一个是配置视图解析器，在这里我们设置视图地址的前缀和后缀，方便Controller调用视图。另外一件事就是配置了JSON数据的转换器，用于解析和构建JSON数据，这里我们使用了fastjson\footnote{Fastjson是一个Java语言编写的JSON处理器,由阿里巴巴公司开发。}。
+
+\input{code/WebMVCResource.java.tex}
+
 \subsubsection{WebMVCConfig}
-这个文件是SpringMVC框架的配置文件，与之前的ApplicationContextConfig类似，这里主要是配置与Web
+这个文件是SpringMVC框架的配置文件，与之前的ApplicationContextConfig类似，这里配置了与Web相关的参数。
+
+\input{code/WebMVCConfig.java.tex}
+
+\subsection{Database Package详细设计}
+\pic[htbp]{Database Package包图}{}{DatabasePackage}
+
+这个包在MVC模型中处于Model层，所有与数据库有关的API都被包含在里面。
+
+\subsubsection{Entity}
+\pic[htbp]{Entity Package类图}{}{EntityPackage}
+
+Entity即为实体，对应着MVC模型中的Model，它和数据库中的内容有着直接的一对一映射关系。本系统数据库较为复杂，这里不赘述每个实体的定义，我们来简述一下各个实体的作用，如表\ref{entitytable}所示
+
+\threelinetable[htbp]{entitytable}{\textwidth}{ll}{Entity表}
+{Entity & 作用\\
+}{
+Article & 文章的内容和基本信息\\
+Code & 用户提交的代码\\
+CompileInfo & 代码的编译信息\\
+Contest & 比赛的基本信息\\
+ContestProblem & 比赛和题目的对应关系\\
+ContestTeamInfo & 参赛队伍的信息\\
+ContestUser & 比赛的注册用户\\
+Department & 学校的部门信息\\
+Language & 可以使用的语言以及部分参数\\
+}{
+}
+
+\subsubsection{Condition}
+\pic[htbp]{Condition Package类图}{}{ConditionPackage}
+
+我们在本系统中使用Hibernate作为持久层框架，它提供了强大的HQL查询语言，Condition包的主要功能就是提供了Condition组件，它可以翻译成HQL查询语言的where条件，来限定检索范围。
+
+根据实际情况，本系统设计的Condition支持三种条件：
+\begin{enumerate}
+	\item Order条件：用来限定返回结果的顺序。
+	\item PageInfo条件：用来实现返回结果的分页功能。
+	\item 普通条件：既Entry，它既可以是一条普通的条件，如\textbf{userId = 5}，也可以是一个Condition。在枚举类型ConditionType中，我们定义了许多常用的条件，如等于、不等于、小于、like、属于等等。
+\end{enumerate}
+
+对于每个数据库实体类型Entity，都有一个对应的Condition类，如Problem实体有对应的ProblemCondition。

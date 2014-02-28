@@ -1,0 +1,38 @@
+\noindent
+\ttfamily
+\hlstd{}\hllin{001\ }\hlcom{/{*}{*}}\\
+\hllin{002\ }\hlcom{\ {*}\ Spring\ MVC\ Configuration\ file\ resource.}\\
+\hllin{003\ }\hlcom{\ {*}/}\hlstd{}\\
+\hllin{004\ }\hlkwa{public\ class\ }\hlstd{WebMVCResource\ }\hlopt{\{}\\
+\hllin{005\ }\hlstd{\\
+\hllin{006\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 视图解析器配置}\\
+\hllin{007\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ static\ }\hlstd{ViewResolver\ }\hlkwd{viewResolver}\hlstd{}\hlopt{()\ \{}\\
+\hllin{008\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{InternalResourceViewResolver\ viewResolver\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\Righttorque\\
+\hllin{009\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{InternalResourceViewResolver}\hlstd{}\hlopt{();}\\
+\hllin{010\ }\hlstd{\\
+\hllin{011\ }}\hlstd{\ \ \ \ }\hlstd{viewResolver}\hlopt{.}\hlstd{}\hlkwd{setPrefix}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"/WEB{-}INF/views/"}\hlstd{}\hlopt{);}\\
+\hllin{012\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{viewResolver}\hlopt{.}\hlstd{}\hlkwd{setSuffix}\hlstd{}\hlopt{(}\hlstd{}\hlstr{".jsp"}\hlstd{}\hlopt{);}\\
+\hllin{013\ }\hlstd{\\
+\hllin{014\ }}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{viewResolver}\hlopt{;}\\
+\hllin{015\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{016\ }\hlstd{\\
+\hllin{017\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 设置FastJson为默认的JSON格式转换器}\\
+\hllin{018\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ static\ }\hlstd{HttpMessageConverter}\hlopt{$<$}\hlstd{?}\hlopt{$>${[}{]}\ }\hlstd{}\hlkwd{messageConverters}\hlstd{}\hlopt{(}\Righttorque\\
+\hllin{019\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{)\ \{}\\
+\hllin{020\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{HttpMessageConverter}\hlopt{$<$}\hlstd{?}\hlopt{$>${[}{]}\ }\hlstd{converters\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\Righttorque\\
+\hllin{021\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{HttpMessageConverter}\hlopt{$<$}\hlstd{?}\hlopt{$>${[}}\hlstd{}\hlnum{1}\hlstd{}\hlopt{{]};}\\
+\hllin{022\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{FastJsonHttpMessageConverter\ \Righttorque\\
+\hllin{023\ }}\hlstd{\ \ \ \ }\hlstd{fastJsonHttpMessageConverter\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\Righttorque\\
+\hllin{024\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{FastJsonHttpMessageConverter}\hlstd{}\hlopt{();}\\
+\hllin{025\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{List}\hlopt{$<$}\hlstd{MediaType}\hlopt{$>$\ }\hlstd{mediaTypes\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\hlstd{LinkedList}\hlopt{$<$$>$();}\\
+\hllin{026\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{mediaTypes}\hlopt{.}\hlstd{}\hlkwd{add}\hlstd{}\hlopt{(}\hlstd{MediaType}\hlopt{.}\hlstd{APPLICATION\textunderscore JSON}\hlopt{);}\\
+\hllin{027\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{fastJsonHttpMessageConverter}\hlopt{.}\hlstd{}\hlkwd{setSupportedMediaTypes}\hlstd{}\hlopt{(}\Righttorque\\
+\hllin{028\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{mediaTypes}\hlopt{);}\\
+\hllin{029\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{converters}\hlopt{{[}}\hlstd{}\hlnum{0}\hlstd{}\hlopt{{]}\ =\ }\hlstd{fastJsonHttpMessageConverter}\hlopt{;}\\
+\hllin{030\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{converters}\hlopt{;}\\
+\hllin{031\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{032\ }\hlstd{}\\
+\hllin{033\ }\hlopt{\}}\hlstd{}\\
+\mbox{}
+\normalfont
+\normalsize
