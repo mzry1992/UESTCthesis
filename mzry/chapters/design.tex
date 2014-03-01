@@ -2,7 +2,12 @@
 
 \chapter{系统详细设计}
 \section{服务器端详细设计}
-在系统设计过程中，最重要的是根据需求分析及用例模型构建系统静态模型和动态模型。顺序图展示对象之间的交互，这些交互是指在场景或用例的事件流中发生的。协作图是一种交互图，强调的是发送和接收消息的对象之间的组织结构，使用协作图来说明系统的动态情况。状态图说明对象在它的生命期中响应事件所经历的状态序列，以及它们对那些事件的响应。活动图是主要用于业务建模时，用于详述业务用例，描述一项业务的执行过程。设计时，描述操作的流程\cite{zhanghaipan1998}。
+在服务器端系统设计过程中，最重要的是根据需求分析及用例模型构建系统静态模型和动态模型。顺序图展示对象之间的交互，这些交互是指在场景或用例的事件流中发生的。协作图是一种交互图，强调的是发送和接收消息的对象之间的组织结构，使用协作图来说明系统的动态情况。状态图说明对象在它的生命期中响应事件所经历的状态序列，以及它们对那些事件的响应。活动图是主要用于业务建模时，用于详述业务用例，描述一项业务的执行过程。设计时，描述操作的流程\cite{zhanghaipan1998}。
+
+\subsection{系统顺序图}
+我们用顺序图来说明用户的一次操作在系统之中是如何完成的，通过顺序图来对本系统的工作机制提供一个大概的说明，图\ref{BackendSequence}说明了用户的一次完整操作。
+
+\pic[htbp]{系统顺序图}{width=\textwidth}{BackendSequence}
 
 \subsection{系统包图}
 包图说明了系统各个模块之间的依赖关系，在\ref{sec:serverModelStructure}中我们已经介绍过了系统的模块结构，根据这个结构，本系统的包结构如图\ref{ServerPackage}所示。由于本系统内容比较多，我们这里先给出大概的结构，后面再一一详细描述。
@@ -40,7 +45,8 @@ WebMVCConfig.java见附录\ref{sec:WebMVCConfig}
 
 Entity即为实体，对应着MVC模型中的Model，它和数据库中的内容有着直接的一对一映射关系。本系统数据库较为复杂，详细数据库结构图见附录\ref{sec:databasediagram}。这里我们简述一下各个实体的作用，如表\ref{entitytable}所示
 
-\longthreelinetable{entitytable}{Entity表}{2}{ll}
+%\longthreelinetable{entitytable}{Entity表}{2}{ll}
+\threelinetable[htbp]{entitytable}{\textwidth}{ll}{Entity表}
 {Entity & 作用\\
 }{
 Article & 文章的内容和基本信息\\
@@ -111,10 +117,9 @@ Service为上层应用提供了一系列特定的数据库操作，根据接口�
 这个Package包含了与评测器服务相关的内容。
 
 \subsubsection{评测器内核}
-评测器内核负责编译、运行、评测用户代码，是一个控制台程序，通过命令行参数来设定评测任务。评测器内核的主函数有如下参数：
-
-%\threelinetable[htbp]{judgecoredescription}{\textwidth}{ll}{Judge Core参数}
-\longthreelinetable{judgecoredescription}{Judge Core参数}{2}{ll}
+评测器内核负责编译、运行、评测用户代码，是一个控制台程序，通过命令行参数来设定评测任务。评测器内核的主函数参数表见表\ref{judgecoredescription}。
+%\longthreelinetable{judgecoredescription}{Judge Core参数}{2}{ll}
+\threelinetable[htbp]{judgecoredescription}{\textwidth}{ll}{Judge Core参数}
 {参数 & 作用\\
 }{
 -u & 指定任务ID\\
@@ -137,7 +142,70 @@ Service为上层应用提供了一系列特定的数据库操作，根据接口�
 
 \subsubsection{JudgeService}
 \pic[htbp]{Judge Package类图}{}{JudgePackage}
-JudgeService在系统启动时开始运行\footnote{见附录\ref{sec:ApplicationContextConfig}}，在这个类中我们用队列judgeQueue作为评测器的调度队列。它生成schedulerThread线程用来等待评测任务的到来，它每隔一定的时间间隔（在这里我们设置为3秒）调用StatusService查找所有等待测试的任务，将其标记为OJ\_JUDGING状态，并加入到judgeQueue中。它还配置了若干个JudgeThread线程用来进行多线程评测操作。每个JudgeThread不停的扫描judgeQueue，直到任务的到来，它首先将代码保存至工作目录下，然后构造控制台命令调用\textbf{Runtime.getRuntime().exec(shellCommand)}来和评测器内核交互，并得到结果，然后依据结果来做出相应的更新。
-
+\pic[htbp]{Judge Service活动图}{}{JudgeActivity}
+JudgeService在系统启动时开始运行\footnote{见附录\ref{sec:ApplicationContextConfig}的22-26行。}，在这个类中我们用队列judgeQueue作为评测器的调度队列。它生成schedulerThread线程用来等待评测任务的到来，它每隔一定的时间间隔（在这里我们设置为3秒）调用StatusService查找所有等待测试的任务，将其标记为OJ\_JUDGING状态，并加入到judgeQueue中。它还配置了若干个JudgeThread线程用来进行多线程评测操作。每个JudgeThread不停的扫描judgeQueue，直到任务的到来，它首先将代码保存至工作目录下，然后构造控制台命令调用\textbf{Runtime.getRuntime().exec(shellCommand)}来和评测器内核交互，并得到结果，然后依据结果来做出相应的更新。如图\ref{JudgeActivity}所示。
 
 \subsection{Web Package详细设计}
+\pic[htbp]{Web Package类图}{}{WebPackage}
+Web Package主要包含的是控制器，以及为控制器服务的一些模块，比如权限验证模块。
+
+\subsubsection{AuthenticationAspect}
+这是本系统的权限验证模块，我们采用了面向侧面的程序设计\footnote{aspect-oriented programming，AOP，又译作面向方面的程序设计、观点导向编程，是计算机科学中的一个术语，指一种程序设计范型。该范型以一种称为侧面（aspect，又译作方面）的语言构造为基础，侧面是一种新的模块化机制，用来描述分散在对象、类或函数中的横切关注点（crosscutting concern）。}思想来完成，既在每个Controller之前``切入''一段指定的代码来进行权限验证。这部分我们使用AspectJ框架来完成，它是以代理（Proxy）的形式实现的。代码见附录\ref{sec:AuthenticationAspect}。
+
+我们在图\ref{AuthenticationSequence}给出了验证成功和验证失败的两个顺序图，可以看到当验证失败时，我们不会调用原Controller，达到了权限限制的目的。
+
+\begin{pics}[htbp]{权限验证顺序图}{AuthenticationSequence}
+\addsubpic{一次失败的权限验证}{}{ControllerSequenceFail}
+\addsubpic{一次成功的权限验证}{}{ControllerSequenceSuccess}
+\end{pics}
+
+\subsubsection{Controller}
+Spring MVC框架提供了很强大的Controller，我们只需要在一个类上使用\textbf{@Controller}注解就可以将一个类声明为控制器。在本项目中，我们按照域名的分布来划分Controller，在前面的图\ref{front-end-structure}中我们已经给出网站的结构。
+
+根据返回值的不同，控制器分为两种类型：一种是返回一个代表视图地址的\textbf{String}的控制器，一种是返回一个代表JSON数据的\textbf{@ResponseBody Map$<$String, Object$>$}的控制器。
+
+视图保存在项目的webapp目录下，如\textbf{webapp/WEB-INF/views/index/index.jsp}，此视图对应的地址为\textbf{/WEB-INF/views/index/index.jsp}，但是我们在WebMVCResource.java（附录\ref{sec:WebMVCResource}）中的\textbf{viewResolver()}设置了地址的前缀和后缀，我们可以将其简写为\textbf{index/index}。如果控制器返回了一个视图地址，那么服务器会将对应的页面返回给用户。
+
+对于返回\textbf{@ResponseBody Map$<$String, Object$>$}的控制器，FastJson框架会将这个\textbf{@ResponseBody Map$<$String, Object$>$}转换成JSON各式的文本返回给用户。
+
+下面我们用用户登陆相关的控制器来说明它是如何工作的（代码省略了其余部分）。
+
+\input{code/UserController.java.tex}
+
+我们使用\textbf{@RequestMap}注解来声明方法所对应的网址，\textbf{@LoginPermit}定义了该地址的权限。因为Spring通过反射机制来进行自动注入，控制器方法的参数可以以任意顺序排列而不需要指定顺序。在login方法中，除了\textbf{HttpSession session}参数以外，另外两个和前端POST来的数据相关，\textbf{@RequestBody @Valid UserLoginDTO userLoginDTO}用来保存前端POST来的数据，我们使用了Java验证框架来对前端传递的数据进行一个初步的合法性验证，\textbf{@Valid}注解说明了我们需要对\textbf{userLoginDTO}进行验证，验证的结果保存在\textbf{BindingResult validateResult}中，下面是\textbf{UserLoginDTO}的部分代码：
+
+\input{code/UserLoginDTO.java.tex}
+
+顺利登陆之后，前端可以接收到类似如下格式的一段数据：
+
+\input{code/loginResult.txt.tex}
+
+\subsubsection{网站地图}
+上面我们举例说明了UserController的login方法的实现，限于篇幅限制其余的部分我们不一一描述，在这里我们给出整个网站的网站地图，介绍各个控制器的作用和返回给前端的数据类型。
+
+\longthreelinetable{sitemap}{网站地图}{5}{lllll}
+{
+地址  & 控制器 & 方法 & 作用 & 返回类型\\
+}{
+/admin/ & AdminController & index & 管理员面板 & HTML\\
+
+/article/data/{type}/{articleId} & ArticleController & data & 文章数据 & JSON\\
+/article/show/{articleId} & ArticleController & show & 文章页面 & HTML\\
+/article/search & ArticleController & search & 文章查找 & JSON\\
+/article/editor/{articleId} & ArticleController & editor & 文章编辑器 & HTML\\
+/article/edit & ArticleController & edit & 文章编辑 & JSON\\
+/article/operator & ArticleController & operator & 文章操作 & JSON\\
+
+/contest/status/{contestId}/{lastFetched} & ContestController & status & 比赛评测结果 & JSON\\
+/contest/rankList/{contestId} & ContestController & rankList & 比赛排名 & JSON\\
+/contest/data/{contestId} & ContestController & data & 比赛数据 & JSON\\
+/contest/show/{contestId} & ContestController & show & 比赛页面 & HTML\\
+/contest/list/{contestId} & ContestController & list & 比赛列表 & HTML\\
+/contest/search & ContestController & search & 比赛查找 & JSON\\
+/contest/operator/{id}/{field}/{value} & ContestController & operator & 比赛操作 & JSON\\
+/contest/editor/{contestId} & ContestController & editor & 比赛编辑器 & HTML\\
+/contest/edit & ContestController & edit & 比赛编辑 & JSON\\
+}
+
+\section{浏览器端详细设计}
+一个好的Web应用不仅仅要拥有功能完善的后台，还应该拥有一个友好的界面。下面我们

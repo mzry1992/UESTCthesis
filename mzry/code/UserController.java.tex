@@ -1,0 +1,67 @@
+\noindent
+\ttfamily
+\hlstd{}\hllin{001\ }\hlslc{//\ 声明控制器}\\
+\hllin{002\ }\hlstd{}\hlkwc{@Controller}\\
+\hllin{003\ }\hlstd{}\hlslc{//\ 声明控制器的域名}\\
+\hllin{004\ }\hlstd{}\hlkwc{@RequestMapping}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"/user"}\hlstd{}\hlopt{)}\\
+\hllin{005\ }\hlstd{}\hlkwa{public\ class\ }\hlstd{UserController\ }\hlkwa{extends\ }\hlstd{BaseController\ }\hlopt{\{}\\
+\hllin{006\ }\hlstd{\\
+\hllin{007\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ /user/login对应的方法}\\
+\hllin{008\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@RequestMapping}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"login"}\hlstd{}\hlopt{)}\\
+\hllin{009\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlslc{//\ 登陆权限设置为无}\\
+\hllin{010\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@LoginPermit}\hlstd{}\hlopt{(}\hlstd{NeedLogin\ }\hlopt{=\ }\hlstd{false}\hlopt{)}\\
+\hllin{011\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public}\\
+\hllin{012\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlslc{//\ 返回值为JSON数据}\\
+\hllin{013\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@ResponseBody}\\
+\hllin{014\ }\hlstd{}\hlstd{\ \ }\hlstd{Map}\hlopt{$<$}\hlstd{String}\hlopt{,\ }\hlstd{Object}\hlopt{$>$\ }\hlstd{}\hlkwd{login}\hlstd{}\hlopt{(}\hlstd{HttpSession\ session}\hlopt{,}\\
+\hllin{015\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlkwc{@RequestBody\ @Valid\ }\Righttorque\\
+\hllin{016\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{UserLoginDTO\ userLoginDTO}\hlopt{,}\\
+\hllin{017\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{BindingResult\ validateResult}\hlopt{)\ \{}\\
+\hllin{018\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{Map}\hlopt{$<$}\hlstd{String}\hlopt{,\ }\hlstd{Object}\hlopt{$>$\ }\hlstd{json\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\hlstd{HashMap}\hlopt{$<$$>$();}\\
+\hllin{019\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlslc{//\ 表单验证失败}\\
+\hllin{020\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{if\ }\hlstd{}\hlopt{(}\hlstd{validateResult}\hlopt{.}\hlstd{}\hlkwd{hasErrors}\hlstd{}\hlopt{())\ \{}\\
+\hllin{021\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{json}\hlopt{.}\hlstd{}\hlkwd{put}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"result"}\hlstd{}\hlopt{,\ }\hlstd{}\hlstr{"field\textunderscore error"}\hlstd{}\hlopt{);}\\
+\hllin{022\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{json}\hlopt{.}\hlstd{}\hlkwd{put}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"field"}\hlstd{}\hlopt{,\ }\hlstd{validateResult}\hlopt{.}\hlstd{}\hlkwd{getFieldErrors}\hlstd{}\hlopt{());}\\
+\hllin{023\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlopt{\}\ }\hlstd{}\hlkwa{else\ }\hlstd{}\hlopt{\{}\\
+\hllin{024\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlkwa{try\ }\hlstd{}\hlopt{\{}\\
+\hllin{025\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlslc{//\ 获取登陆用户的信息}\\
+\hllin{026\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{UserDTO\ userDTO\ }\hlopt{=\ }\hlstd{userService}\hlopt{.}\hlstd{}\hlkwd{getUserDTOByUserName}\hlstd{}\hlopt{(}\Righttorque\\
+\hllin{027\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{userLoginDTO}\hlopt{.}\hlstd{}\hlkwd{getUserName}\hlstd{}\hlopt{());}\\
+\hllin{028\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlslc{//\ 密码验证}\\
+\hllin{029\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{if\ }\hlstd{}\hlopt{(}\hlstd{userDTO\ }\hlopt{==\ }\hlstd{null\ }\hlopt{\textbar \textbar \ !}\hlstd{userLoginDTO}\hlopt{.}\hlstd{}\hlkwd{getPassword}\hlstd{}\hlopt{().}\Righttorque\\
+\hllin{030\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwd{equals}\hlstd{}\hlopt{(}\hlstd{userDTO}\hlopt{.}\hlstd{}\hlkwd{getPassword}\hlstd{}\hlopt{()))\ \{}\\
+\hllin{031\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{throw\ new\ }\hlstd{}\hlkwd{FieldException}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"password"}\hlstd{}\hlopt{,\ }\hlstd{}\hlstr{"User\ or\ }\Righttorque\\
+\hllin{032\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstr{password\ is\ wrong,\ please\ try\ again"}\hlstd{}\hlopt{);}\\
+\hllin{033\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlopt{\}}\\
+\hllin{034\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlslc{//\ 更新用户}\\
+\hllin{035\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{userDTO}\hlopt{.}\hlstd{}\hlkwd{setLastLogin}\hlstd{}\hlopt{(}\hlstd{}\hlkwa{new\ }\hlstd{}\hlkwd{Timestamp}\hlstd{}\hlopt{(}\hlstd{}\hlkwa{new\ }\hlstd{}\hlkwd{Date}\hlstd{}\hlopt{().}\Righttorque\\
+\hllin{036\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwd{getTime}\hlstd{}\hlopt{()\ /\ }\hlstd{}\hlnum{1000\ }\hlstd{}\hlopt{{*}\ }\hlstd{}\hlnum{1000}\hlstd{}\hlopt{));}\\
+\hllin{037\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{userService}\hlopt{.}\hlstd{}\hlkwd{updateUser}\hlstd{}\hlopt{(}\hlstd{userDTO}\hlopt{);}\\
+\hllin{038\ }\hlstd{\\
+\hllin{039\ }}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlslc{//\ 将用户信息放入Session中}\\
+\hllin{040\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{session}\hlopt{.}\hlstd{}\hlkwd{setAttribute}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"currentUser"}\hlstd{}\hlopt{,\ }\hlstd{userDTO}\hlopt{);}\\
+\hllin{041\ }\hlstd{\\
+\hllin{042\ }}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlslc{//\ 构造返回数据}\\
+\hllin{043\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{json}\hlopt{.}\hlstd{}\hlkwd{put}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"userName"}\hlstd{}\hlopt{,\ }\hlstd{userDTO}\hlopt{.}\hlstd{}\hlkwd{getUserName}\hlstd{}\hlopt{());}\\
+\hllin{044\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{json}\hlopt{.}\hlstd{}\hlkwd{put}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"type"}\hlstd{}\hlopt{,\ }\hlstd{userDTO}\hlopt{.}\hlstd{}\hlkwd{getType}\hlstd{}\hlopt{());}\\
+\hllin{045\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{json}\hlopt{.}\hlstd{}\hlkwd{put}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"email"}\hlstd{}\hlopt{,\ }\hlstd{userDTO}\hlopt{.}\hlstd{}\hlkwd{getEmail}\hlstd{}\hlopt{());}\\
+\hllin{046\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{json}\hlopt{.}\hlstd{}\hlkwd{put}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"result"}\hlstd{}\hlopt{,\ }\hlstd{}\hlstr{"success"}\hlstd{}\hlopt{);}\\
+\hllin{047\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlopt{\}\ }\hlstd{}\hlkwa{catch\ }\hlstd{}\hlopt{(}\hlstd{FieldException\ e}\hlopt{)\ \{}\\
+\hllin{048\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlslc{//\ 如果存在表单错误}\\
+\hllin{049\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwd{putFieldErrorsIntoBindingResult}\hlstd{}\hlopt{(}\hlstd{e}\hlopt{,\ }\hlstd{validateResult}\hlopt{);}\\
+\hllin{050\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{json}\hlopt{.}\hlstd{}\hlkwd{put}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"result"}\hlstd{}\hlopt{,\ }\hlstd{}\hlstr{"field\textunderscore error"}\hlstd{}\hlopt{);}\\
+\hllin{051\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{json}\hlopt{.}\hlstd{}\hlkwd{put}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"field"}\hlstd{}\hlopt{,\ }\hlstd{validateResult}\hlopt{.}\hlstd{}\hlkwd{getFieldErrors}\hlstd{}\hlopt{());}\\
+\hllin{052\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlopt{\}\ }\hlstd{}\hlkwa{catch\ }\hlstd{}\hlopt{(}\hlstd{AppException\ e}\hlopt{)\ \{}\\
+\hllin{053\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlslc{//\ 如果发生其它错误}\\
+\hllin{054\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{json}\hlopt{.}\hlstd{}\hlkwd{put}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"result"}\hlstd{}\hlopt{,\ }\hlstd{}\hlstr{"error"}\hlstd{}\hlopt{);}\\
+\hllin{055\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{json}\hlopt{.}\hlstd{}\hlkwd{put}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"error\textunderscore msg"}\hlstd{}\hlopt{,\ }\hlstd{e}\hlopt{.}\hlstd{}\hlkwd{getMessage}\hlstd{}\hlopt{());}\\
+\hllin{056\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlopt{\}}\\
+\hllin{057\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlopt{\}}\\
+\hllin{058\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlslc{//\ 返回结果}\\
+\hllin{059\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{json}\hlopt{;}\\
+\hllin{060\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{061\ }\hlstd{}\\
+\hllin{062\ }\hlopt{\}}\hlstd{}\\
+\mbox{}
+\normalfont
+\normalsize

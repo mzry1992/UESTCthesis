@@ -1,0 +1,32 @@
+\noindent
+\ttfamily
+\hlstd{}\hllin{001\ }\hlcom{/{*}{*}}\\
+\hllin{002\ }\hlcom{\ {*}\ DTO\ post\ from\ user\ login\ form.}\\
+\hllin{003\ }\hlcom{\ {*}/}\hlstd{}\\
+\hllin{004\ }\hlkwa{public\ class\ }\hlstd{UserLoginDTO\ }\hlopt{\{}\\
+\hllin{005\ }\hlstd{\\
+\hllin{006\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
+\hllin{007\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Input:\ user\ name}\\
+\hllin{008\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
+\hllin{009\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 非空验证}\\
+\hllin{010\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@NotNull}\hlstd{}\hlopt{(}\hlstd{message\ }\hlopt{=\ }\hlstd{}\hlstr{"Please\ enter\ your\ user\ name."}\hlstd{}\hlopt{)}\\
+\hllin{011\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlslc{//\ 正则表达式验证}\\
+\hllin{012\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Pattern}\hlstd{}\hlopt{(}\hlstd{regexp\ }\hlopt{=\ }\hlstd{}\hlstr{"}\hlesc{$\backslash$$\backslash$}\hlstr{b\textasciicircum {[}a{-}zA{-}Z0{-}9\textunderscore {]}\{4,24\}\$}\hlesc{$\backslash$$\backslash$}\hlstr{b"}\hlstd{}\hlopt{,}\\
+\hllin{013\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{message\ }\hlopt{=\ }\hlstd{}\hlstr{"Please\ enter\ 4{-}24\ characters\ consist\ of\ A{-}}\Righttorque\\
+\hllin{014\ }\hlstr{}\hlstd{\ \ \ \ \ \ }\hlstr{Z,\ a{-}z,\ 0{-}9\ and\ '\textunderscore '."}\hlstd{}\hlopt{)}\\
+\hllin{015\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{private\ }\hlstd{String\ userName}\hlopt{;}\\
+\hllin{016\ }\hlstd{\\
+\hllin{017\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
+\hllin{018\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Input:\ password}\\
+\hllin{019\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
+\hllin{020\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 非空验证}\\
+\hllin{021\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@NotNull}\hlstd{}\hlopt{(}\hlstd{message\ }\hlopt{=\ }\hlstd{}\hlstr{"Please\ enter\ your\ password."}\hlstd{}\hlopt{)}\\
+\hllin{022\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlslc{//\ 长度验证}\\
+\hllin{023\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Length}\hlstd{}\hlopt{(}\hlstd{min\ }\hlopt{=\ }\hlstd{}\hlnum{40}\hlstd{}\hlopt{,\ }\hlstd{max\ }\hlopt{=\ }\hlstd{}\hlnum{40}\hlstd{}\hlopt{,\ }\hlstd{message\ }\hlopt{=\ }\hlstd{}\hlstr{"Please\ enter\ your\ }\Righttorque\\
+\hllin{024\ }\hlstr{}\hlstd{\ \ }\hlstr{password."}\hlstd{}\hlopt{)}\\
+\hllin{025\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{private\ }\hlstd{String\ password}\hlopt{;}\\
+\hllin{026\ }\hlstd{}\\
+\hllin{027\ }\hlopt{\}}\hlstd{}\\
+\mbox{}
+\normalfont
+\normalsize

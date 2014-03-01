@@ -1,0 +1,83 @@
+\noindent
+\ttfamily
+\hlstd{}\hllin{001\ }\hlcom{/{*}{*}}\\
+\hllin{002\ }\hlcom{\ {*}\ Authentication\ aspect}\\
+\hllin{003\ }\hlcom{\ {*}/}\hlstd{}\\
+\hllin{004\ }\hlkwc{@Component}\\
+\hllin{005\ }\hlstd{}\hlslc{//\ 声明侧面}\\
+\hllin{006\ }\hlstd{}\hlkwc{@Aspect}\\
+\hllin{007\ }\hlstd{}\hlkwa{public\ class\ }\hlstd{AuthenticationAspect\ }\hlopt{\{}\\
+\hllin{008\ }\hlstd{\\
+\hllin{009\ }}\hlstd{\ \ }\hlstd{}\hlcom{/{*}{*}}\\
+\hllin{010\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}\ Http\ request}\\
+\hllin{011\ }\hlcom{}\hlstd{\ \ \ }\hlcom{{*}/}\hlstd{\\
+\hllin{012\ }}\hlstd{\ \ }\hlstd{}\hlkwa{private\ }\hlstd{HttpServletRequest\ request}\hlopt{;}\\
+\hllin{013\ }\hlstd{\\
+\hllin{014\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ 注入HttpServletRequest}\\
+\hllin{015\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Autowired}\hlstd{}\hlopt{(}\hlstd{required\ }\hlopt{=\ }\hlstd{true}\hlopt{)}\\
+\hllin{016\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ }\hlstd{}\hlkwb{void\ }\hlstd{}\hlkwd{setRequest}\hlstd{}\hlopt{(}\hlstd{HttpServletRequest\ request}\hlopt{)\ \{}\\
+\hllin{017\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{this}\hlstd{}\hlopt{.}\hlstd{request\ }\hlopt{=\ }\hlstd{request}\hlopt{;}\\
+\hllin{018\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{019\ }\hlstd{\\
+\hllin{020\ }}\hlstd{\ \ }\hlstd{}\hlslc{//\ }\Righttorque\\
+\hllin{021\ }\hlslc{}\hlstd{\ \ }\hlslc{声明该侧面的作用范围为包围在所有有LoginPe}\Righttorque\\
+\hllin{022\ }\hlslc{}\hlstd{\ \ }\hlslc{rmit注解的函数上}\\
+\hllin{023\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwc{@Around}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"@annotation(cn.edu.uestc.acmicpc.util.annotation.}\Righttorque\\
+\hllin{024\ }\hlstr{}\hlstd{\ \ }\hlstr{LoginPermit)"}\hlstd{}\hlopt{)}\\
+\hllin{025\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{public\ }\hlstd{Object\ }\hlkwd{checkAuth}\hlstd{}\hlopt{(}\hlstd{ProceedingJoinPoint\ \Righttorque\\
+\hllin{026\ }}\hlstd{\ \ }\hlstd{proceedingJoinPoint}\hlopt{)\ }\hlstd{}\hlkwa{throws\ }\hlstd{Throwable\ }\hlopt{\{}\\
+\hllin{027\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{MethodSignature\ methodSignature\ }\hlopt{=\ (}\hlstd{MethodSignature}\hlopt{)\ }\Righttorque\\
+\hllin{028\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{proceedingJoinPoint}\hlopt{.}\hlstd{}\hlkwd{getSignature}\hlstd{}\hlopt{();}\\
+\hllin{029\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{Method\ method\ }\hlopt{=\ }\hlstd{methodSignature}\hlopt{.}\hlstd{}\hlkwd{getMethod}\hlstd{}\hlopt{();}\\
+\hllin{030\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlslc{//\ 获取函数上的LoginPermit注解}\\
+\hllin{031\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{LoginPermit\ permit\ }\hlopt{=\ }\hlstd{method}\hlopt{.}\hlstd{}\hlkwd{getAnnotation}\hlstd{}\hlopt{(}\hlstd{LoginPermit}\hlopt{.}\Righttorque\\
+\hllin{032\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{class}\hlstd{}\hlopt{);}\\
+\hllin{033\ }\hlstd{\\
+\hllin{034\ }}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{try\ }\hlstd{}\hlopt{\{}\\
+\hllin{035\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlslc{//\ 如果该函数需要登录后才能访问}\\
+\hllin{036\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlkwa{if\ }\hlstd{}\hlopt{(}\hlstd{permit}\hlopt{.}\hlstd{}\hlkwd{NeedLogin}\hlstd{}\hlopt{())\ \{}\\
+\hllin{037\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlslc{//\ 获得当前用户}\\
+\hllin{038\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{UserDTO\ userDTO\ }\hlopt{=\ (}\hlstd{UserDTO}\hlopt{)\ }\hlstd{request}\hlopt{.}\hlstd{}\hlkwd{getSession}\hlstd{}\hlopt{().}\Righttorque\\
+\hllin{039\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwd{getAttribute}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"currentUser"}\hlstd{}\hlopt{);}\\
+\hllin{040\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlslc{//\ }\Righttorque\\
+\hllin{041\ }\hlslc{}\hlstd{\ \ \ \ \ \ \ \ }\hlslc{如果当前未登录，那么就抛出权限异常}\\
+\hllin{042\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{if\ }\hlstd{}\hlopt{(}\hlstd{userDTO\ }\hlopt{==\ }\hlstd{null}\hlopt{)\ \{}\\
+\hllin{043\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{throw\ new\ }\hlstd{}\hlkwd{AppException}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"Permission\ denied"}\hlstd{}\hlopt{);}\\
+\hllin{044\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlopt{\}}\\
+\hllin{045\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlslc{//\ 如果权限不足，那么就抛出权限异常}\\
+\hllin{046\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{if\ }\hlstd{}\hlopt{(}\hlstd{permit}\hlopt{.}\hlstd{}\hlkwd{value}\hlstd{}\hlopt{()\ !=\ }\hlstd{Global}\hlopt{.}\hlstd{AuthenticationType}\hlopt{.}\Righttorque\\
+\hllin{047\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{NORMAL}\hlopt{)\ \{}\\
+\hllin{048\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{if\ }\hlstd{}\hlopt{(}\hlstd{userDTO}\hlopt{.}\hlstd{}\hlkwd{getType}\hlstd{}\hlopt{()\ !=\ }\hlstd{permit}\hlopt{.}\hlstd{}\hlkwd{value}\hlstd{}\hlopt{().}\hlstd{}\hlkwd{ordinal}\hlstd{}\hlopt{())}\Righttorque\\
+\hllin{049\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlopt{\{}\\
+\hllin{050\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{throw\ new\ }\hlstd{}\hlkwd{AppException}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"Permission\ denied"}\hlstd{}\hlopt{);}\\
+\hllin{051\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlopt{\}}\\
+\hllin{052\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlopt{\}}\\
+\hllin{053\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlopt{\}}\\
+\hllin{054\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlslc{//\ }\Righttorque\\
+\hllin{055\ }\hlslc{}\hlstd{\ \ \ \ \ \ }\hlslc{至此，权限验证已经完毕，继续函数的运}\Righttorque\\
+\hllin{056\ }\hlslc{}\hlstd{\ \ \ \ \ \ }\hlslc{行}\\
+\hllin{057\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{proceedingJoinPoint}\hlopt{.}\hlstd{}\hlkwd{proceed}\hlstd{}\hlopt{();}\\
+\hllin{058\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlopt{\}\ }\hlstd{}\hlkwa{catch\ }\hlstd{}\hlopt{(}\hlstd{AppException\ e}\hlopt{)\ \{}\\
+\hllin{059\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlslc{//\ 捕获权限异常}\\
+\hllin{060\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlslc{//\ }\Righttorque\\
+\hllin{061\ }\hlslc{}\hlstd{\ \ \ \ \ \ }\hlslc{如果该方法返回值是视图地址，那么我们}\Righttorque\\
+\hllin{062\ }\hlslc{}\hlstd{\ \ \ \ \ \ }\hlslc{将其重定向到错误页面上}\\
+\hllin{063\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlkwa{if\ }\hlstd{}\hlopt{(}\hlstd{method}\hlopt{.}\hlstd{}\hlkwd{getReturnType}\hlstd{}\hlopt{()\ ==\ }\hlstd{String}\hlopt{.}\hlstd{}\hlkwa{class}\hlstd{}\hlopt{)\ \{}\\
+\hllin{064\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{}\hlstr{"redirect:/error/authenticationError"}\hlstd{}\hlopt{;}\\
+\hllin{065\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlopt{\}}\\
+\hllin{066\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlslc{//\ }\Righttorque\\
+\hllin{067\ }\hlslc{}\hlstd{\ \ \ \ \ \ }\hlslc{否则这个方法返回的是一个Map，我们要做}\Righttorque\\
+\hllin{068\ }\hlslc{}\hlstd{\ \ \ \ \ \ }\hlslc{的是设置相应的错误信息}\\
+\hllin{069\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlkwa{else\ }\hlstd{}\hlopt{\{}\\
+\hllin{070\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{Map}\hlopt{$<$}\hlstd{String}\hlopt{,\ }\hlstd{Object}\hlopt{$>$\ }\hlstd{json\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\hlstd{HashMap}\hlopt{$<$$>$();}\\
+\hllin{071\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{json}\hlopt{.}\hlstd{}\hlkwd{put}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"result"}\hlstd{}\hlopt{,\ }\hlstd{}\hlstr{"error"}\hlstd{}\hlopt{);}\\
+\hllin{072\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{json}\hlopt{.}\hlstd{}\hlkwd{put}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"error\textunderscore msg"}\hlstd{}\hlopt{,\ }\hlstd{e}\hlopt{.}\hlstd{}\hlkwd{getMessage}\hlstd{}\hlopt{());}\\
+\hllin{073\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{return\ }\hlstd{json}\hlopt{;}\\
+\hllin{074\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlopt{\}}\\
+\hllin{075\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlopt{\}}\\
+\hllin{076\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{\}}\\
+\hllin{077\ }\hlstd{}\\
+\hllin{078\ }\hlopt{\}}\hlstd{}\\
+\mbox{}
+\normalfont
+\normalsize
