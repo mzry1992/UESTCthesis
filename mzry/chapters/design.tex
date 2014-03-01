@@ -6,36 +6,29 @@
 
 \subsection{系统包图}
 包图说明了系统各个模块之间的依赖关系，在\ref{sec:serverModelStructure}中我们已经介绍过了系统的模块结构，根据这个结构，本系统的包结构如图\ref{ServerPackage}所示。由于本系统内容比较多，我们这里先给出大概的结构，后面再一一详细描述。
-\pic[htbp]{包图}{}{ServerPackage}
+\pic[htb]{包图}{}{ServerPackage}
 
 \subsection{Config Package详细设计}
 
 \pic[htbp]{Config Package类图}{}{ConfigPackage}
 
 \subsubsection{ApplicationContextConfig}
+ApplicationContextConfig.java见附录\ref{sec:ApplicationContextConfig}。
+
 Spring框架有两种配置方式，一种是通过XML配置文件进行配置，这种方式将所有的配置信息写入一个指定的XML文件之中，这种方式略显麻烦，在本文中我们采用了另外一种方式，这种方式是利用Java的Annotation机制来进行配置。
 
-下面是ApplicationContextConfig.java的主要内容：
-
-\input{code/ApplicationContextConfig.java.tex}
-
-系统启动时默认将resources.properties文件中的键值对初始化成一个Environment实例，我们可以通过getProperty(String): String方法来获得对应的值。
-
-下面是\textbf{resources.properties}文件：
-
-\input{code/resources.ini.tex}
+系统启动时默认将resources.properties文件\footnote{resources.properties见附录\ref{sec:resources}。}中的键值对初始化成一个Environment实例，我们可以通过getProperty(String): String方法来获得对应的值。
 
 有了\textbf{Environment}实例，我们就可以将配置信息从代码中分离开来。
 
 \subsubsection{WebMVCResource}
+WebMVCResource.java见附录\ref{sec:WebMVCResource}。
+
 为了方便进行测试，我们将一些比较特殊的资源从WebMVCConfig.java中独立开来，放到WebMVCResource.java中。这里主要做了两件事情：一个是配置视图解析器，在这里我们设置视图地址的前缀和后缀，方便Controller调用视图。另外一件事就是配置了JSON数据的转换器，用于解析和构建JSON数据，这里我们使用了fastjson\footnote{Fastjson是一个Java语言编写的JSON处理器,由阿里巴巴公司开发。}。
 
-\input{code/WebMVCResource.java.tex}
-
 \subsubsection{WebMVCConfig}
+WebMVCConfig.java见附录\ref{sec:WebMVCConfig}
 这个文件是SpringMVC框架的配置文件，与之前的ApplicationContextConfig类似，这里配置了与Web相关的参数。
-
-\input{code/WebMVCConfig.java.tex}
 
 \subsection{Database Package详细设计}
 \pic[htbp]{Database Package包图}{}{DatabasePackage}
@@ -45,9 +38,9 @@ Spring框架有两种配置方式，一种是通过XML配置文件进行配置�
 \subsubsection{Entity}
 \pic[htbp]{Entity Package类图}{}{EntityPackage}
 
-Entity即为实体，对应着MVC模型中的Model，它和数据库中的内容有着直接的一对一映射关系。本系统数据库较为复杂，这里不赘述每个实体的定义，我们来简述一下各个实体的作用，如表\ref{entitytable}所示
+Entity即为实体，对应着MVC模型中的Model，它和数据库中的内容有着直接的一对一映射关系。本系统数据库较为复杂，详细数据库结构图见附录\ref{sec:databasediagram}。这里我们简述一下各个实体的作用，如表\ref{entitytable}所示
 
-\threelinetable[htbp]{entitytable}{\textwidth}{ll}{Entity表}
+\longthreelinetable{entitytable}{Entity表}{2}{ll}
 {Entity & 作用\\
 }{
 Article & 文章的内容和基本信息\\
@@ -58,9 +51,29 @@ ContestProblem & 比赛和题目的对应关系\\
 ContestTeamInfo & 参赛队伍的信息\\
 ContestUser & 比赛的注册用户\\
 Department & 学校的部门信息\\
-Language & 可以使用的语言以及部分参数\\
+Language & 可以使用的语言以及参数\\
+Message & 用户短消息\\
+Problem & 题目内容和基本信息\\
+ProblemTag & 题目和分类标签的对应关系\\
+Status & 代码的评测状态\\
+Tag & 分类标签\\
+User & 用户信息\\
+UserSerialKey & 用户激活码\\
 }{
 }
+
+\subsubsection{DTO}
+\pic[htbp]{DTO Package类图}{}{DTOPackage}
+
+数据传输对象DTO有两种，一种是客户端向服务器传输的数据，一种是模型向上层传输的数据。前者我们通过一个简单的类可以实现。
+
+Hibernate自带的数据库API较为复杂，为了提升效率和简化代码维护成本，我们自己构建了一套用来提取数据库数据的工具。在这类DTO中，我们使用了一个\textbf{@Fields}注解来注明这个DTO的信息来自数据库中的哪些域，然后通过这个field来构建HQL查询语言的\textbf{SELECT}命令。如下所示为UserListDTO.java的部分内容：
+
+\input{code/FieldAnnotation.java.tex}
+
+对应生成的HQL语句为\textbf{SELECT userId, email, userName, nickName, type, school, motto, lastLogin, solved, tried FROM User}，配合接下来要介绍到的Condition，我们可以组合出基本的HQL查询语句。
+
+在得到这些域后，我们调用对应的EntityDTOBuilder的build方法来得到这些值。
 
 \subsubsection{Condition}
 \pic[htbp]{Condition Package类图}{}{ConditionPackage}
@@ -74,4 +87,57 @@ Language & 可以使用的语言以及部分参数\\
 	\item 普通条件：既Entry，它既可以是一条普通的条件，如\textbf{userId = 5}，也可以是一个Condition。在枚举类型ConditionType中，我们定义了许多常用的条件，如等于、不等于、小于、like、属于等等。
 \end{enumerate}
 
-对于每个数据库实体类型Entity，都有一个对应的Condition类，如Problem实体有对应的ProblemCondition。
+对于每个数据库实体类型Entity，都有一个对应的EntityCondition类，如Problem实体有对应的ProblemCondition。这些EntityCondition类都必须继承自BaseCondition类，并且实现它的\textbf{getCondition()}方法。
+
+对于一些比较简单的条件，我们提供了一个\textbf{@Exp}注解，例如在StatusCondition.java中有如下变量：
+
+\input{code/ExpAnnotation.java.tex}
+
+如果这两个成员变量不是空，那么最后我们会得到一个形式如同\textbf{WHERE ... userId $>=$ userId and userByUserId $=$ userId ...}的HQL查询语句。
+
+对于一些比较复杂的条件，开发者可以在\textbf{getCondition()}方法中实现复杂的逻辑。
+
+\subsubsection{DAO}
+\pic[htbp]{DAO Package类图}{}{DAOPackage}
+
+DAO提供了基础的数据库操作API，例如添加数据、修改、删除、查询等等，通过与DTO和Condition的配合使用，我们可以方便的进行数据库操作，而不需要为每种情况都生成一段冗长的HQL语句。
+
+\subsection{Service Package详细设计}
+\pic[htbp]{Service Package类图}{}{ServicePackage}
+
+Service为上层应用提供了一系列特定的数据库操作，根据接口隔离原则\cite{szyperski2002component}，我们不希望上层应用直接调用底层的数据库API来进行操作，我们通过Service来隔离它们。在这里，每个EntityService都完成与指定Entity相关的操作，不允许出现跨Entity的调用。
+
+\subsection{Judge Package详细设计}
+这个Package包含了与评测器服务相关的内容。
+
+\subsubsection{评测器内核}
+评测器内核负责编译、运行、评测用户代码，是一个控制台程序，通过命令行参数来设定评测任务。评测器内核的主函数有如下参数：
+
+%\threelinetable[htbp]{judgecoredescription}{\textwidth}{ll}{Judge Core参数}
+\longthreelinetable{judgecoredescription}{Judge Core参数}{2}{ll}
+{参数 & 作用\\
+}{
+-u & 指定任务ID\\
+-s & 指定源代码路径\\
+-n & 指定题目ID\\
+-D & 指定数据文件夹地址\\
+-d & 指定运行的工作目录\\
+-t & 指定运行时间限制\\
+-m & 指定运行内存限制\\
+-o & 指定输出大小限制\\
+-S & 开启SPJ选项\\
+-l & 指定语言类型\\
+-I & 指定测试用例的输入文件\\
+-O & 指定-I中测试用例的对应标准输出文件\\
+-C & 是否需要编译\\
+}{
+}
+
+评测结束后，它返回三个整数，分别代表评测结果、内存开销、时间开销。
+
+\subsubsection{JudgeService}
+\pic[htbp]{Judge Package类图}{}{JudgePackage}
+JudgeService在系统启动时开始运行\footnote{见附录\ref{sec:ApplicationContextConfig}}，在这个类中我们用队列judgeQueue作为评测器的调度队列。它生成schedulerThread线程用来等待评测任务的到来，它每隔一定的时间间隔（在这里我们设置为3秒）调用StatusService查找所有等待测试的任务，将其标记为OJ\_JUDGING状态，并加入到judgeQueue中。它还配置了若干个JudgeThread线程用来进行多线程评测操作。每个JudgeThread不停的扫描judgeQueue，直到任务的到来，它首先将代码保存至工作目录下，然后构造控制台命令调用\textbf{Runtime.getRuntime().exec(shellCommand)}来和评测器内核交互，并得到结果，然后依据结果来做出相应的更新。
+
+
+\subsection{Web Package详细设计}

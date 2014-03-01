@@ -122,8 +122,8 @@
     ><path fill="none" d="M0 20 L599 20 L599 759 L0 759 L0 0 L119 0 L119 20" clip-path="url(#clipPath1)"
     /></g
     ><g font-size="10" transform="translate(2,22)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="&apos;Times New Roman&apos;" stroke="black" stroke-opacity="1"
-    ><text x="262" xml:space="preserve" y="9" clip-path="url(#clipPath2)" stroke="none"
-      >Condition Package</text
+    ><text x="263" xml:space="preserve" y="9" clip-path="url(#clipPath2)" stroke="none"
+      >ConditionPackage</text
     ></g
     ><g font-size="10" transform="translate(12,32)" fill-opacity="1" fill="white" text-rendering="geometricPrecision" font-family="&apos;Times New Roman&apos;" stroke="white" stroke-opacity="1"
     ><rect x="0" width="115" height="20" y="0" clip-path="url(#clipPath3)" stroke="none"
@@ -371,8 +371,8 @@
       /><line y2="12" fill="none" x1="0" clip-path="url(#clipPath24)" x2="130" y1="12"
     /></g
     ><g font-size="10" transform="translate(42,692)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="&apos;Times New Roman&apos;" stroke="black" font-weight="bold" stroke-opacity="1"
-    ><text x="12" xml:space="preserve" y="9" clip-path="url(#clipPath26)" stroke="none"
-      >EntityCondition Classes</text
+    ><text x="29" xml:space="preserve" y="9" clip-path="url(#clipPath26)" stroke="none"
+      >EntityCondition</text
     ></g
     ><g font-size="10" transform="translate(452,542)" fill-opacity="1" fill="white" text-rendering="geometricPrecision" font-family="&apos;Times New Roman&apos;" stroke="white" font-weight="bold" stroke-opacity="1"
     ><rect x="0" width="110" height="60" y="0" clip-path="url(#clipPath27)" stroke="none"
