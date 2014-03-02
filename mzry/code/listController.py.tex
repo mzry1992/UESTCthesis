@@ -1,0 +1,42 @@
+\noindent
+\ttfamily
+\hlstd{\hllin{001\ }cdoj}\hlopt{.}\hlstd{}\hlkwd{controller}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"ListController"}\hlstd{}\hlopt{,\ {[}}\\
+\hllin{002\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlstr{"\$scope"}\hlstd{}\hlopt{,\ }\hlstd{}\hlstr{"\$rootScope"}\hlstd{}\hlopt{,\ }\hlstd{}\hlstr{"\$http"}\hlstd{}\hlopt{,}\\
+\hllin{003\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{(}\hlstd{\$scope}\hlopt{,\ }\hlstd{\$rootScope}\hlopt{,\ }\hlstd{\$http}\hlopt{)\ {-}$>$}\\
+\hllin{004\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{condition\ }\hlopt{=\ }\hlstd{}\hlnum{0}\\
+\hllin{005\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{}\hlkwb{list\ }\hlstd{}\hlopt{=\ {[}{]}}\\
+\hllin{006\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlslc{\#\ 翻页导航}\\
+\hllin{007\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{pageInfo\ }\hlopt{=}\\
+\hllin{008\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{countPerPage}\hlopt{:\ }\hlstd{}\hlnum{20}\\
+\hllin{009\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{currentPage}\hlopt{:\ }\hlstd{}\hlnum{1}\\
+\hllin{010\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{displayDistance}\hlopt{:\ }\hlstd{}\hlnum{2}\\
+\hllin{011\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{totalPages}\hlopt{:\ }\hlstd{}\hlnum{1}\\
+\hllin{012\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlslc{\#\ 列表的请求地址}\\
+\hllin{013\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{requestUrl\ }\hlopt{=\ }\hlstd{}\hlnum{0}\\
+\hllin{014\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlslc{\#\ 查询条件重置}\\
+\hllin{015\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{reset\ }\hlopt{=\ {-}$>$}\\
+\hllin{016\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{\textunderscore }\hlopt{.}\hlstd{}\hlkwd{each}\hlstd{}\hlopt{(}\hlstd{\$scope}\hlopt{.}\hlstd{condition}\hlopt{,\ (}\hlstd{value}\hlopt{,\ }\hlstd{index}\hlopt{)\ {-}$>$}\\
+\hllin{017\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{condition}\hlopt{{[}}\hlstd{index}\hlopt{{]}\ =\ }\hlstd{undefined\\
+\hllin{018\ }}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlopt{)}\\
+\hllin{019\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{condition}\hlopt{{[}}\hlstd{}\hlstr{"currentPage"}\hlstd{}\hlopt{{]}\ =\ }\hlstd{null\\
+\hllin{020\ }}\hlstd{\ \ \ \ }\hlstd{}\hlslc{\#\ 列表刷新}\\
+\hllin{021\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{refresh\ }\hlopt{=\ {-}$>$}\\
+\hllin{022\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlkwa{if\ }\hlstd{\$scope}\hlopt{.}\hlstd{requestUrl\ }\hlopt{!=\ }\hlstd{}\hlnum{0}\\
+\hllin{023\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{condition\ }\hlopt{=\ }\hlstd{angular}\hlopt{.}\hlstd{}\hlkwd{copy}\hlstd{}\hlopt{(}\hlstd{\$scope}\hlopt{.}\hlstd{condition}\hlopt{)}\\
+\hllin{024\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{\$http}\hlopt{.}\hlstd{}\hlkwd{post}\hlstd{}\hlopt{(}\hlstd{\$scope}\hlopt{.}\hlstd{requestUrl}\hlopt{,\ }\hlstd{condition}\hlopt{).}\hlstd{}\hlkwd{then\ }\hlstd{}\hlopt{(}\Righttorque\\
+\hllin{025\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{response}\hlopt{)\ =$>$}\\
+\hllin{026\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{}\hlkwb{list\ }\hlstd{}\hlopt{=\ }\hlstd{response}\hlopt{.}\hlstd{data}\hlopt{.}\hlstd{}\hlkwb{list}\\
+\hllin{027\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{pageInfo\ }\hlopt{=\ }\hlstd{response}\hlopt{.}\hlstd{data}\hlopt{.}\hlstd{pageInfo\\
+\hllin{028\ }}\hlstd{\ \ \ \ }\hlstd{}\hlslc{\#\ 在用户登陆/登出时刷新}\\
+\hllin{029\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{\$rootScope}\hlopt{.}\hlstd{\$}\hlkwd{watch}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"currentUser"}\hlstd{}\hlopt{,\ {-}$>$}\\
+\hllin{030\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{}\hlkwd{refresh}\hlstd{}\hlopt{()}\\
+\hllin{031\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlopt{,\ }\hlstd{true}\hlopt{)}\\
+\hllin{032\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlslc{\#\ 在查询条件发生变化时刷新}\\
+\hllin{033\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{\$}\hlkwd{watch}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"condition"}\hlstd{}\hlopt{,\ {-}$>$}\\
+\hllin{034\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{}\hlkwd{refresh}\hlstd{}\hlopt{()}\\
+\hllin{035\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlopt{,\ }\hlstd{true\\
+\hllin{036\ }}\hlstd{\ \ \ \ }\hlstd{}\hlopt{)}\\
+\hllin{037\ }\hlstd{}\hlopt{{]})}\hlstd{}\\
+\mbox{}
+\normalfont
+\normalsize

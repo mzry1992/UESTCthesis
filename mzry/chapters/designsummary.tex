@@ -12,7 +12,15 @@
 	\item 持续集成：TeamCity\footnote{一款功能强大的持续集成（Continue Integration）工具，可以让团队快速实现持续继承：IDE工具集成、各种消息通知、各种报表、项目的管理、分布式的编译等等。}
 \end{enumerate}
 
-本系统涉及到了服务器端、浏览器端、评测器三个模块，它们所使用的编程语言也都不同。服务器端我们采用的是JDK7.0标准下的Java语言，项目通过maven来组织和管理。浏览器端核心框架为AngularJS和JQuery，前端UI采用Bootstrap3，项目通过Grunt来组织和管理，编程语言为Less和Coffeescript。评测器采用C++语言，使用32位Linux API实现。
+本系统涉及到了服务器端、浏览器端、评测器三个模块，它们所使用的编程语言也都不同。服务器端我们采用的是JDK7.0标准下的Java语言，项目通过maven来组织和管理。浏览器端核心框架为AngularJS和JQuery，前端UI采用Bootstrap3，项目通过Grunt来组织和管理，编程语言为Less\footnote{LESSCSS是一种动态样式语言，属于CSS预处理语言的一种，它使用类似CSS的语法，为CSS的赋予了动态语言的特性，如变量、继承、运算、函数等，更方便CSS的编写和维护。}和Coffeescript\footnote{CoffeeScript是一套JavaScript的转译语言。受到Ruby、Python与Haskell等语言的启发，CoffeeScript增强了JavaScript的简洁性与可读性。}。评测器采用C++语言，使用32位Linux API实现。
+
+本项目代码托管在Github上\footnote{项目主页\url{http://uestc-acm.github.io/CDOJ/}。}，评测器内核位于branches文件夹，项目相关文档位于doc文件夹，服务器代码位于trunk文件夹下\footnote{项目最早托管于Google Code上，使用SVN作为版本控制工具，目录结构也是SVN风格的结构。}。评测器内核不在本文的讨论范围内，我们主要说明下trunk目录的结构。
+
+trunk目录下的pom.xml是maven工程的配置文件，config和script用来保存一些编译脚本和配置文件，所有的代码均在src目录下。
+
+\pic[htbp]{src目录结构}{width=\textwidth}{srcdirectorystructure}
+
+java目录保存java源代码，resources文件夹保存系统配置信息，sql目录下保存数据库脚本，webapp下保存和前端相关的所有文件，包括样式表、图片、JSP文件。
 
 \section{服务器端框架}
 \subsection{服务器端总体技术架构}
@@ -82,3 +90,14 @@
 \pic[htbp]{网站结构图}{}{front-end-structure}
 
 目前本项目域名为\url{http://acm.uestc.edu.cn/}，根据功能需要我们将其划分若干部分，如图\ref{front-end-structure}所示。
+
+\subsection{浏览器端开发流程}
+\pic[htbp]{前端文件目录结构}{width=\textwidth}{cdojuidirectorystructure}
+
+本系统所用到的样式表和脚本较多，这些文件统一使用GruntJS来维护，位于trunk/src/main/webapp/plugins/cdoj下。我们用LESS作为样式表的编程语言，CoffeeScript作为脚本的编程语言，编译流程如图\ref{GruntJS}所示。
+
+\pic[htbp]{GruntJS编译活动图}{}{GruntJS}
+
+项目中与AngularJS框架相关的脚本文件统一放置在src/angular子目录下。LESS文件在src/less下。还有部分功能我们用JQuery实现，位于src/jquery下。src/css和src/js被用来保存外部的CSS和JS文件。编译后的文件在dist目录下。
+
+%\pic[htbp]{dist目录结构}{width=0.4\textwidth}{distdirectorystructure}

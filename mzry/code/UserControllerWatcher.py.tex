@@ -1,0 +1,21 @@
+\noindent
+\ttfamily
+\hlstd{\hllin{001\ }}\hlstd{\ \ \ \ }\hlstd{\$rootScope}\hlopt{.}\hlstd{\$}\hlkwd{watch}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"hasLogin"}\hlstd{}\hlopt{,}\\
+\hllin{002\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlopt{{-}$>$}\\
+\hllin{003\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{if\ }\hlstd{\$rootScope}\hlopt{.}\hlstd{hasLogin\\
+\hllin{004\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{view\ }\hlopt{=\ }\hlstd{\$scope}\hlopt{.}\hlstd{views}\hlopt{.}\hlstd{userView\\
+\hllin{005\ }}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{else}\\
+\hllin{006\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{view\ }\hlopt{=\ }\hlstd{\$scope}\hlopt{.}\hlstd{views}\hlopt{.}\hlstd{loginView\\
+\hllin{007\ }}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlslc{\#\ recompile\ content}\\
+\hllin{008\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{\$element}\hlopt{.}\hlstd{}\hlkwd{html}\hlstd{}\hlopt{(}\hlstd{view}\hlopt{)}\\
+\hllin{009\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{\$}\hlkwb{compile}\hlstd{}\hlopt{(}\hlstd{\$element}\hlopt{.}\hlstd{}\hlkwd{contents}\hlstd{}\hlopt{())(}\hlstd{\$scope}\hlopt{)}\\
+\hllin{010\ }\hlstd{\\
+\hllin{011\ }}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{if\ }\hlstd{\$rootScope}\hlopt{.}\hlstd{hasLogin\ }\hlopt{\&\&\ }\hlstd{\$rootScope}\hlopt{.}\hlstd{currentUser}\hlopt{.}\Righttorque\\
+\hllin{012\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwb{type\ }\hlstd{}\hlopt{==\ }\hlstd{}\hlnum{1}\\
+\hllin{013\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{\$rootScope}\hlopt{.}\hlstd{isAdmin\ }\hlopt{=\ }\hlstd{true\\
+\hllin{014\ }}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{else}\\
+\hllin{015\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{\$rootScope}\hlopt{.}\hlstd{isAdmin\ }\hlopt{=\ }\hlstd{false\\
+\hllin{016\ }}\hlstd{\ \ \ \ }\hlstd{}\hlopt{)}\hlstd{}\\
+\mbox{}
+\normalfont
+\normalsize

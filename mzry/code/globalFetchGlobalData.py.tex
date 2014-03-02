@@ -1,0 +1,15 @@
+\noindent
+\ttfamily
+\hlstd{\hllin{001\ }cdoj}\hlopt{.}\hlstd{}\hlkwd{run}\hlstd{}\hlopt{({[}}\\
+\hllin{002\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlstr{"\$rootScope"}\hlstd{}\hlopt{,\ }\hlstd{}\hlstr{"\$http"}\hlstd{\\
+\hllin{003\ }}\hlstd{\ \ }\hlstd{}\hlopt{(}\hlstd{\$rootScope}\hlopt{,\ }\hlstd{\$http}\hlopt{){-}$>$}\\
+\hllin{004\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{\$http}\hlopt{.}\hlstd{}\hlkwd{get}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"/globalData"}\hlstd{}\hlopt{).}\hlstd{}\hlkwd{then\ }\hlstd{}\hlopt{(}\hlstd{response}\hlopt{){-}$>$}\\
+\hllin{005\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{data\ }\hlopt{=\ }\hlstd{response}\hlopt{.}\hlstd{data\\
+\hllin{006\ }}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlkwa{if\ }\hlstd{data}\hlopt{.}\hlstd{result\ }\hlopt{==\ }\hlstd{}\hlstr{"error"}\hlstd{\\
+\hllin{007\ }}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwd{alert}\hlstd{}\hlopt{(}\hlstd{data}\hlopt{.}\hlstd{error\textunderscore msg}\hlopt{)}\\
+\hllin{008\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlkwa{else}\\
+\hllin{009\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{\textunderscore }\hlopt{.}\hlstd{}\hlkwd{extend}\hlstd{}\hlopt{(}\hlstd{\$rootScope}\hlopt{,\ }\hlstd{data}\hlopt{)}\\
+\hllin{010\ }\hlstd{}\hlopt{{]})}\hlstd{}\\
+\mbox{}
+\normalfont
+\normalsize

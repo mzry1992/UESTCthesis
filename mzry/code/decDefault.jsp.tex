@@ -1,0 +1,48 @@
+\noindent
+\ttfamily
+\hlstd{}\hllin{001\ }\hlopt{$<$\%{-}{-}}\\
+\hllin{002\ }\hlstd{\ Default\ decorator}\\
+\hllin{003\ }\hlopt{{-}{-}\%$>$}\\
+\hllin{004\ }\hlstd{}\hlopt{$<$\%}\hlstd{@\ taglib\ uri}\hlopt{=}\hlstd{}\hlstr{"http://www.opensymphony.}\Righttorque\\
+\hllin{005\ }\hlstr{com/sitemesh/decorator"}\hlstd{\\
+\hllin{006\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ }\hlstd{prefix}\hlopt{=}\hlstd{}\hlstr{"decorator"}\hlstd{\ }\hlopt{\%$>$}\\
+\hllin{007\ }\hlstd{}\hlopt{$<$\%}\hlstd{@\ taglib\ uri}\hlopt{=}\hlstd{}\hlstr{"http://www.opensymphony.com/sitemesh/page"}\hlstd{\ \Righttorque\\
+\hllin{008\ }prefix}\hlopt{=}\hlstd{}\hlstr{"page"}\hlstd{\ }\hlopt{\%$>$}\\
+\hllin{009\ }\hlstd{}\hlopt{$<$\%}\hlstd{@\ page\ contentType}\hlopt{=}\hlstd{}\hlstr{"text/html;charset=UTF{-}8"}\hlstd{\ \Righttorque\\
+\hllin{010\ }language}\hlopt{=}\hlstd{}\hlstr{"java"}\hlstd{\ }\hlopt{\%$>$}\\
+\hllin{011\ }\hlstd{}\hlopt{$<$!}\hlstd{DOCTYPE\ html}\hlopt{$>$}\\
+\hllin{012\ }\hlstd{}\hlopt{$<$}\hlstd{html\ lang}\hlopt{=}\hlstd{}\hlstr{"en"}\hlstd{\ ng}\hlopt{{-}}\hlstd{app}\hlopt{=}\hlstd{}\hlstr{"cdoj"}\hlstd{}\hlopt{$>$}\\
+\hllin{013\ }\hlstd{}\hlopt{$<$}\hlstd{head}\hlopt{$>$}\\
+\hllin{014\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{$<$}\hlstd{page}\hlopt{:}\hlstd{applyDecorator\ name}\hlopt{=}\hlstd{}\hlstr{"head"}\hlstd{\ page}\hlopt{=}\hlstd{}\hlstr{"/WEB{-}}\Righttorque\\
+\hllin{015\ }\hlstr{}\hlstd{\ \ }\hlstr{INF/views/common/header.jsp"}\hlstd{}\hlopt{/$>$}\\
+\hllin{016\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{$<$}\hlstd{decorator}\hlopt{:}\hlstd{head}\hlopt{/$>$}\\
+\hllin{017\ }\hlstd{\\
+\hllin{018\ }}\hlstd{\ \ }\hlstd{}\hlopt{$<$}\hlstd{title}\hlopt{$>$$<$}\hlstd{decorator}\hlopt{:}\hlstd{title}\hlopt{/$>$\ {-}\ }\hlstd{UESTC\ Online\ Judge}\hlopt{$<$/}\hlstd{title}\hlopt{$>$}\\
+\hllin{019\ }\hlstd{}\hlopt{$<$/}\hlstd{head}\hlopt{$>$}\\
+\hllin{020\ }\hlstd{}\\
+\hllin{021\ }\hlopt{$<$}\hlstd{body}\hlopt{$>$}\\
+\hllin{022\ }\hlstd{}\hlopt{$<$}\hlstd{page}\hlopt{:}\hlstd{applyDecorator\ name}\hlopt{=}\hlstd{}\hlstr{"body"}\hlstd{\\
+\hllin{023\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{page}\hlopt{=}\hlstd{}\hlstr{"/WEB{-}INF/views/common/navbarTop.}\Righttorque\\
+\hllin{024\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{jsp"}\hlstd{}\hlopt{/$>$}\\
+\hllin{025\ }\hlstd{}\hlopt{$<$}\hlstd{div\ id}\hlopt{=}\hlstd{}\hlstr{"cdoj{-}layout"}\hlstd{}\hlopt{$>$}\\
+\hllin{026\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{$<$}\hlstd{div\ id}\hlopt{=}\hlstd{}\hlstr{"cdoj{-}navbar"}\hlstd{}\hlopt{$>$}\\
+\hllin{027\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlopt{$<$}\hlstd{page}\hlopt{:}\hlstd{applyDecorator\ name}\hlopt{=}\hlstd{}\hlstr{"body"}\hlstd{\\
+\hllin{028\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{page}\hlopt{=}\hlstd{}\hlstr{"/WEB{-}}\Righttorque\\
+\hllin{029\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{INF/views/common/navbarList.jsp"}\hlstd{}\hlopt{/$>$}\\
+\hllin{030\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{$<$/}\hlstd{div}\hlopt{$>$}\\
+\hllin{031\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{$<$}\hlstd{div\ id}\hlopt{=}\hlstd{}\hlstr{"cdoj{-}container"}\hlstd{}\hlopt{$>$}\\
+\hllin{032\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlopt{$<$}\hlstd{decorator}\hlopt{:}\hlstd{body}\hlopt{/$>$}\\
+\hllin{033\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{$<$/}\hlstd{div}\hlopt{$>$}\\
+\hllin{034\ }\hlstd{}\hlopt{$<$/}\hlstd{div}\hlopt{$>$}\\
+\hllin{035\ }\hlstd{}\\
+\hllin{036\ }\hlopt{$<$}\hlstd{page}\hlopt{:}\hlstd{applyDecorator\ name}\hlopt{=}\hlstd{}\hlstr{"body"}\hlstd{\\
+\hllin{037\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{page}\hlopt{=}\hlstd{}\hlstr{"/WEB{-}INF/views/common/modal.}\Righttorque\\
+\hllin{038\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{jsp"}\hlstd{}\hlopt{/$>$}\\
+\hllin{039\ }\hlstd{}\hlopt{$<$}\hlstd{page}\hlopt{:}\hlstd{applyDecorator\ name}\hlopt{=}\hlstd{}\hlstr{"head"}\hlstd{\\
+\hllin{040\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{page}\hlopt{=}\hlstd{}\hlstr{"/WEB{-}INF/views/common/footer.}\Righttorque\\
+\hllin{041\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{jsp"}\hlstd{}\hlopt{/$>$}\\
+\hllin{042\ }\hlstd{}\hlopt{$<$/}\hlstd{body}\hlopt{$>$}\\
+\hllin{043\ }\hlstd{}\hlopt{$<$/}\hlstd{html}\hlopt{$>$}\hlstd{}\\
+\mbox{}
+\normalfont
+\normalsize

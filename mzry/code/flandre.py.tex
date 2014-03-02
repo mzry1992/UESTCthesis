@@ -1,0 +1,95 @@
+\noindent
+\ttfamily
+\hlstd{}\hllin{001\ }\hlslc{\#\ 一个简单的Markdown编辑器}\\
+\hllin{002\ }\hlstd{cdoj}\hlopt{.}\hlstd{}\hlkwd{directive}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"uiFlandre"}\hlstd{}\hlopt{,}\\
+\hllin{003\ }\hlstd{}\hlopt{{-}$>$}\\
+\hllin{004\ }\hlstd{}\hlstd{\ \ }\hlstd{restrict}\hlopt{:\ }\hlstd{}\hlstr{"A"}\hlstd{\\
+\hllin{005\ }}\hlstd{\ \ }\hlstd{scope}\hlopt{:}\\
+\hllin{006\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{content}\hlopt{:\ }\hlstd{}\hlstr{"=ngModel"}\hlstd{\\
+\hllin{007\ }}\hlstd{\ \ \ \ }\hlstd{uploadUrl}\hlopt{:\ }\hlstd{}\hlstr{"@"}\hlstd{\\
+\hllin{008\ }}\hlstd{\ \ }\hlstd{controller}\hlopt{:\ {[}}\\
+\hllin{009\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlstr{"\$scope"}\hlstd{}\hlopt{,\ }\hlstd{}\hlstr{"\$element"}\hlstd{}\hlopt{,}\\
+\hllin{010\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlopt{(}\hlstd{\$scope}\hlopt{,\ }\hlstd{\$element}\hlopt{)\ {-}$>$}\\
+\hllin{011\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{mode\ }\hlopt{=\ }\hlstd{}\hlstr{"edit"}\hlstd{\\
+\hllin{012\ }}\hlstd{\ \ \ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{previewContent\ }\hlopt{=\ }\hlstd{}\hlstr{""}\hlstd{\\
+\hllin{013\ }}\hlstd{\ \ \ \ \ \ }\hlstd{\$editor\ }\hlopt{=\ }\hlstd{\$element}\hlopt{.}\hlstd{}\hlkwd{find}\hlstd{}\hlopt{(}\hlstd{}\hlstr{".flandre{-}editor"}\hlstd{}\hlopt{)}\\
+\hllin{014\ }\hlstd{\\
+\hllin{015\ }}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlslc{\#\ 预览按钮事件绑定}\\
+\hllin{016\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{togglePreview\ }\hlopt{=\ {-}$>$}\\
+\hllin{017\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{if\ }\hlstd{\$scope}\hlopt{.}\hlstd{mode\ }\hlopt{==\ }\hlstd{}\hlstr{"edit"}\hlstd{\\
+\hllin{018\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlslc{\#\ preview}\\
+\hllin{019\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{previewContent\ }\hlopt{=\ }\hlstd{\$scope}\hlopt{.}\hlstd{content\\
+\hllin{020\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{mode\ }\hlopt{=\ }\hlstd{}\hlstr{"preview"}\hlstd{\\
+\hllin{021\ }}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{else}\\
+\hllin{022\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlslc{\#\ edit}\\
+\hllin{023\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{mode\ }\hlopt{=\ }\hlstd{}\hlstr{"edit"}\hlstd{\\
+\hllin{024\ }\\
+\hllin{025\ }}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlslc{\#\ 图片上传}\\
+\hllin{026\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{pictureUploader\ }\hlopt{=\ }\hlstd{new\ qq}\hlopt{.}\hlstd{}\hlkwd{FineUploaderBasic}\hlstd{}\hlopt{(}\\
+\hllin{027\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{button}\hlopt{:\ }\hlstd{\$element}\hlopt{.}\hlstd{}\hlkwd{find}\hlstd{}\hlopt{(}\hlstd{}\hlstr{".flandre{-}picture{-}uploader"}\hlstd{}\hlopt{){[}}\Righttorque\\
+\hllin{028\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlnum{0}\hlstd{}\hlopt{{]}}\\
+\hllin{029\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{request}\hlopt{:}\\
+\hllin{030\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{endpoint}\hlopt{:\ }\hlstd{\$scope}\hlopt{.}\hlstd{uploadUrl\\
+\hllin{031\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{inputName}\hlopt{:\ }\hlstd{}\hlstr{"uploadFile"}\hlstd{\\
+\hllin{032\ }}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{validation}\hlopt{:}\\
+\hllin{033\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{allowedExtensions}\hlopt{:\ {[}}\hlstd{}\hlstr{"jpeg"}\hlstd{}\hlopt{,\ }\hlstd{}\hlstr{"jpg"}\hlstd{}\hlopt{,\ }\hlstd{}\hlstr{"gif"}\hlstd{}\hlopt{,\ }\hlstd{}\hlstr{"png"}\hlstd{}\hlopt{{]},}\\
+\hllin{034\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{sizeLimit}\hlopt{:\ }\hlstd{}\hlnum{10\ }\hlstd{}\hlopt{{*}\ }\hlstd{}\hlnum{1000\ }\hlstd{}\hlopt{{*}\ }\hlstd{}\hlnum{1000\ }\hlstd{}\hlslc{\#\ 10\ MB}\\
+\hllin{035\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{multiple}\hlopt{:\ }\hlstd{false\\
+\hllin{036\ }}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{callbacks}\hlopt{:}\\
+\hllin{037\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{onComplete}\hlopt{:\ (}\hlstd{}\hlkwb{id}\hlstd{}\hlopt{,\ }\hlstd{fileName}\hlopt{,\ }\hlstd{data}\hlopt{)\ {-}$>$}\\
+\hllin{038\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{if\ }\hlstd{data}\hlopt{.}\hlstd{success\ }\hlopt{==\ }\hlstd{}\hlstr{"true"}\hlstd{\\
+\hllin{039\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{value\ }\hlopt{=\ }\hlstd{}\hlstr{"!{[}title{]}(\#\{data.uploadedFileUrl\})"}\hlstd{\\
+\hllin{040\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{position\ }\hlopt{=\ }\hlstd{\$editor}\hlopt{.}\hlstd{}\hlkwd{getCursorPosition}\hlstd{}\hlopt{()}\\
+\hllin{041\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{oldText\ }\hlopt{=\ }\hlstd{\$editor}\hlopt{.}\hlstd{}\hlkwd{val}\hlstd{}\hlopt{()}\\
+\hllin{042\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlslc{\#\ 将代码插入到文章中}\\
+\hllin{043\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{oldText\ }\hlopt{=\ }\hlstd{oldText}\hlopt{.}\hlstd{}\hlkwd{insert}\hlstd{}\hlopt{(}\hlstd{value}\hlopt{,\ }\hlstd{position}\hlopt{)}\\
+\hllin{044\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{\$}\hlkwb{apply}\hlstd{}\hlopt{({-}$>$}\\
+\hllin{045\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{\$scope}\hlopt{.}\hlstd{content\ }\hlopt{=\ }\hlstd{oldText\\
+\hllin{046\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlopt{)}\\
+\hllin{047\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlslc{\#\ !{[}title{]}(...)}\\
+\hllin{048\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlslc{\#}\hlstd{\ \ \ }\hlslc{\textasciicircum \textasciicircum \textasciicircum \textasciicircum \textasciicircum }\\
+\hllin{049\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlslc{\#\ 同时选中title部分}\\
+\hllin{050\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{\$editor}\hlopt{.}\hlstd{}\hlkwd{setSelection}\hlstd{}\hlopt{(}\hlstd{position\ }\hlopt{+\ }\hlstd{}\hlnum{2}\hlstd{}\hlopt{,\ }\hlstd{position\ }\hlopt{+\ }\Righttorque\\
+\hllin{051\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlnum{7}\hlstd{}\hlopt{)}\\
+\hllin{052\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{else}\\
+\hllin{053\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlslc{\#\ TODO}\\
+\hllin{054\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{console}\hlopt{.}\hlstd{}\hlkwd{log}\hlstd{}\hlopt{(}\hlstd{data}\hlopt{)}\\
+\hllin{055\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlopt{)}\\
+\hllin{056\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{{]}}\\
+\hllin{057\ }\hlstd{}\hlstd{\ \ }\hlstd{template}\hlopt{:\ }\hlstd{}\hlstr{"""}\\
+\hllin{058\ }\hlstr{}\hlstd{\ \ \ \ \ \ }\hlstr{$<$div\ class="panel\ panel{-}default"$>$}\\
+\hllin{059\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{$<$div\ class="panel{-}heading\ flandre{-}heading"$>$}\\
+\hllin{060\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstr{$<$div\ class="btn{-}toolbar"\ role="toolbar"$>$}\\
+\hllin{061\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{$<$div\ class="btn{-}group"$>$}\\
+\hllin{062\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{$<$button\ type="button"\ class="btn\ btn{-}default\ }\Righttorque\\
+\hllin{063\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{btn{-}sm"}\\
+\hllin{064\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{ng{-}click="togglePreview()"}\\
+\hllin{065\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{ng{-}class="\{active:\ mode\ ==\ 'preview'\}}\Righttorque\\
+\hllin{066\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{"$>$Preview$<$/button$>$}\\
+\hllin{067\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{$<$/div$>$}\\
+\hllin{068\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{$<$div\ class="btn{-}group\ flandre{-}tools"$>$}\\
+\hllin{069\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{$<$span\ class="btn\ btn{-}default\ btn{-}sm"$>$$<$i\ }\Righttorque\\
+\hllin{070\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{class="fa\ fa{-}smile{-}o"$>$$<$/i$>$$<$/span$>$}\\
+\hllin{071\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{$<$span\ class="btn\ btn{-}default\ btn{-}sm\ flandre{-}}\Righttorque\\
+\hllin{072\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{picture{-}uploader"$>$$<$i\ class="fa\ fa{-}picture{-}o"$>$$<$}\Righttorque\\
+\hllin{073\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{/i$>$$<$/span$>$}\\
+\hllin{074\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{$<$/div$>$}\\
+\hllin{075\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstr{$<$/div$>$}\\
+\hllin{076\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{$<$/div$>$}\\
+\hllin{077\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{$<$textarea\ class="tex2jax\textunderscore ignore\ form{-}control\ }\Righttorque\\
+\hllin{078\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{flandre{-}editor"}\\
+\hllin{079\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{msd{-}elastic}\\
+\hllin{080\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{ng{-}class="\{'flandre{-}show':\ mode\ ==\ 'edit'\}}\Righttorque\\
+\hllin{081\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{"}\\
+\hllin{082\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{ng{-}model="content"$>$$<$/textarea$>$}\\
+\hllin{083\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{$<$div\ class="flandre{-}preview"\ ng{-}class="\{'flandre{-}}\Righttorque\\
+\hllin{084\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{show':\ mode\ ==\ 'preview'\}"$>$}\\
+\hllin{085\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstr{$<$div\ ui{-}markdown\ content="previewContent"$>$$<$/div$>$}\\
+\hllin{086\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{$<$/div$>$}\\
+\hllin{087\ }\hlstr{}\hlstd{\ \ \ \ \ \ }\hlstr{$<$/div$>$}\\
+\hllin{088\ }\hlstr{}\hlstd{\ \ \ \ \ \ }\hlstr{"""}\hlstd{\\
+\hllin{089\ }}\hlstd{\ \ }\hlstd{replace}\hlopt{:\ }\hlstd{true}\\
+\hllin{090\ }\hlopt{)}\hlstd{}\\
+\mbox{}
+\normalfont
+\normalsize

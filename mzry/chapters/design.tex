@@ -75,7 +75,7 @@ UserSerialKey & 用户激活码\\
 
 Hibernate自带的数据库API较为复杂，为了提升效率和简化代码维护成本，我们自己构建了一套用来提取数据库数据的工具。在这类DTO中，我们使用了一个\textbf{@Fields}注解来注明这个DTO的信息来自数据库中的哪些域，然后通过这个field来构建HQL查询语言的\textbf{SELECT}命令。如下所示为UserListDTO.java的部分内容：
 
-\input{code/FieldAnnotation.java.tex}
+\input{code/FieldAnnotation.java}
 
 对应生成的HQL语句为\textbf{SELECT userId, email, userName, nickName, type, school, motto, lastLogin, solved, tried FROM User}，配合接下来要介绍到的Condition，我们可以组合出基本的HQL查询语句。
 
@@ -97,7 +97,7 @@ Hibernate自带的数据库API较为复杂，为了提升效率和简化代码�
 
 对于一些比较简单的条件，我们提供了一个\textbf{@Exp}注解，例如在StatusCondition.java中有如下变量：
 
-\input{code/ExpAnnotation.java.tex}
+\input{code/ExpAnnotation.java}
 
 如果这两个成员变量不是空，那么最后我们会得到一个形式如同\textbf{WHERE ... userId $>=$ userId and userByUserId $=$ userId ...}的HQL查询语句。
 
@@ -170,42 +170,261 @@ Spring MVC框架提供了很强大的Controller，我们只需要在一个类上
 
 下面我们用用户登陆相关的控制器来说明它是如何工作的（代码省略了其余部分）。
 
-\input{code/UserController.java.tex}
+\input{code/UserController.java}
 
 我们使用\textbf{@RequestMap}注解来声明方法所对应的网址，\textbf{@LoginPermit}定义了该地址的权限。因为Spring通过反射机制来进行自动注入，控制器方法的参数可以以任意顺序排列而不需要指定顺序。在login方法中，除了\textbf{HttpSession session}参数以外，另外两个和前端POST来的数据相关，\textbf{@RequestBody @Valid UserLoginDTO userLoginDTO}用来保存前端POST来的数据，我们使用了Java验证框架来对前端传递的数据进行一个初步的合法性验证，\textbf{@Valid}注解说明了我们需要对\textbf{userLoginDTO}进行验证，验证的结果保存在\textbf{BindingResult validateResult}中，下面是\textbf{UserLoginDTO}的部分代码：
 
-\input{code/UserLoginDTO.java.tex}
+\input{code/UserLoginDTO.java}
 
 顺利登陆之后，前端可以接收到类似如下格式的一段数据：
 
-\input{code/loginResult.txt.tex}
+\input{code/loginResult.txt}
 
 \subsubsection{网站地图}
-上面我们举例说明了UserController的login方法的实现，限于篇幅限制其余的部分我们不一一描述，在这里我们给出整个网站的网站地图，介绍各个控制器的作用和返回给前端的数据类型。
+上面我们举例说明了UserController的login方法的实现，限于篇幅限制其余的部分我们不一一描述，在这里我们给出整个网站的网站地图，一共有47个不同的方法，我们只介绍各个控制器的作用和返回给前端的数据类型。
 
-\longthreelinetable{sitemap}{网站地图}{5}{lllll}
+\longthreelinetable{sitemap}{网站地图}{4}{llll}
 {
-地址  & 控制器 & 方法 & 作用 & 返回类型\\
+地址 & 方法 & 作用 & 返回类型\\
 }{
-/admin/ & AdminController & index & 管理员面板 & HTML\\
+ & \multicolumn{3}{c}{AdminController}\\
+ \cmidrule[0.05em]{2-4}
+/admin/ & index & 管理员面板 & HTML\\
 
-/article/data/{type}/{articleId} & ArticleController & data & 文章数据 & JSON\\
-/article/show/{articleId} & ArticleController & show & 文章页面 & HTML\\
-/article/search & ArticleController & search & 文章查找 & JSON\\
-/article/editor/{articleId} & ArticleController & editor & 文章编辑器 & HTML\\
-/article/edit & ArticleController & edit & 文章编辑 & JSON\\
-/article/operator & ArticleController & operator & 文章操作 & JSON\\
+\midrule[0.05em]
+ & \multicolumn{3}{c}{ArticleController}\\
+ \cmidrule[0.05em]{2-4}
+/article/data/ & data & 文章数据 & JSON\\
+/article/show/ & show & 文章页面 & HTML\\
+/article/search & search & 文章查找 & JSON\\
+/article/editor/ & editor & 文章编辑器 & HTML\\
+/article/edit & edit & 文章编辑 & JSON\\
+/article/operator & operator & 文章操作 & JSON\\
 
-/contest/status/{contestId}/{lastFetched} & ContestController & status & 比赛评测结果 & JSON\\
-/contest/rankList/{contestId} & ContestController & rankList & 比赛排名 & JSON\\
-/contest/data/{contestId} & ContestController & data & 比赛数据 & JSON\\
-/contest/show/{contestId} & ContestController & show & 比赛页面 & HTML\\
-/contest/list/{contestId} & ContestController & list & 比赛列表 & HTML\\
-/contest/search & ContestController & search & 比赛查找 & JSON\\
-/contest/operator/{id}/{field}/{value} & ContestController & operator & 比赛操作 & JSON\\
-/contest/editor/{contestId} & ContestController & editor & 比赛编辑器 & HTML\\
-/contest/edit & ContestController & edit & 比赛编辑 & JSON\\
+\midrule[0.05em]
+ & \multicolumn{3}{c}{ContestController}\\
+ \cmidrule[0.05em]{2-4}
+/contest/status/ & status & 比赛评测结果 & JSON\\
+/contest/rankList/ & rankList & 比赛排名 & JSON\\
+/contest/data/ & data & 比赛数据 & JSON\\
+/contest/show/ & show & 比赛页面 & HTML\\
+/contest/list/ & list & 比赛列表 & HTML\\
+/contest/search & search & 比赛查找 & JSON\\
+/contest/operator/ & operator & 比赛操作 & JSON\\
+/contest/editor/ & editor & 比赛编辑器 & HTML\\
+/contest/edit & edit & 比赛编辑 & JSON\\
+
+\midrule[0.05em]
+ & \multicolumn{3}{c}{ErrorController}\\
+ \cmidrule[0.05em]{2-4}
+/error/authenticationError & authenticationError & 权限错误页面 & HTML\\
+
+\midrule[0.05em]
+ & \multicolumn{3}{c}{IndexController}\\
+ \cmidrule[0.05em]{2-4}
+/ & index & 主页 & HTML\\
+/globalData & globalData & 全局变量 & JSON\\
+
+\midrule[0.05em]
+ & \multicolumn{3}{c}{PictureController}\\
+ \cmidrule[0.05em]{2-4}
+/picture/uploadPicture/ & uploadPicture & 图片上传 & JSON\\
+
+\midrule[0.05em]
+ & \multicolumn{3}{c}{ProblemController}\\
+ \cmidrule[0.05em]{2-4}
+/problem/data/ & data & 题目数据 & JSON\\
+/problem/show/ & show & 题目页面 & HTML\\
+/problem/list & list & 题目列表 & HTML\\
+/problem/search & search & 题目查找 & JSON\\
+/problem/operator/ & operator & 题目操作 & JSON\\
+/problem/query/ & query & 题目数据 & JSON\\
+/problem/editor/ & editor & 题目编辑器 & HTML\\
+/problem/edit & edit & 题目编辑 & JSON\\
+/problem/uploadProblemDataFile/ & uploadProblemData & 题目测试数据上传 & JSON\\
+
+\midrule[0.05em]
+ & \multicolumn{3}{c}{StatusController}\\
+ \cmidrule[0.05em]{2-4}
+/status/list & list & 评测状态列表 & HTML\\
+/status/search & search & 评测状态查找 & JSON\\
+/status/count & count & 评测状态统计 & JSON\\
+/status/rejudge & rejudge & 重新评测 & JSON\\
+/status/submit & submit & 提交代码 & JSON\\
+/status/info/ & info & 评测状态信息 & JSON\\
+
+\midrule[0.05em]
+ & \multicolumn{3}{c}{UserController}\\
+ \cmidrule[0.05em]{2-4}
+/user/login & login & 用户登录 & JSON\\
+/user/logout & logout & 用户登出 & JSON\\
+/user/register & register & 用户注册 & JSON\\
+/user/list & list & 用户列表 & HTML\\
+/user/search & search & 用户查找 & JSON\\
+/user/center/ & center & 用户页面 & HTML\\
+/user/edit & edit & 用户账户修改 & JSON\\
+/user/adminEdit & adminEdit & 用户账户修改（管理员） & JSON\\
+/user/sendSerialKey/ & sendSerialKey & 用户激活请求 & JSON\\
+/user/profile/ & profile & 用户信息 & JSON\\
+/user/activate/ & activate & 用户激活页面 & HTML\\
+/user/resetPassword & resetPassword & 用户密码重置 & JSON\\
 }
 
 \section{浏览器端详细设计}
-一个好的Web应用不仅仅要拥有功能完善的后台，还应该拥有一个友好的界面。下面我们
+一个好的Web应用不仅仅要拥有功能完善的后台，还应该拥有一个友好的界面。这部分我们介绍下网页的基本框架以及使用的编程方法。
+
+本系统用到的样式表和
+\subsection{网页结构}
+
+整个网站可以分为三个部分：侧边栏、顶部导航和页面主体部分。为了统一所有页面的样式，我们使用了SiteMesh框架\footnote{SiteMesh是由一个基于Web页面布局、装饰以及与现存Web应用整合的框架。它能帮助我们在由大量页面构成的项目中创建一致的页面布局和外观，如一致的导航条，一致的banner，一致的版权，等等。 它不仅仅能处理动态的内容，如jsp，php，asp等产生的内容，它也能处理静态的内容，如htm的内容，使得它的内容也符合你的页面结构的要求。甚至于它能将HTML文件象include那样将该文件作为一个面板的形式嵌入到别的文件中去。所有的这些，都是GOF的Decorator模式的最生动的实现。}，它通过对用户请求进行过滤，并对服务器向客户端响应也进行过滤，然后给原始页面加入一定的装饰（header,footer等），然后把结果返回给客户端。通过SiteMesh的页面装饰，可以提供更好的代码复用，所有的页面装饰效果耦合在目标页面中，无需再使用include指令来包含装饰效果，目标页与装饰页完全分离，如果所有页面使用相同的装饰器，可以是整个Web应用具有统一的风格。
+
+首先，我们定义了一个全局的装饰器，所有的页面都使用这个装饰器装饰。
+
+\input{code/decDefault.jsp}
+
+\textbf{header.jsp}文件包含了网站head标签内的所有信息，head元素是所有头部元素的容器，指引浏览器找到样式表，提供元信息。
+
+\pic[htbp]{SiteMesh装饰器结构图}{width=\textwidth}{SiteMesh}
+
+body标签首先包含的是\textbf{navbarTop.jsp}，这个文件是网站的顶部导航部分。接着是一个双栏格式的div，左侧包含的\textbf{navbarList.jsp}是网站的侧边栏部分，右侧的\textbf{$<$decorator:body/$>$}是网站的主体部分。最后两个部分\textbf{modal.jsp}和\textbf{footer.jsp}分别保存网站中的对话框元素和网站的脚本文件。如图\ref{SiteMesh}所示。
+
+当控制器返回一个视图地址时（如index/index），SiteMesh会自动用\textbf{index/index.jsp}文件替换掉\textbf{$<$decorator:body/$>$}标签，得到一个完整的文件。
+
+\pic[htbp]{网站前端设计}{width=\textwidth}{UI}
+
+在样式方面，我们采用了Bootstrap3作为网站前端的UI框架，原因有以下两点：首先，Bootstrap出自twitter，并且开源，久经考验，减少了测试的工作量。同时，Bootstrap的代码有着非常良好的代码规范，从中也可以学习到很多，在Bootstrap的基础之上创建项目，日后代码的维护也变得异常简单清晰。
+
+Bootstrap是一个响应式的框架，利用这个特性，我们为移动客户端进行了一些优化，让网页能够在手机等小屏幕设备上正常浏览。图\ref{UI}是最终的整体效果图，我们通过调整浏览器的大小来模拟不同的屏幕尺寸，在实际中效果也很好。
+
+\subsection{网页加载流程}
+网页加载完成后，首先运行下面这段代码：
+
+这句话定义了一个叫做cdoj的angular module，后面的数组是本module引用到的外部库。接下来向/globalData这个地址获取用户的基本信息和一些常量。在AngularJS中每个元素都有一个自己的Scope（作用域），整个系统中还有一个rootScope，所有元素都能访问这个Scope，我们将从/globalData获取的全局信息放到rootScope中便于日后使用。
+
+\input{code/globalInit.py}
+
+\input{code/globalFetchGlobalData.py}
+
+完成上诉步骤后，AngularJS分析整个网页的文档树，然后将各个Controller和Directive应用到各部分中。
+
+\subsection{顶部导航详细设计}
+\subsubsection{用户菜单设计}
+顶部导航栏有两部分组成：搜索框和用户菜单。搜索框将在后面介绍，这里先介绍用户菜单。
+
+在用户未登录时用户菜单显示的是一个Sign in按钮，而在登录之后显示的是用户的头像\footnote{我们使用了Gravatar（英语：Globally Recognized Avatar）头像服务。只要用户在Gravatar的服务器上上传了自己的头像，用户便可以在其他任何支持Gravatar的博客、论坛等地方使用它。}。登陆前菜单由一个登录表单组成，登录之后菜单内容变成了与用户相关的内容。见图\ref{userMenu}。
+
+\begin{pics}[htbp]{用户菜单}{userMenu}
+\addsubpic{登陆前的用户菜单}{width=0.5\textwidth}{userMenuBeforeLogin}
+\addsubpic{登录后的用户菜单}{width=0.27\textwidth}{userMenuAfterLogin}
+\end{pics}
+
+在\ref{sec:angularjs}中我们介绍了AngularJS框架，网页的html标签中我们用\textbf{ng-app="cdoj"}定义了app的作用域。在HTML中用户菜单只有如下一个标签（详细代码见附录\ref{sec:navbarTop}）：
+
+\input{code/navbarTopUser.jsp}
+
+\textbf{ng-controller="UserController"}声明了这个li标签对应的控制器，我们将一个叫做UserController的控制器绑定到了这个标签上，在这个控制器中，我们实现了如下功能：
+\begin{enumerate}
+	\item 用户菜单各个按钮事件的绑定。
+	\item 根据rootScope中的hasLogin变量来决定用户的登录状况以及根据情况展示相应的内容。
+\end{enumerate}
+
+我们在整个用户操作过程中都使用AJAX，这样做的好处是用户可以在原网页上登陆，而不用离开当前页面。
+
+\subsubsection{用户注册流程}
+打开Sign in菜单（图\ref{userMenuBeforeLogin}），单击Register后弹出注册对话框（图\ref{RegisterModal}）。对话框中包含一个注册表单，表单的每个输入框都是一个Angular Model，通过在input标签中添加相应的属性将其绑定到指定的变量上去，除此之外还可以进行浏览器端的表单验证。
+
+\input{code/RegisterModalPart.jsp}
+
+\pic[htbp]{注册对话框}{width=0.7\textwidth}{RegisterModal}
+
+\textbf{ng-model}指定了绑定的变量名\textbf{scope.userRegisterDTO.userName}，这种绑定是双向的，也就是说当变量改变时，输入框内的数据也会发生变化，同理当输入框变化是变量会自动变化。\textbf{ng-required}和\textbf{ng-pattern}指定了表单验证的条件。当数据不满足条件时，AngularJS会自动给该输入框添加一个\textbf{ng-invalid}的class。
+
+当用户填写完所有项目后，便可以单击Register按钮完成注册。如果表单中存在错误，我们会给出相应的提示（图\ref{RegisterValidateError}），否则对话框消失，注册完成，此时新注册的用户自动登陆在系统之中。为了保证用户密码的安全，我们在浏览器端使用Crypto-JS库\footnote{CryptoJS是一个纯javascript写的加密类库。}对用户的密码进行加密，然后将加密后的密码和账号传给后台。
+
+\pic[htbp]{表单错误提示示例}{width=0.6\textwidth}{RegisterValidateError}
+
+\subsubsection{用户登陆流程}
+在Sign in菜单（图\ref{userMenuBeforeLogin}）中填写用户名与密码之后单击Login按钮即可登陆。
+
+\subsubsection{用户登出流程}
+登陆之后，在用户菜单中（图\ref{userMenuAfterLogin}单击Logout即可安全退出。
+
+\subsubsection{用户密码找回流程}
+\pic[htbp]{密码找回对话框（单击Send email后）}{width=0.7\textwidth}{ForgetPasswordDialog}
+我们给忘记密码的用户提供了一个找回密码的功能，单击Sign in菜单（图\ref{userMenuBeforeLogin}）中的Forget password按钮可以弹出一个找回密码的对话框，用户在里面将自己的用户名填入后单击Send email按钮（图\ref{ForgetPasswordDialog}），服务器会向用户注册时填写的邮箱中发送一封找回密码用的邮件，并弹出成功提示。
+
+邮件中包含了一个形如\url{http://acm.uestc.edu.cn/user/activate/UESTC_Izayoi/96ac3b16d84a4bb335bfd8321c7a32f61f70f99f}的地址，这个地址由用户名和一个SerialKey组成。为了保证安全，每个SerialKey只有30分钟的有效期，且只能使用一次，这个地址会将用户带到一个密码重置页面（图\ref{ResetPasswordPage}）。
+
+\pic[htbp]{找回密码页面}{width=\textwidth}{ResetPasswordPage}
+
+\subsubsection{用户账户修改}
+登陆之后，在用户菜单中（图\ref{userMenuAfterLogin}单击Edit profile后会弹出一个用户信息编辑对话框，在这个对话框中用户能修改一部分基本信息，如密码、学号、学院信息等，但是不允许修改用户名。
+
+\subsection{内容渲染}
+为了保证网站内容格式的统一，本系统采用Markdown语言作为页面内容的排版语言\footnote{Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）和亚伦·斯沃茨（Aaron Swartz）。它允许人们``使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML（或者HTML）文档''。这种语言吸收了很多在电子邮件中已有的纯文本标记的特性。}\footnote{本系统中使用marked.js来将Markdown内容转换成HTML。}，同时我们还支持在内容中插入\LATEX格式的数学公式\footnote{本系统使用MathJax插件来渲染数学公式。}，代码由Prettify插件渲染。在这三个插件的帮助下，我们可以用很简单的方式排版出漂亮的格式。为了满足这些需求，我们实现了一个简单的Markdown编辑器，代码见附录\ref{sec:flandre}。它具有编辑模式和预览模式两种状态，通过一个Preview开关来切换，工具栏目前只有两个工具，一个是表情插入，这个部分是给用户讨论功能准备的，另一个工具是上传图片，用于向文章中插入一些描述性的图，如图\ref{flandreEditor}所示。
+\begin{pics}[htbp]{内容编辑器}{flandreEditor}
+\addsubpic{编辑模式}{width=0.48\textwidth}{editor}
+\addsubpic{预览模式}{width=0.48\textwidth}{editorPreview}
+\end{pics}
+
+\subsection{列表页面}
+本系统一共有有许多信息通过列表的形式呈现给用户，所以我们设计了一个简单的列表控制器\textbf{ListController}来复用一些重复的代码（见附录\ref{sec:listController}）。每个列表的HTML代码都是如下形式：
+
+\input{code/listPage.jsp}
+
+列表在\textbf{ng-init}属性中定义了初始化查询条件\textbf{condition}和查询操作的链接。列表查询表单中的各个输入框与\textbf{scope.condition}中的元素绑定，当用户修改查询条件时列表会自动更新。而后通过\textbf{ng-repeat}标签来定义列表的主体，AngularJS会自动将查询到的列表中的每一个元素应用到这个模板中去。
+
+在列表页面，顶部导航栏中的搜索框将会开始起作用，在它的右侧会有一个小箭头，通过它可以打开高级搜索下拉菜单，既之前说的列表查询表单。如图\ref{contestAdvanceSearch}所示。
+
+\pic[htbp]{比赛列表中的高级搜索菜单}{width=0.5\textwidth}{contestAdvanceSearch}
+
+列表的每一页只显示20个项目，如果查询得到的项目超过这个数量，页面会显示一个分页栏对结果进行划分。
+
+\pic[htbp]{分页栏}{width=0.4\textwidth}{pageInfo}
+
+\subsection{主页设计}
+\pic[htbp]{网站主页}{width=\textwidth}{HomepageLong2}
+主页是一个网站的入口，它由三个部分组成：网站标志，重要公告，日志。我们将一些重要的公告放置在醒目的位置。其余部分就是近期的一些日志，例如系统简介、常见问答等，如图\ref{HomepageLong2}所示。
+
+\subsection{文章模块详细设计}
+该模块包含两个页面，一个是文章页面，一个是文章编辑器。以管理员身份打开文章页面后在文章标题下方会有一个编辑连接，通过它可以编辑该文章。
+
+\begin{pics}[htbp]{文章相关页面}{articlePages}
+\addsubpic{文章页面}{width=0.48\textwidth}{articlePage}
+\addsubpic{文章编辑器}{width=0.48\textwidth}{articleEditor}
+\end{pics}
+
+\subsection{题目模块详细设计}
+\subsubsection{题目列表页面}
+单击侧边栏中的Problem选项即可进入题目列表页面，题目列表较为简单，包含了题目ID、题目名称、题目来源、通过人数，如果以管理员身份登陆还有有题目编辑按钮（一个是隐藏/显示题目，一个是编辑题目）和一个添加新题目的链接。
+。题目列表的高级搜索菜单提供了按题目编号查询、按题目难度查询、按题目标题查询、按题目来源查询等查询功能。
+
+\pic[htbp]{题目列表}{width=\textwidth}{ProblemListPage}
+
+\subsubsection{题目页面}
+经由题目列表可以进入题目页面。一道题目由题目限制、题目描述、输入格式、输出格式、测试样例、提示（可选）和来源信息（可选）组成。如图\ref{ProblemPageLong}所示。
+
+\pic[htbp]{题目页面}{width=\textwidth}{ProblemPageLong}
+
+\subsubsection{代码提交流程}
+在题目页面之中单击Submit标签按钮，切换到代码提交对话框，如图\ref{submitDialog}所示。
+
+用户将自己的代码复制到代码框中，然后通过下方的语言选择按钮选择对应的语言，最后单击Submit按钮即可将自己的代码提交至服务器。
+
+\pic[htbp]{代码提交对话框}{width=0.65\textwidth}{submitDialog}
+
+\subsubsection{题目编辑器}
+
+\subsection{比赛模块详细设计}
+\subsubsection{比赛列表页面}
+\subsubsection{比赛页面}
+\subsubsection{比赛流程}
+\subsubsection{比赛编辑器}
+
+\subsection{评测状态模块详细设计}
+\subsubsection{评测列表页面}
+\subsubsection{管理员Rejudge流程}
+
+\subsection{用户模块详细设计}
+\subsubsection{用户列表页面}
+\subsubsection{用户中心页面}

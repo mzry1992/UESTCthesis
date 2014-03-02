@@ -1,0 +1,49 @@
+\noindent
+\ttfamily
+\hlstd{}\hllin{001\ }\hlopt{$<$}\hlstd{div\ id}\hlopt{=}\hlstd{}\hlstr{"xxx{-}list"}\hlstd{\\
+\hllin{002\ }}\hlstd{\ \ \ \ \ }\hlstd{ng}\hlopt{{-}}\hlstd{controller}\hlopt{=}\hlstd{}\hlstr{"ListController"}\hlstd{\\
+\hllin{003\ }}\hlstd{\ \ \ \ \ }\hlstd{ng}\hlopt{{-}}\hlstd{init}\hlopt{=}\hlstd{}\hlstr{"condition=\{}\\
+\hllin{004\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{currentPage:\ null,}\\
+\hllin{005\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{keyword:\ undefined,}\\
+\hllin{006\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{orderFields:\ undefined,}\\
+\hllin{007\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{orderAsc:\ undefined}\\
+\hllin{008\ }\hlstr{}\hlstd{\ \ \ \ }\hlstr{\};}\\
+\hllin{009\ }\hlstr{}\hlstd{\ \ \ \ }\hlstr{requestUrl='/xxxx/search'"}\hlstd{}\hlopt{$>$}\\
+\hllin{010\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{$<$}\hlstd{div\ }\hlkwa{class}\hlstd{}\hlopt{=}\hlstd{}\hlstr{"row"}\hlstd{}\hlopt{$>$}\\
+\hllin{011\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlopt{$<$}\hlstd{div\ }\hlkwa{class}\hlstd{}\hlopt{=}\hlstd{}\hlstr{"col{-}md{-}12"}\hlstd{}\hlopt{$>$}\\
+\hllin{012\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlopt{$<$}\hlstd{div\ ui}\hlopt{{-}}\hlstd{page}\hlopt{{-}}\hlstd{info\\
+\hllin{013\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ }\hlstd{page}\hlopt{{-}}\hlstd{info}\hlopt{=}\hlstd{}\hlstr{"pageInfo"}\hlstd{\\
+\hllin{014\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ }\hlstd{condition}\hlopt{=}\hlstd{}\hlstr{"condition"}\hlstd{\\
+\hllin{015\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ }\hlstd{id}\hlopt{=}\hlstd{}\hlstr{"page{-}info"}\hlstd{}\hlopt{$>$}\\
+\hllin{016\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlopt{$<$/}\hlstd{div}\hlopt{$>$}\\
+\hllin{017\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlopt{$<$}\hlstd{div\ id}\hlopt{=}\hlstd{}\hlstr{"advance{-}search"}\hlstd{}\hlopt{$>$}\\
+\hllin{018\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlopt{$<$}\hlstd{a\ href}\hlopt{=}\hlstd{}\hlstr{"\#"}\hlstd{\ id}\hlopt{=}\hlstd{}\hlstr{"advanced"}\hlstd{\ data}\hlopt{{-}}\hlstd{toggle}\hlopt{=}\hlstd{}\hlstr{"dropdown"}\hlstd{}\hlopt{$>$$<$}\hlstd{i\\
+\hllin{019\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlkwa{class}\hlstd{}\hlopt{=}\hlstd{}\hlstr{"fa\ fa{-}caret{-}square{-}o{-}down"}\hlstd{}\hlopt{$>$$<$/}\hlstd{i}\hlopt{$>$$<$/}\hlstd{a}\hlopt{$>$}\\
+\hllin{020\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlopt{$<$}\hlstd{ul\ ui}\hlopt{{-}}\hlstd{dropdown}\hlopt{{-}}\hlstd{menu\ }\hlkwa{class}\hlstd{}\hlopt{=}\hlstd{}\hlstr{"dropdown{-}menu\ cdoj{-}form{-}}\Righttorque\\
+\hllin{021\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{menu"}\hlstd{\\
+\hllin{022\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{role}\hlopt{=}\hlstd{}\hlstr{"menu"}\hlstd{\\
+\hllin{023\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{aria}\hlopt{{-}}\hlstd{labelledby}\hlopt{=}\hlstd{}\hlstr{"advance{-}menu"}\hlstd{}\hlopt{$>$}\\
+\hllin{024\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlopt{$<$}\hlstd{li\ role}\hlopt{=}\hlstd{}\hlstr{"presentation"}\hlstd{\ id}\hlopt{=}\hlstd{}\hlstr{"condition"}\hlstd{}\hlopt{$>$}\\
+\hllin{025\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlopt{$<$}\hlstd{form\ }\hlkwa{class}\hlstd{}\hlopt{=}\hlstd{}\hlstr{"form"}\hlstd{}\hlopt{$>$}\\
+\hllin{026\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{列表查询条件表单\\
+\hllin{027\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlopt{$<$}\hlstd{p\ }\hlkwa{class}\hlstd{}\hlopt{=}\hlstd{}\hlstr{"pull{-}right"}\hlstd{}\hlopt{$>$}\\
+\hllin{028\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlopt{$<$}\hlstd{button\ type}\hlopt{=}\hlstd{}\hlstr{"button"}\hlstd{\ }\hlkwa{class}\hlstd{}\hlopt{=}\hlstd{}\hlstr{"btn\ btn{-}danger\ }\Righttorque\\
+\hllin{029\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstr{btn{-}sm"}\hlstd{\ ng}\hlopt{{-}}\hlstd{click}\hlopt{=}\hlstd{}\hlstr{"reset()"}\hlstd{}\hlopt{$>$}\hlstd{Reset\\
+\hllin{030\ }}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlopt{$<$/}\hlstd{button}\hlopt{$>$}\\
+\hllin{031\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlopt{$<$/}\hlstd{p}\hlopt{$>$}\\
+\hllin{032\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlopt{$<$/}\hlstd{form}\hlopt{$>$}\\
+\hllin{033\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ \ \ }\hlstd{}\hlopt{$<$/}\hlstd{li}\hlopt{$>$}\\
+\hllin{034\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlopt{$<$/}\hlstd{ul}\hlopt{$>$}\\
+\hllin{035\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{}\hlopt{$<$/}\hlstd{div}\hlopt{$>$}\\
+\hllin{036\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlopt{$<$/}\hlstd{div}\hlopt{$>$}\\
+\hllin{037\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{$<$/}\hlstd{div}\hlopt{$>$}\\
+\hllin{038\ }\hlstd{\\
+\hllin{039\ }}\hlstd{\ \ }\hlstd{}\hlopt{$<$}\hlstd{div\ }\hlkwa{class}\hlstd{}\hlopt{=}\hlstd{}\hlstr{"row"}\hlstd{}\hlopt{$>$}\\
+\hllin{040\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlopt{$<$}\hlstd{div\ ng}\hlopt{{-}}\hlstd{repeat}\hlopt{=}\hlstd{}\hlstr{"xxx\ in\ list"}\hlstd{}\hlopt{$>$}\\
+\hllin{041\ }\hlstd{}\hlstd{\ \ \ \ \ \ }\hlstd{列表主体\\
+\hllin{042\ }}\hlstd{\ \ \ \ }\hlstd{}\hlopt{$<$/}\hlstd{div}\hlopt{$>$}\\
+\hllin{043\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlopt{$<$/}\hlstd{div}\hlopt{$>$}\\
+\hllin{044\ }\hlstd{}\hlopt{$<$/}\hlstd{div}\hlopt{$>$}\hlstd{}\\
+\mbox{}
+\normalfont
+\normalsize
