@@ -1,0 +1,109 @@
+\noindent
+\ttfamily
+\hlstd{}\hllin{001\ }\hlppc{\#include\ $<$cstdio$>$}\\
+\hllin{002\ }\hlstd{}\hlppc{\#include\ $<$cstdlib$>$}\\
+\hllin{003\ }\hlstd{}\\
+\hllin{004\ }\hlppc{\#define\ WA\ 0}\\
+\hllin{005\ }\hlstd{}\hlppc{\#define\ AC\ 1}\\
+\hllin{006\ }\hlstd{}\hlppc{\#define\ PE\ 2}\\
+\hllin{007\ }\hlstd{}\hlppc{\#define\ SE\ 3}\\
+\hllin{008\ }\hlstd{}\hlppc{\#define\ EPS\ 1e{-}8}\\
+\hllin{009\ }\hlstd{}\\
+\hllin{010\ }\hlcom{/{*}{*}}\\
+\hllin{011\ }\hlcom{\ {*}\ @brief}\\
+\hllin{012\ }\hlcom{\ {*}}\hlstd{\ \ \ \ }\hlcom{Basic\ judge\ item\ for\ judger,\ store\ stdard\ input\ and\ }\Righttorque\\
+\hllin{013\ }\hlcom{\ output,\ user\ output}\\
+\hllin{014\ }\hlcom{\ {*}}\hlstd{\ \ }\hlcom{FILE{*}\ entity.}\\
+\hllin{015\ }\hlcom{\ {*}/}\hlstd{}\\
+\hllin{016\ }\hlkwb{struct\ }\hlstd{Node\ }\hlopt{\{}\\
+\hllin{017\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwb{FILE}\hlstd{}\hlopt{{*}\ }\hlstd{data\textunderscore input}\hlopt{;}\\
+\hllin{018\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwb{FILE}\hlstd{}\hlopt{{*}\ }\hlstd{data\textunderscore output}\hlopt{;}\\
+\hllin{019\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwb{FILE}\hlstd{}\hlopt{{*}\ }\hlstd{user\textunderscore output}\hlopt{;}\\
+\hllin{020\ }\hlstd{}\hlopt{\};}\\
+\hllin{021\ }\hlstd{}\\
+\hllin{022\ }\hlkwb{static\ }\hlstd{Node}\hlopt{{*}\ }\hlstd{node\textunderscore pointer}\hlopt{;}\\
+\hllin{023\ }\hlstd{}\\
+\hllin{024\ }\hlcom{/{*}{*}}\\
+\hllin{025\ }\hlcom{\ {*}\ @brief}\\
+\hllin{026\ }\hlcom{\ {*}}\hlstd{\ \ \ \ }\hlcom{if\ statement\ is\ not\ true,\ print\ exit\textunderscore code's\ string\ }\Righttorque\\
+\hllin{027\ }\hlcom{\ and\ exit\ SPJ}\\
+\hllin{028\ }\hlcom{\ {*}/}\hlstd{}\\
+\hllin{029\ }\hlkwb{void\ }\hlstd{}\hlkwd{dump}\hlstd{}\hlopt{(}\hlstd{}\hlkwb{bool\ }\hlstd{statement}\hlopt{,\ }\hlstd{}\hlkwb{const\ int}\hlstd{}\hlopt{\&\ }\hlstd{exit\textunderscore code}\hlopt{)\ \{}\\
+\hllin{030\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{if\ }\hlstd{}\hlopt{(}\hlstd{statement}\hlopt{)}\\
+\hllin{031\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwa{return}\hlstd{}\hlopt{;}\\
+\hllin{032\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{if\ }\hlstd{}\hlopt{(}\hlstd{node\textunderscore pointer}\hlopt{{-}$>$}\hlstd{data\textunderscore input\ }\hlopt{!=\ }\hlstd{NULL}\hlopt{)}\\
+\hllin{033\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{fclose}\hlstd{}\hlopt{(}\hlstd{node\textunderscore pointer}\hlopt{{-}$>$}\hlstd{data\textunderscore input}\hlopt{);}\\
+\hllin{034\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{if\ }\hlstd{}\hlopt{(}\hlstd{node\textunderscore pointer}\hlopt{{-}$>$}\hlstd{data\textunderscore output\ }\hlopt{!=\ }\hlstd{NULL}\hlopt{)}\\
+\hllin{035\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{fclose}\hlstd{}\hlopt{(}\hlstd{node\textunderscore pointer}\hlopt{{-}$>$}\hlstd{data\textunderscore output}\hlopt{);}\\
+\hllin{036\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{if\ }\hlstd{}\hlopt{(}\hlstd{node\textunderscore pointer}\hlopt{{-}$>$}\hlstd{user\textunderscore output\ }\hlopt{!=\ }\hlstd{NULL}\hlopt{)}\\
+\hllin{037\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{fclose}\hlstd{}\hlopt{(}\hlstd{node\textunderscore pointer}\hlopt{{-}$>$}\hlstd{user\textunderscore output}\hlopt{);}\\
+\hllin{038\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{if\ }\hlstd{}\hlopt{(}\hlstd{exit\textunderscore code\ }\hlopt{==\ }\hlstd{WA}\hlopt{)}\\
+\hllin{039\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{puts}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"WA"}\hlstd{}\hlopt{);}\\
+\hllin{040\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{else\ if\ }\hlstd{}\hlopt{(}\hlstd{exit\textunderscore code\ }\hlopt{==\ }\hlstd{AC}\hlopt{)}\\
+\hllin{041\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{puts}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"AC"}\hlstd{}\hlopt{);}\\
+\hllin{042\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{else\ if\ }\hlstd{}\hlopt{(}\hlstd{exit\textunderscore code\ }\hlopt{==\ }\hlstd{PE}\hlopt{)}\\
+\hllin{043\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{puts}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"PE"}\hlstd{}\hlopt{);}\\
+\hllin{044\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{else}\\
+\hllin{045\ }\hlstd{}\hlstd{\ \ \ \ }\hlstd{}\hlkwd{puts}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"SE"}\hlstd{}\hlopt{);}\\
+\hllin{046\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{delete\ }\hlstd{node\textunderscore pointer}\hlopt{;}\\
+\hllin{047\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwd{exit}\hlstd{}\hlopt{(}\hlstd{}\hlnum{0}\hlstd{}\hlopt{);}\\
+\hllin{048\ }\hlstd{}\hlopt{\}}\\
+\hllin{049\ }\hlstd{}\\
+\hllin{050\ }\hlkwb{int\ }\hlstd{}\hlkwd{nextInt}\hlstd{}\hlopt{(}\hlstd{}\hlkwb{FILE}\hlstd{}\hlopt{{*}\ }\hlstd{fp}\hlopt{)\ \{}\\
+\hllin{051\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwb{int\ }\hlstd{variable}\hlopt{;}\\
+\hllin{052\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwd{dump}\hlstd{}\hlopt{(}\hlstd{}\hlkwd{fscanf}\hlstd{}\hlopt{(}\hlstd{fp}\hlopt{,\ }\hlstd{}\hlstr{"\%d"}\hlstd{}\hlopt{,\ \&}\hlstd{variable}\hlopt{)\ ==\ }\hlstd{}\hlnum{1}\hlstd{}\hlopt{,\ }\hlstd{fp\ }\hlopt{==\ }\hlstd{stdin\ ?\ WA\ }\hlopt{:\ }\Righttorque\\
+\hllin{053\ }\hlstd{}\hlstd{\ \ }\hlstd{SE}\hlopt{);}\\
+\hllin{054\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{return\ }\hlstd{variable}\hlopt{;}\\
+\hllin{055\ }\hlstd{}\hlopt{\}}\\
+\hllin{056\ }\hlstd{}\\
+\hllin{057\ }\hlkwb{long\ long\ }\hlstd{}\hlkwd{nextLong}\hlstd{}\hlopt{(}\hlstd{}\hlkwb{FILE}\hlstd{}\hlopt{{*}\ }\hlstd{fp}\hlopt{)\ \{}\\
+\hllin{058\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwb{long\ long\ }\hlstd{variable}\hlopt{;}\\
+\hllin{059\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwd{dump}\hlstd{}\hlopt{(}\hlstd{}\hlkwd{fscanf}\hlstd{}\hlopt{(}\hlstd{fp}\hlopt{,\ }\hlstd{}\hlstr{"\%lld"}\hlstd{}\hlopt{,\ \&}\hlstd{variable}\hlopt{)\ ==\ }\hlstd{}\hlnum{1}\hlstd{}\hlopt{,\ }\hlstd{fp\ }\hlopt{==\ }\hlstd{stdin\ ?\ WA\ \Righttorque\\
+\hllin{060\ }}\hlstd{\ \ }\hlstd{}\hlopt{:\ }\hlstd{SE}\hlopt{);}\\
+\hllin{061\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{return\ }\hlstd{variable}\hlopt{;}\\
+\hllin{062\ }\hlstd{}\hlopt{\}}\\
+\hllin{063\ }\hlstd{}\\
+\hllin{064\ }\hlkwb{double\ }\hlstd{}\hlkwd{nextDouble}\hlstd{}\hlopt{(}\hlstd{}\hlkwb{FILE}\hlstd{}\hlopt{{*}\ }\hlstd{fp}\hlopt{)\ \{}\\
+\hllin{065\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwb{double\ }\hlstd{variable}\hlopt{;}\\
+\hllin{066\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwd{dump}\hlstd{}\hlopt{(}\hlstd{}\hlkwd{fscanf}\hlstd{}\hlopt{(}\hlstd{fp}\hlopt{,\ }\hlstd{}\hlstr{"\%lf"}\hlstd{}\hlopt{,\ \&}\hlstd{variable}\hlopt{)\ ==\ }\hlstd{}\hlnum{1}\hlstd{}\hlopt{,\ }\hlstd{fp\ }\hlopt{==\ }\hlstd{stdin\ ?\ WA\ }\hlopt{:}\Righttorque\\
+\hllin{067\ }\hlstd{}\hlstd{\ \ }\hlstd{SE}\hlopt{);}\\
+\hllin{068\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{return\ }\hlstd{variable}\hlopt{;}\\
+\hllin{069\ }\hlstd{}\hlopt{\}}\\
+\hllin{070\ }\hlstd{}\\
+\hllin{071\ }\hlkwb{void\ }\hlstd{}\hlkwd{nextString}\hlstd{}\hlopt{(}\hlstd{}\hlkwb{FILE}\hlstd{}\hlopt{{*}\ }\hlstd{fp}\hlopt{,\ }\hlstd{}\hlkwb{char}\hlstd{}\hlopt{{*}\ }\hlstd{buf}\hlopt{)\ \{}\\
+\hllin{072\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwd{dump}\hlstd{}\hlopt{(}\hlstd{}\hlkwd{fscanf}\hlstd{}\hlopt{(}\hlstd{fp}\hlopt{,\ }\hlstd{}\hlstr{"\%s"}\hlstd{}\hlopt{,\ }\hlstd{buf}\hlopt{)\ ==\ }\hlstd{}\hlnum{1}\hlstd{}\hlopt{,\ }\hlstd{fp\ }\hlopt{==\ }\hlstd{stdin\ ?\ WA\ }\hlopt{:\ }\hlstd{SE}\hlopt{);}\\
+\hllin{073\ }\hlstd{}\hlopt{\}}\\
+\hllin{074\ }\hlstd{}\\
+\hllin{075\ }\hlkwb{int\ }\hlstd{}\hlkwd{sgn}\hlstd{}\hlopt{(}\hlstd{}\hlkwb{double\ }\hlstd{variable}\hlopt{)\ \{}\\
+\hllin{076\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{return\ }\hlstd{variable\ }\hlopt{$<$\ {-}}\hlstd{EPS\ ?\ }\hlopt{{-}}\hlstd{}\hlnum{1\ }\hlstd{}\hlopt{:\ }\hlstd{variable\ }\hlopt{$>$\ }\hlstd{EPS}\hlopt{;}\\
+\hllin{077\ }\hlstd{}\hlopt{\}}\\
+\hllin{078\ }\hlstd{}\\
+\hllin{079\ }\hlkwb{int\ }\hlstd{}\hlkwd{compare}\hlstd{}\hlopt{(}\hlstd{}\hlkwb{double\ }\hlstd{lhs}\hlopt{,\ }\hlstd{}\hlkwb{double\ }\hlstd{rhs}\hlopt{)\ \{}\\
+\hllin{080\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{return\ }\hlstd{}\hlkwd{sgn}\hlstd{}\hlopt{(}\hlstd{lhs\ }\hlopt{{-}\ }\hlstd{rhs}\hlopt{);}\\
+\hllin{081\ }\hlstd{}\hlopt{\}}\\
+\hllin{082\ }\hlstd{}\\
+\hllin{083\ }\hlcom{/{*}{*}}\\
+\hllin{084\ }\hlcom{\ {*}\ @brief}\\
+\hllin{085\ }\hlcom{\ {*}}\hlstd{\ \ \ \ }\hlcom{Judge\ for\ specific\ problem,\ only\ function\ needed\ to\ }\Righttorque\\
+\hllin{086\ }\hlcom{\ modify.}\\
+\hllin{087\ }\hlcom{\ {*}\ @author\ RuinsHe$<$lyhypacm@gmail.com$>$}\\
+\hllin{088\ }\hlcom{\ {*}/}\hlstd{}\\
+\hllin{089\ }\hlkwb{void\ }\hlstd{}\hlkwd{judge}\hlstd{}\hlopt{()\ \{}\\
+\hllin{090\ }\hlstd{}\hlopt{\}}\\
+\hllin{091\ }\hlstd{}\\
+\hllin{092\ }\hlkwb{int\ }\hlstd{}\hlkwd{main}\hlstd{}\hlopt{(}\hlstd{}\hlkwb{int\ }\hlstd{argc}\hlopt{,\ }\hlstd{}\hlkwb{char}\hlstd{}\hlopt{{*}\ }\hlstd{argv}\hlopt{{[}{]})\ \{}\\
+\hllin{093\ }\hlstd{}\hlstd{\ \ }\hlstd{node\textunderscore pointer\ }\hlopt{=\ }\hlstd{}\hlkwa{new\ }\hlstd{}\hlkwd{Node}\hlstd{}\hlopt{();}\\
+\hllin{094\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwd{dump}\hlstd{}\hlopt{(}\hlstd{argc\ }\hlopt{$>$=\ }\hlstd{}\hlnum{3}\hlstd{}\hlopt{,\ }\hlstd{SE}\hlopt{);}\\
+\hllin{095\ }\hlstd{}\hlstd{\ \ }\hlstd{node\textunderscore pointer}\hlopt{{-}$>$}\hlstd{data\textunderscore input\ }\hlopt{=\ }\hlstd{}\hlkwd{fopen}\hlstd{}\hlopt{(}\hlstd{argv}\hlopt{{[}}\hlstd{}\hlnum{1}\hlstd{}\hlopt{{]},\ }\hlstd{}\hlstr{"r"}\hlstd{}\hlopt{);}\\
+\hllin{096\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwd{dump}\hlstd{}\hlopt{(}\hlstd{node\textunderscore pointer}\hlopt{{-}$>$}\hlstd{data\textunderscore input\ }\hlopt{!=\ }\hlstd{NULL}\hlopt{,\ }\hlstd{SE}\hlopt{);}\\
+\hllin{097\ }\hlstd{}\hlstd{\ \ }\hlstd{node\textunderscore pointer}\hlopt{{-}$>$}\hlstd{data\textunderscore output\ }\hlopt{=\ }\hlstd{}\hlkwd{fopen}\hlstd{}\hlopt{(}\hlstd{argv}\hlopt{{[}}\hlstd{}\hlnum{2}\hlstd{}\hlopt{{]},\ }\hlstd{}\hlstr{"r"}\hlstd{}\hlopt{);}\\
+\hllin{098\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwd{dump}\hlstd{}\hlopt{(}\hlstd{node\textunderscore pointer}\hlopt{{-}$>$}\hlstd{data\textunderscore output\ }\hlopt{!=\ }\hlstd{NULL}\hlopt{,\ }\hlstd{SE}\hlopt{);}\\
+\hllin{099\ }\hlstd{}\hlstd{\ \ }\hlstd{node\textunderscore pointer}\hlopt{{-}$>$}\hlstd{user\textunderscore output\ }\hlopt{=\ }\hlstd{stdin}\hlopt{;}\\
+\hllin{100\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwd{dump}\hlstd{}\hlopt{(}\hlstd{node\textunderscore pointer}\hlopt{{-}$>$}\hlstd{user\textunderscore output\ }\hlopt{!=\ }\hlstd{NULL}\hlopt{,\ }\hlstd{SE}\hlopt{);}\\
+\hllin{101\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwd{judge}\hlstd{}\hlopt{();}\\
+\hllin{102\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwd{dump}\hlstd{}\hlopt{(}\hlstd{}\hlkwa{false}\hlstd{}\hlopt{,\ }\hlstd{AC}\hlopt{);}\\
+\hllin{103\ }\hlstd{}\hlstd{\ \ }\hlstd{}\hlkwa{return\ }\hlstd{}\hlnum{0}\hlstd{}\hlopt{;}\\
+\hllin{104\ }\hlstd{}\hlopt{\}}\hlstd{}\\
+\mbox{}
+\normalfont
+\normalsize

@@ -145,6 +145,10 @@ Service为上层应用提供了一系列特定的数据库操作，根据接口�
 \pic[htbp]{Judge Service活动图}{}{JudgeActivity}
 JudgeService在系统启动时开始运行\footnote{见附录\ref{sec:ApplicationContextConfig}的22-26行。}，在这个类中我们用队列judgeQueue作为评测器的调度队列。它生成schedulerThread线程用来等待评测任务的到来，它每隔一定的时间间隔（在这里我们设置为3秒）调用StatusService查找所有等待测试的任务，将其标记为OJ\_JUDGING状态，并加入到judgeQueue中。它还配置了若干个JudgeThread线程用来进行多线程评测操作。每个JudgeThread不停的扫描judgeQueue，直到任务的到来，它首先将代码保存至工作目录下，然后构造控制台命令调用\textbf{Runtime.getRuntime().exec(shellCommand)}来和评测器内核交互，并得到结果，然后依据结果来做出相应的更新。如图\ref{JudgeActivity}所示。
 
+每个题目可能有若干组测试数据，这些数据保存在\textbf{WEB-INF}下的\textbf{data}文件夹，按题目编号分别保存在不同的子文件夹下，从$1$开始编号，每个测试用例的输入文件以\textbf{.in}为后缀，对应的输出文件以\textbf{.out}结尾。
+
+有些开放性的题目存在多个答案，这个时候评测器需要用另外一段程序来判断它是否符合要求。还有一种情况就是结果为浮点数的时候，为了排除浮点误差对结果正确性的干扰，我们需要将用户程序运行结果和标准结果进行比较，一般来说误差小于$10^{-8}$就可以认为两者相同。如果需要进行Special Judge，还需要提供一个\textbf{spj.cc}文件指定Special Judge的代码（见附录\ref{sec:spj}）。
+
 \subsection{Web Package详细设计}
 \pic[htbp]{Web Package类图}{}{WebPackage}
 Web Package主要包含的是控制器，以及为控制器服务的一些模块，比如权限验证模块。
@@ -299,9 +303,9 @@ Bootstrap是一个响应式的框架，利用这个特性，我们为移动客�
 \subsection{网页加载流程}
 网页加载完成后，首先运行下面这段代码：
 
-这句话定义了一个叫做cdoj的angular module，后面的数组是本module引用到的外部库。接下来向/globalData这个地址获取用户的基本信息和一些常量。在AngularJS中每个元素都有一个自己的Scope（作用域），整个系统中还有一个rootScope，所有元素都能访问这个Scope，我们将从/globalData获取的全局信息放到rootScope中便于日后使用。
-
 \input{code/globalInit.py}
+
+这句话定义了一个叫做cdoj的angular module，后面的数组是本module引用到的外部库。接下来向/globalData这个地址获取用户的基本信息和一些常量。在AngularJS中每个元素都有一个自己的Scope（作用域），整个系统中还有一个rootScope，所有元素都能访问这个Scope，我们将从/globalData获取的全局信息放到rootScope中便于日后使用。
 
 \input{code/globalFetchGlobalData.py}
 
@@ -333,9 +337,9 @@ Bootstrap是一个响应式的框架，利用这个特性，我们为移动客�
 \subsubsection{用户注册流程}
 打开Sign in菜单（图\ref{userMenuBeforeLogin}），单击Register后弹出注册对话框（图\ref{RegisterModal}）。对话框中包含一个注册表单，表单的每个输入框都是一个Angular Model，通过在input标签中添加相应的属性将其绑定到指定的变量上去，除此之外还可以进行浏览器端的表单验证。
 
-\input{code/RegisterModalPart.jsp}
-
 \pic[htbp]{注册对话框}{width=0.7\textwidth}{RegisterModal}
+
+\input{code/RegisterModalPart.jsp}
 
 \textbf{ng-model}指定了绑定的变量名\textbf{scope.userRegisterDTO.userName}，这种绑定是双向的，也就是说当变量改变时，输入框内的数据也会发生变化，同理当输入框变化是变量会自动变化。\textbf{ng-required}和\textbf{ng-pattern}指定了表单验证的条件。当数据不满足条件时，AngularJS会自动给该输入框添加一个\textbf{ng-invalid}的class。
 
@@ -350,8 +354,9 @@ Bootstrap是一个响应式的框架，利用这个特性，我们为移动客�
 登陆之后，在用户菜单中（图\ref{userMenuAfterLogin}单击Logout即可安全退出。
 
 \subsubsection{用户密码找回流程}
-\pic[htbp]{密码找回对话框（单击Send email后）}{width=0.7\textwidth}{ForgetPasswordDialog}
 我们给忘记密码的用户提供了一个找回密码的功能，单击Sign in菜单（图\ref{userMenuBeforeLogin}）中的Forget password按钮可以弹出一个找回密码的对话框，用户在里面将自己的用户名填入后单击Send email按钮（图\ref{ForgetPasswordDialog}），服务器会向用户注册时填写的邮箱中发送一封找回密码用的邮件，并弹出成功提示。
+
+\pic[htbp]{密码找回对话框（单击Send email后）}{width=0.7\textwidth}{ForgetPasswordDialog}
 
 邮件中包含了一个形如\url{http://acm.uestc.edu.cn/user/activate/UESTC_Izayoi/96ac3b16d84a4bb335bfd8321c7a32f61f70f99f}的地址，这个地址由用户名和一个SerialKey组成。为了保证安全，每个SerialKey只有30分钟的有效期，且只能使用一次，这个地址会将用户带到一个密码重置页面（图\ref{ResetPasswordPage}）。
 
@@ -361,11 +366,11 @@ Bootstrap是一个响应式的框架，利用这个特性，我们为移动客�
 登陆之后，在用户菜单中（图\ref{userMenuAfterLogin}单击Edit profile后会弹出一个用户信息编辑对话框，在这个对话框中用户能修改一部分基本信息，如密码、学号、学院信息等，但是不允许修改用户名。
 
 \subsection{内容渲染}
-为了保证网站内容格式的统一，本系统采用Markdown语言作为页面内容的排版语言\footnote{Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）和亚伦·斯沃茨（Aaron Swartz）。它允许人们``使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML（或者HTML）文档''。这种语言吸收了很多在电子邮件中已有的纯文本标记的特性。}\footnote{本系统中使用marked.js来将Markdown内容转换成HTML。}，同时我们还支持在内容中插入\LATEX格式的数学公式\footnote{本系统使用MathJax插件来渲染数学公式。}，代码由Prettify插件渲染。在这三个插件的帮助下，我们可以用很简单的方式排版出漂亮的格式。为了满足这些需求，我们实现了一个简单的Markdown编辑器，代码见附录\ref{sec:flandre}。它具有编辑模式和预览模式两种状态，通过一个Preview开关来切换，工具栏目前只有两个工具，一个是表情插入，这个部分是给用户讨论功能准备的，另一个工具是上传图片，用于向文章中插入一些描述性的图，如图\ref{flandreEditor}所示。
 \begin{pics}[htbp]{内容编辑器}{flandreEditor}
 \addsubpic{编辑模式}{width=0.48\textwidth}{editor}
 \addsubpic{预览模式}{width=0.48\textwidth}{editorPreview}
 \end{pics}
+为了保证网站内容格式的统一，本系统采用Markdown语言作为页面内容的排版语言\footnote{Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）和亚伦·斯沃茨（Aaron Swartz）。它允许人们``使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML（或者HTML）文档''。这种语言吸收了很多在电子邮件中已有的纯文本标记的特性。}\footnote{本系统中使用marked.js来将Markdown内容转换成HTML。}，同时我们还支持在内容中插入\LATEX格式的数学公式\footnote{本系统使用MathJax插件来渲染数学公式。}，代码由Prettify插件渲染。在这三个插件的帮助下，我们可以用很简单的方式排版出漂亮的格式。为了满足这些需求，我们实现了一个简单的Markdown编辑器，代码见附录\ref{sec:flandre}。它具有编辑模式和预览模式两种状态，通过一个Preview开关来切换，工具栏目前只有两个工具，一个是表情插入，这个部分是给用户讨论功能准备的，另一个工具是上传图片，用于向文章中插入一些描述性的图，如图\ref{flandreEditor}所示。
 
 \subsection{列表页面}
 本系统一共有有许多信息通过列表的形式呈现给用户，所以我们设计了一个简单的列表控制器\textbf{ListController}来复用一些重复的代码（见附录\ref{sec:listController}）。每个列表的HTML代码都是如下形式：
@@ -387,17 +392,25 @@ Bootstrap是一个响应式的框架，利用这个特性，我们为移动客�
 主页是一个网站的入口，它由三个部分组成：网站标志，重要公告，日志。我们将一些重要的公告放置在醒目的位置。其余部分就是近期的一些日志，例如系统简介、常见问答等，如图\ref{HomepageLong2}所示。
 
 \subsection{文章模块详细设计}
-该模块包含两个页面，一个是文章页面，一个是文章编辑器。以管理员身份打开文章页面后在文章标题下方会有一个编辑连接，通过它可以编辑该文章。
+该模块包含两个页面，一个是文章页面，一个是文章编辑器。以管理员身份打开文章页面后在文章标题下方会有一个编辑连接，通过它可以编辑该文章，如图\ref{articlePages}所示。
 
 \begin{pics}[htbp]{文章相关页面}{articlePages}
 \addsubpic{文章页面}{width=0.48\textwidth}{articlePage}
 \addsubpic{文章编辑器}{width=0.48\textwidth}{articleEditor}
 \end{pics}
 
+\subsection{用户模块详细设计}
+\subsubsection{用户列表页面}
+\pic[htbp]{用户列表}{width=\textwidth}{UserList}
+单击侧边栏中的User选项即可进入用户列表页面，用户列表以名片墙的形式展示用户信息，按题目通过数量排序。用户列表的高级搜索菜单提供了按用户编号查询、按用户名查询、按用户学校查询等等高级搜索功能。名片左上角还有一个管理员的编辑按钮，方便管理员对用户进行操作，如图\ref{UserList}所示。
+
+\subsubsection{用户中心页面}
+在网页中任何一个地方单击用户名都会进入该用户的用户中心，这个用户中心用来展示该用户的一些信息，如基本信息、题目通过情况等，如图\ref{UserCenter}所示。
+\pic[htbp]{用户中心}{width=0.9\textwidth}{UserCenter}
+
 \subsection{题目模块详细设计}
 \subsubsection{题目列表页面}
-单击侧边栏中的Problem选项即可进入题目列表页面，题目列表较为简单，包含了题目ID、题目名称、题目来源、通过人数，如果以管理员身份登陆还有有题目编辑按钮（一个是隐藏/显示题目，一个是编辑题目）和一个添加新题目的链接。
-。题目列表的高级搜索菜单提供了按题目编号查询、按题目难度查询、按题目标题查询、按题目来源查询等查询功能。
+单击侧边栏中的Problem选项即可进入题目列表页面，题目列表包含了题目ID、题目名称、题目来源、通过人数，如果以管理员身份登陆还有有题目编辑按钮（一个是隐藏/显示题目，一个是编辑题目）和一个添加新题目的链接。题目列表的高级搜索菜单提供了按题目编号查询、按题目难度查询、按题目标题查询、按题目来源查询等查询功能。
 
 \pic[htbp]{题目列表}{width=\textwidth}{ProblemListPage}
 
@@ -407,24 +420,33 @@ Bootstrap是一个响应式的框架，利用这个特性，我们为移动客�
 \pic[htbp]{题目页面}{width=\textwidth}{ProblemPageLong}
 
 \subsubsection{代码提交流程}
-在题目页面之中单击Submit标签按钮，切换到代码提交对话框，如图\ref{submitDialog}所示。
-
-用户将自己的代码复制到代码框中，然后通过下方的语言选择按钮选择对应的语言，最后单击Submit按钮即可将自己的代码提交至服务器。
+在题目页面之中单击Submit标签按钮，切换到代码提交对话框，如图\ref{submitDialog}所示。用户将自己的代码复制到代码框中，然后通过下方的语言选择按钮选择对应的语言，最后单击Submit按钮即可将自己的代码提交至服务器。提交成功后会自动跳转到评测列表页面。
 
 \pic[htbp]{代码提交对话框}{width=0.65\textwidth}{submitDialog}
 
 \subsubsection{题目编辑器}
+以管理员的身份从题目列表或题目页面的入口可以进入题目编辑器。这个编辑器页面上半部分为基本信息编辑框，下半部分是题面描述编辑框。题目编辑框和文章编辑器类似，这里就不赘述了。
 
-\subsection{比赛模块详细设计}
-\subsubsection{比赛列表页面}
-\subsubsection{比赛页面}
-\subsubsection{比赛流程}
-\subsubsection{比赛编辑器}
+\pic[htbp]{题目基本信息编辑框}{width=\textwidth}{ProblemDataEditor}
+
+管理员添加题目时，需要通过文件上传测试用例。我们规定用户使用一个zip压缩包打包，这个zip包种包含若干测试用例，每个测试用例的输入文件以\textbf{.in}为后缀，对应的输出文件以\textbf{.out}结尾。如果需要进行Special Judge，这个zip包种还应该包含\textbf{spj.cc}文件。上传成功后会有如图\ref{uploadSuccess}所示提示。
+
+\pic[htbp]{题目数据上传成功提示}{width=0.7\textwidth}{uploadSuccess}
+
+编辑完后点击Submit按钮即可提交这次编辑。
 
 \subsection{评测状态模块详细设计}
 \subsubsection{评测列表页面}
+单击侧边栏中的Status选项或者提交代码后都会进入评测列表页面，评测列表包含了任务ID、提交者用户名、题目编号、评测状态、内存开销、时间开销、编程语言、代码长度、提交时间。
+
 \subsubsection{管理员Rejudge流程}
 
-\subsection{用户模块详细设计}
-\subsubsection{用户列表页面}
-\subsubsection{用户中心页面}
+\subsection{比赛模块详细设计}
+\subsubsection{比赛列表页面}
+\pic[htbp]{比赛列表}{width=\textwidth}{contestList}
+
+单击侧边栏中的Contest选项即可进入比赛列表页面，比赛列表包含了比赛ID、比赛名称、比赛开始时间、比赛长度，如果以管理员身份登陆还有有比赛编辑按钮（一个是隐藏/显示比赛，一个是编辑比赛）和一个添加新比赛的链接。比赛列表的高级搜索菜单提供了按比赛编号查询、按比赛标题查询的查询功能（见图\ref{contestAdvanceSearch}）。
+
+\subsubsection{比赛页面}
+\subsubsection{比赛流程}
+\subsubsection{比赛编辑器}
