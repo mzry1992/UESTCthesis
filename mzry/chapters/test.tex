@@ -7,7 +7,7 @@
 \subsection{单元测试}
 在计算机编程中，单元测试（又称为模块测试, Unit Testing）是针对程序模块（软件设计的最小单位）来进行正确性检验的测试工作。程序单元是应用的最小可测试部件。在过程化编程中，一个单元就是单个程序、函数、过程等；对于面向对象编程，最小单元就是方法，包括基类（超类）、抽象类、或者派生类（子类）中的方法。通常来说，我们每修改一次程序就会进行最少一次单元测试，在编写程序的过程中前后很可能要进行多次单元测试，以证实程序达到要求。
 
-每个理想的测试案例独立于其它案例。为了测试时隔离模块，我们经常经常使用Stubbing、Mock或Fake等测试马甲程序。单元测试通常由软件开发人员编写，用于确保他们所写的代码符合软件需求和遵循开发目标。它的实施方式可以是非常手动的（通过纸笔），或者是做成构建自动化的一部分。
+每个理想的测试案例独立于其它案例。为了测试时隔离模块，我们经常经常使用Stubbing、Mock或Fake等测试马甲程序。单元测试通常由软件开发人员编写，用于确保他们所写的代码符合软件需求和遵循开发目标。它的实施方式可以是手动的（通过纸笔），或者是做成构建自动化的一部分。
 
 \subsection{Mock}
 软件中是充满依赖关系的，例如我们会基于Service类写操作类，而Service类又是基于数据访问类（DAO）的，依次下去。单元测试的思路就是我们想在不涉及依赖关系的情况下测试代码。种测试可以在无视代码的依赖关系的情况下去测试代码的有效性。核心思想就是如果代码按设计正常工作，并且依赖关系也正常，那么他们应该会同时工作正常。
@@ -17,4 +17,207 @@
 \subsection{Stubbing}
 Stubbing（桩）是指用来替换一部分功能的程序段。桩程序可以用来模拟已有程序的行为（比如一个远端机器的过程）或是对将要开发的代码的一种临时替代。因此，打桩技术在程序移植、分布式计算、通用软件开发和测试中用处很大。桩程序是一段并不执行任何实际功能的程序，只对接受的参数进行声明并返回一个合法值。这个返回值通常只是一个对于调用者来讲可接受的值即可。桩通常用在对一个已有接口的临时替换上，实际的接口程序在未来再对桩程序进行替换。
 
+\subsection{Mockito}
+我们采用了Mockito框架来进行Mock和Stubbing操作，代码保存在\textbf{src/test}目录下，文件夹有图\ref{TestDir}所示的目录结构。
+
+\pic[htbp]{测试目录结构}{width=0.5\textwidth}{TestDir}
+
+Spring使用\textbf{@Bean}注解和\textbf{@Autowired}来完成依赖注入操作，为了得到这些依赖的模拟对象，我们使用了Mockito框架中的mock函数。下面这段代码配置了一个UserService的模拟对象：
+
+\input{code/Mock.java}
+
+通过这种方式得到的模拟对象可以很轻松的实现桩程序，通过Mockito框架中的when函数，我们建立一个简单的桩程序。下面这段代码配置了一个桩程序：
+
+\input{code/Stubbing.java}
+
+这个桩程序替换了当参数为1000时的problemService的checkProblemExists方法，返回true值。
 \section{测试内容}
+\subsection{数据库模块测试}
+这里对Condition模块进行了测试。我们通过Condition类来生成HQL查询语句中的条件语句，它在服务器运行过程中是最常使用到的模块之一，所以对它的测试要求比较高，这部分的测试一共有12组，见表\ref{conditionTest}。
+
+%\threelinetable[htbp]{conditionTest}{\textwidth}{ll}{Condition模块测试用例}
+\longthreelinetable{conditionTest}{Condition模块测试用例表}{2}{ll}
+{测试描述 & 期望结果\\
+}{
+条件为空 & 空字符串\\
+简单的样例 & \textsf{where (id$=$'1')}\\
+与条件测试 & \textsf{where (id$>=$'1' and id$<=$'5')}\\
+或条件测试 & \textsf{where (id$>=$'1' or id$<=$'5')}\\
+嵌套测试 & \textsf{where ((id$>=$'1' or id$<=$'5') and (price$>$'10' or price$<=$'20'))}\\
+非空条件测试 & \textsf{where ((userId is not null))}\\
+空条件测试 & \textsf{where ((userId is null))}\\
+嵌套测试 & \textsf{where ((userId is not null) and (departmentId is null))}\\
+排序测试 & \textsf{ order by userId desc}\\
+条件非空排序测试 & \textsf{where (userId$>=$'1') order by userId desc}\\
+多关键字排序测试 & \textsf{where (userId$>=$'1') order by departmentId asc,userId desc}\\
+组合测试 & \textsf{where ((userId$>=$'1' or userId$<=$'5') and ((departmentId is not null) or }\\
+& \textsf{userName like '\%user\%')) order by departmentId asc,userId desc}\\
+}{
+}
+
+\subsection{数据库集成测试}
+数据库集成测试的作用是检测数据库各个模块之间是否工作正常。我们构建了一个名叫\textsf{uestcojtest}的测试数据库，这个数据库里面的每个表中都包含了若干数据，用以进行数据库集成测试。这里面包含了许多子测试，见表\ref{databaseITTest}。
+
+\longthreelinetable{databaseITTest}{数据库集成测试用例表}{3}{lll}
+{测试函数 & 测试内容 & 期望结果\\
+}{
+ & \multicolumn{2}{c}{基本测试}\\
+ \cmidrule[0.05em]{2-3}
+testFetchDataSource & 当前使用的数据库 & \textsf{uestcojtest}\\
+testDataBaseConnection & 数据库连接情况 & 正常\\
+testHQLQuery & HQL查询 & 正常\\
+
+ & \multicolumn{2}{c}{Condition测试}\\
+ \cmidrule[0.05em]{2-3}
+testCondition\_emptyEntrySet & 查询功能 & 正常\\
+testCondition\_emptyEntrySetWithDescId & 查询功能（按ID逆序排列）& 正常\\
+testCondition\_count\_emptyCondition & 个数查询功能 & 正常\\
+testCondition\_count\_withDepartmentId & 个数查询功能（带条件） & 正常\\
+
+ & \multicolumn{2}{c}{查找功能测试（返回实体）}\\
+ \cmidrule[0.05em]{2-3}
+testDAO\_getEntityByUnique & 依照主键查找 & 正常\\
+testDAO\_getEntityByUnique\_notUniqueField & 依照非主键查找 & 抛出异常\\
+
+ & \multicolumn{2}{c}{查找功能测试（返回DTO）}\\
+ \cmidrule[0.05em]{2-3}
+testDAO\_findAllByBuilder & 查找操作 & 正常\\
+testDAO\_findAllByBuilder\_withPageInfo & 查找操作（带目录限制） & 正常\\
+testDAO\_getDTOByUniqueField\_null & 查找失败 & 返回null\\
+testDAO\_getDTOByUniqueField\_intType & 查找操作（条件为数字） & 正常\\
+testDAO\_getDTOByUniqueField\_stringType & 查找操作（条件为字符串） & 正常\\
+testDAO\_getDTOByUniqueField\_failed & 依照非主键查找 & 抛出异常\\
+
+ & \multicolumn{2}{c}{更新功能测试}\\
+ \cmidrule[0.05em]{2-3}
+testSQLUpdate & 多行更新 & 正常\\
+
+ & \multicolumn{2}{c}{DTO功能测试}\\
+ \cmidrule[0.05em]{2-3}
+testUserDTO & Builder功能 & 正常\\
+
+ & \multicolumn{2}{c}{ContestProblemDAO测试}\\
+ \cmidrule[0.05em]{2-3}
+testAddContestProblem & 添加比赛题目功能 & 正常\\
+
+ & \multicolumn{2}{c}{Problem数据库测试}\\
+ \cmidrule[0.05em]{2-3}
+testStartIdAndEndId & 按ID区域查找 & 正常\\
+testStartIdAndEndId\_invalidParameter & 按ID区域查找（参数错误） & 空列表\\
+testIsSpjQuery\_notSpj & 按SPJ状态查找（非SPJ） & 正常\\
+testIsSpjQuery\_spj & 按SPJ状态查找（是SPJ） & 正常\\
+testProblemCondition\_emptyTitle & 按标题查找（空标题） & 正常\\
+testAddProblem & 添加题目 & 正常\\
+
+ & \multicolumn{2}{c}{Status数据库测试}\\
+ \cmidrule[0.05em]{2-3}
+testStatusDAO\_withDistinctProblem & 查找符合条件的状态的题目ID & 正常\\
+
+ & \multicolumn{2}{c}{Tag数据库测试}\\
+ \cmidrule[0.05em]{2-3}
+testQuery\_fetchAllTags & 查找所有的tag & 正常\\
+testCount & 查找所有的tag的个数 & 正常\\
+
+ & \multicolumn{2}{c}{User数据库测试}\\
+ \cmidrule[0.05em]{2-3}
+ testQuery\_byName & 按姓名查找用户 & 正常\\
+ testQuery\_byDepartmentId & 按学院查找用户 & 正常\\
+ testUserCondition\_byStartIdAndEndId & 按ID查找用户 & 正常\\
+
+ & \multicolumn{2}{c}{UserSerialKey数据库测试}\\
+ \cmidrule[0.05em]{2-3}
+ testFindUserSerialKeyByUserName & 按用户姓名查找激活码 & 正常\\
+}{
+}
+
+\subsection{服务集成测试}
+前面我们已经对数据库进行了集成测试，在这些测试都通过后，我们可以假设数据库模块已经是正常的了，然后在服务中用DAO的模拟对象对服务模块进行测试。这里面包含了许多子测试，由于篇幅限制我们只给出其中两个服务的测试用例，见表\ref{serviceITTest}。
+
+\longthreelinetable{serviceITTest}{服务集成测试用例表}{3}{lll}
+{测试函数 & 测试内容 & 期望结果\\
+}{
+ & \multicolumn{2}{c}{Problem服务测试}\\
+ \cmidrule[0.05em]{2-3}
+ testGetProblemDTOByProblemId & 按题目ID查询ProblemDTO & 正常\\
+ testCount & 题目数量查询 & 正常\\
+ testUpdateProblem & 题目更新 & 正常\\
+ testUpdateProblem\_problemNotFound & 题目更新（更新不存在的题目） & 抛出异常\\
+ testUpdateProblem\_problemFoundWithNullId & 题目更新（题目ID错误） & 抛出异常\\
+ testCreateNewProblem & 新建题目 & 正常\\
+ testGetProblemListDTOList & 获取题目列表 & 正常\\
+ testGetAllVisibleProblemIds & 获取可见题目ID列表 & 正常\\
+
+ & \multicolumn{2}{c}{User服务测试}\\
+ \cmidrule[0.05em]{2-3}
+testGetUserByUserId & 按用户ID查询用户 & 正常\\
+testGetUserByUserName & 按用户名查询用户 & 正常\\
+testGetUserByUserEmail & 按用户邮箱查询用户 & 正常\\
+testUpdateUser & 更新用户 & 正常\\
+testCount\_emptyCondition & 用户数量查询（条件为空）&正常\\
+testCount\_byStartId & 用户数量查询（ID大于等于2）&正常\\
+testCount\_byEndId & 用户数量查询（ID小于等于2）&正常\\
+testCount\_byStartIdAndEndId & 用户数量查询（ID在2到10之间）&正常\\
+testCount\_byStartIdAndEndId\_empty & 用户数量查询（不存在ID区间）&正常\\
+testCount\_byDepartmentId & 用户数量查询（按学院查询）&正常\\
+testCount\_bySchool & 用户数量查询（按学校查询）&正常\\
+testCount\_bySchool\_empty & 用户数量查询（不存在的学校）&正常\\
+testCount\_byUserName & 用户数量查询（按用户名查询）&正常\\
+testCount\_byType & 用户数量查询（按类型查询）&正常\\
+}{
+}
+
+\subsection{实用工具测试}
+系统中我们用到了许多实用工具，例如数据解压工具、数组工具等，这些工具我们也作出了相应的测试。测试用例见表\ref{utilITTest}
+
+\longthreelinetable{utilITTest}{实用工具测试用例表}{3}{lll}
+{测试函数 & 测试内容 & 期望结果\\
+}{
+ & \multicolumn{2}{c}{题目数据解压工具测试}\\
+ \cmidrule[0.05em]{2-3}
+ testCheck\_withoutSpjFile\_oneCase & 一组数据，无SPJ & 解压正常\\
+ testCheck\_withoutSpjFile\_moreCases & 多组数据，无SPJ & 解压正常\\
+ testCheck\_withSpjFile\_oneCase & 一组数据，有SPJ & 解压正常\\
+ testCheck\_withSpjFile\_moreCases & 多组数据，有SPJ & 解压正常\\
+ testCheck\_withInvalidDataName & 无效的数据 & 解压失败\\
+ testCheck\_withDirectory & 包含无效目录 & 解压失败\\
+ testCheck\_withNullDirectory & 空压缩包 & 解压失败\\
+ testCheck\_invalidDataDirectory & 非法数据文件夹 & 解压失败\\
+ testCheck\_notSameInputsAndOutputs & 无对应的输出文件 & 解压失败\\
+ testCheck\_missMatchInputAndOutput & 输入输出文件不匹配 & 解压失败\\
+
+ & \multicolumn{2}{c}{数组工具测试}\\
+ \cmidrule[0.05em]{2-3}
+ testParseIntArray & 解析整数数组 & 正常\\
+}{
+}
+
+\subsection{控制器测试}
+在服务测试通过的情况下，我们可以在控制器中设置服务的模拟对象来进行控制器测试。这里面包含了许多子测试，由于篇幅限制我们只给出其中四个控制器的测试用例，见表\ref{serviceITTest}。
+
+\section{测试结果}
+在\textbf{trunk}目录下运行\textbf{mvn test}即可进行自动化测试，下面是测试的运行结果：
+\begin{verbatim}
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running TestSuite
+PASSED: UserServiceTest
+PASSED: ProblemServiceTest
+PASSED: ConditionTest
+PASSED: ArrayUtilTest
+PASSED: CompareSkipSpacesTest
+PASSED: ZipDataCheckerTest
+PASSED: IndexControllerTest
+PASSED: UserControllerTest
+PASSED: ProblemControllerTest
+PASSED: Database integration tests
+PASSED: Service integration tests
+PASSED: Utility integration tests
+Tests run: 183, Failures: 0, Errors: 0, Skipped: 0
+Time elapsed: 10.53 sec - in TestSuite
+
+Results :
+
+Tests run: 183, Failures: 0, Errors: 0, Skipped: 0
+\end{verbatim}
+可以看到所有183组测试用例全部通过测试。

@@ -1,0 +1,1 @@
+when(problemService.checkProblemExists(1000)).thenReturn(true);

@@ -1,6 +1,39 @@
 % !Mode:: "TeX:UTF-8"
 
+
 \chapter{系统详细设计}
+\section{数据库详细设计}
+本系统数据库较为复杂，这里我们简述一下各个数据表的作用，如表\ref{entitytable}所示。我们将这些数据表分成了五个部分，数据结构图见图\ref{ArticleTable}、图\ref{StatusTable}、图\ref{ContestTable}、图\ref{UserTable}和图\ref{ProblemTable}。
+
+%\longthreelinetable{entitytable}{Entity表}{2}{ll}
+\threelinetable[htbp]{entitytable}{\textwidth}{ll}{Entity表}
+{表 & 作用\\
+}{
+Article & 文章的内容和基本信息\\
+Code & 用户提交的代码\\
+CompileInfo & 代码的编译信息\\
+Contest & 比赛的基本信息\\
+ContestProblem & 比赛和题目的对应关系\\
+ContestTeamInfo & 参赛队伍的信息\\
+ContestUser & 比赛的注册用户\\
+Department & 学校的部门信息\\
+Language & 可以使用的语言以及参数\\
+Message & 用户短消息\\
+Problem & 题目内容和基本信息\\
+ProblemTag & 题目和分类标签的对应关系\\
+Status & 代码的评测状态\\
+Tag & 分类标签\\
+User & 用户信息\\
+UserSerialKey & 用户激活码\\
+}{
+}
+
+\pic[htbp]{Article相关数据库结构图}{}{ArticleTable}
+\pic[htbp]{Status相关数据库结构图}{}{StatusTable}
+\pic[htbp]{Contest相关数据库结构图}{}{ContestTable}
+\pic[htbp]{User相关数据库结构图}{}{UserTable}
+\pic[htbp]{Problem相关数据库结构图}{}{ProblemTable}
+
 \section{服务器端详细设计}
 在服务器端系统设计过程中，最重要的是根据需求分析及用例模型构建系统静态模型和动态模型。顺序图展示对象之间的交互，这些交互是指在场景或用例的事件流中发生的。协作图是一种交互图，强调的是发送和接收消息的对象之间的组织结构，使用协作图来说明系统的动态情况。状态图说明对象在它的生命期中响应事件所经历的状态序列，以及它们对那些事件的响应。活动图是主要用于业务建模时，用于详述业务用例，描述一项业务的执行过程。设计时，描述操作的流程\cite{zhanghaipan1998}。
 
@@ -43,30 +76,7 @@ WebMVCConfig.java见附录\ref{sec:WebMVCConfig}
 \subsubsection{Entity}
 \pic[htbp]{Entity Package类图}{}{EntityPackage}
 
-Entity即为实体，对应着MVC模型中的Model，它和数据库中的内容有着直接的一对一映射关系。本系统数据库较为复杂，详细数据库结构图见附录\ref{sec:databasediagram}。这里我们简述一下各个实体的作用，如表\ref{entitytable}所示
-
-%\longthreelinetable{entitytable}{Entity表}{2}{ll}
-\threelinetable[htbp]{entitytable}{\textwidth}{ll}{Entity表}
-{Entity & 作用\\
-}{
-Article & 文章的内容和基本信息\\
-Code & 用户提交的代码\\
-CompileInfo & 代码的编译信息\\
-Contest & 比赛的基本信息\\
-ContestProblem & 比赛和题目的对应关系\\
-ContestTeamInfo & 参赛队伍的信息\\
-ContestUser & 比赛的注册用户\\
-Department & 学校的部门信息\\
-Language & 可以使用的语言以及参数\\
-Message & 用户短消息\\
-Problem & 题目内容和基本信息\\
-ProblemTag & 题目和分类标签的对应关系\\
-Status & 代码的评测状态\\
-Tag & 分类标签\\
-User & 用户信息\\
-UserSerialKey & 用户激活码\\
-}{
-}
+Entity即为实体，对应着MVC模型中的Model，它和数据库中的内容有着直接的一对一映射关系。
 
 \subsubsection{DTO}
 \pic[htbp]{DTO Package类图}{}{DTOPackage}
@@ -173,15 +183,16 @@ JudgeService在系统启动时开始运行\footnote{见附录\ref{sec:Applicatio
 有些开放性的题目存在多个答案，这个时候评测器需要用另外一段程序来判断它是否符合要求。还有一种情况就是结果为浮点数的时候，为了排除浮点误差对结果正确性的干扰，我们需要将用户程序运行结果和标准结果进行比较，一般来说误差小于$10^{-8}$就可以认为两者相同。如果需要进行Special Judge，还需要提供一个\textbf{spj.cc}文件指定Special Judge的代码（见附录\ref{sec:spj}）。
 
 出于使用上的考虑，我们在表\ref{judgecorereturncode}的基础上添加了三种评测状态：
-
-\threelinetable[htbp]{judgecorereturncodeextend}{\textwidth}{lll}{评测状态代码（扩展）}
-{ & 编号 & 结果\\
-}{
-OJ\_JUDGING & 16 & 测评器启动\\
-OJ\_RUNNING & 17 & 正在运行代码\\
-OJ\_REJUDGING & 18 & 重新评测中\\
-}{
-}
+\begin{itemize}
+	\item OJ\_JUDGING，编号：16，作用：测评器启动
+	\item OJ\_RUNNING，编号：17，作用：正在运行代码
+	\item OJ\_REJUDGING，编号：18，作用：重新评测中
+\end{itemize}
+%\threelinetable[htbp]{judgecorereturncodeextend}{\textwidth}{lll}{评测状态代码（扩展）}
+%{ & 编号 & 结果\\
+%}{
+%}{
+%}
 
 \subsection{Web Package详细设计}
 Web Package主要包含的是控制器，以及为控制器服务的一些模块，比如权限验证模块。
@@ -309,10 +320,10 @@ Spring MVC框架提供了很强大的Controller，我们只需要在一个类上
 }
 
 \section{浏览器端详细设计}
-一个好的Web应用不仅仅要拥有功能完善的后台，还应该拥有一个友好的界面。这部分我们介绍下网页的基本框架以及使用的编程方法。
+一个好的Web应用不仅仅要拥有功能完善的后台，还应该拥有一个友好的界面。这部分我们介绍下客户端的基本框架以及使用的编程方法。
 
 本系统用到的样式表和
-\subsection{网页结构}
+\subsection{客户端结构}
 
 整个网站可以分为三个部分：侧边栏、顶部导航和页面主体部分。为了统一所有页面的样式，我们使用了SiteMesh框架\footnote{SiteMesh是由一个基于Web页面布局、装饰以及与现存Web应用整合的框架。它能帮助我们在由大量页面构成的项目中创建一致的页面布局和外观，如一致的导航条，一致的banner，一致的版权，等等。 它不仅仅能处理动态的内容，如jsp，php，asp等产生的内容，它也能处理静态的内容，如htm的内容，使得它的内容也符合你的页面结构的要求。甚至于它能将HTML文件象include那样将该文件作为一个面板的形式嵌入到别的文件中去。所有的这些，都是GOF的Decorator模式的最生动的实现。}，它通过对用户请求进行过滤，并对服务器向客户端响应也进行过滤，然后给原始页面加入一定的装饰（header,footer等），然后把结果返回给客户端。通过SiteMesh的页面装饰，可以提供更好的代码复用，所有的页面装饰效果耦合在目标页面中，无需再使用include指令来包含装饰效果，目标页与装饰页完全分离，如果所有页面使用相同的装饰器，可以是整个Web应用具有统一的风格。
 
@@ -332,10 +343,10 @@ body标签首先包含的是\textbf{navbarTop.jsp}，这个文件是网站的顶
 
 在样式方面，我们采用了Bootstrap3作为网站前端的UI框架，原因有以下两点：首先，Bootstrap出自twitter，并且开源，久经考验，减少了测试的工作量。同时，Bootstrap的代码有着非常良好的代码规范，从中也可以学习到很多，在Bootstrap的基础之上创建项目，日后代码的维护也变得异常简单清晰。
 
-Bootstrap是一个响应式的框架，利用这个特性，我们为移动客户端进行了一些优化，让网页能够在手机等小屏幕设备上正常浏览。图\ref{UI}是最终的整体效果图，我们通过调整浏览器的大小来模拟不同的屏幕尺寸，在实际中效果也很好。
+Bootstrap是一个响应式的框架，利用这个特性，我们为移动客户端进行了一些优化，让客户端能够在手机等小屏幕设备上正常浏览。图\ref{UI}是最终的整体效果图，我们通过调整浏览器的大小来模拟不同的屏幕尺寸，在实际中效果也很好。
 
-\subsection{网页加载流程}
-网页加载完成后，首先运行下面这段代码：
+\subsection{客户端加载流程}
+客户端加载完成后，首先运行下面这段代码：
 
 \input{code/globalInit.py}
 
@@ -499,9 +510,9 @@ Bootstrap是一个响应式的框架，利用这个特性，我们为移动客�
 比赛页面集合了题目列表（图\ref{ContestOverview}）、题目页面（图\ref{ContestProblems}）、状态页面（图\ref{ContestStatus}）、在线答疑和比赛排名（图\ref{ContestRankList}）五个页面，由一个标签页组展示给用户。
 
 \pic[htbp]{题目列表}{width=0.9\textwidth}{ContestOverview}
+\pic[htbp]{比赛排名}{width=\textwidth}{ContestRankList}
 \pic[htbp]{题目页面}{width=0.9\textwidth}{ContestProblems}
 \pic[htbp]{状态页面}{width=\textwidth}{ContestStatus}
-\pic[htbp]{比赛排名}{width=\textwidth}{ContestRankList}
 
 \subsubsection{比赛编辑器}
 我们提供了一个方便的题目编辑器供管理员编辑题目，它的界面如图\ref{ContestEditor}所示，
