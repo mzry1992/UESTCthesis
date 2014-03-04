@@ -3481,7 +3481,7 @@ pdfkeywords={\@pdfckeywords}%在pdf元信息中加入关键字
   \edef\x{\noexpand\ccwd\the\ccwd}%
   \expandafter\endgroup\x
   \ifdim\parindent=0pt\else\parindent2\ccwd\fi}
-\RequirePackage[hang]{footmisc}
+\RequirePackage[hang,perpage]{footmisc}
 \setlength{\footnotemargin}{5.2mm}
 \renewcommand{\footnoterule}{\vfill\noindent
 \vspace*{-3pt}\hspace{7.4mm}\rule{5.05cm}{0.02cm}\vspace*{2.6pt}}

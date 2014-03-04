@@ -138,20 +138,54 @@ Service为上层应用提供了一系列特定的数据库操作，根据接口�
 }{
 }
 
-评测结束后，它返回三个整数，分别代表评测结果、内存开销、时间开销。
+评测结束后，它返回三个整数，分别代表评测结果编号（含义见表\ref{judgecorereturncode}）、内存开销、时间开销。
+
+\threelinetable[htbp]{judgecorereturncode}{\textwidth}{lll}{Judge Core结果代码}
+{ & 编号 & 结果\\
+}{
+OJ\_WAIT & 0 & 等待评测开始\\
+OJ\_AC & 1 & 结果正确\\
+OJ\_PE & 2 & 结果正确但格式错误\\
+OJ\_TLE & 3 & 运行时间超过限制\\
+OJ\_MLE & 4 & 运行内存超过限制\\
+OJ\_WA & 5 & 错误的答案\\
+OJ\_OLE & 6 & 输出数据过大\\
+OJ\_CE & 7 & 编译错误\\
+OJ\_RE\_SEGV & 8 & 段错误\\
+OJ\_RE\_FPE & 9 & 浮点溢出错\\
+OJ\_RE\_BUS & 10 & 总线错误\\
+OJ\_RE\_ABRT & 11 & 意外中断\\
+OJ\_RE\_UNKNOWN & 12 & 未知错误\\
+OJ\_RF & 13 & 调用了非法函数\\
+OJ\_SE & 14 & 系统错误\\
+OJ\_RE\_JAVA & 15 & Java运行时错误\\
+}{
+}
 
 \subsubsection{JudgeService}
 \pic[htbp]{Judge Package类图}{}{JudgePackage}
-\pic[htbp]{Judge Service活动图}{}{JudgeActivity}
 JudgeService在系统启动时开始运行\footnote{见附录\ref{sec:ApplicationContextConfig}的22-26行。}，在这个类中我们用队列judgeQueue作为评测器的调度队列。它生成schedulerThread线程用来等待评测任务的到来，它每隔一定的时间间隔（在这里我们设置为3秒）调用StatusService查找所有等待测试的任务，将其标记为OJ\_JUDGING状态，并加入到judgeQueue中。它还配置了若干个JudgeThread线程用来进行多线程评测操作。每个JudgeThread不停的扫描judgeQueue，直到任务的到来，它首先将代码保存至工作目录下，然后构造控制台命令调用\textbf{Runtime.getRuntime().exec(shellCommand)}来和评测器内核交互，并得到结果，然后依据结果来做出相应的更新。如图\ref{JudgeActivity}所示。
+
+\pic[htbp]{Judge Service活动图}{}{JudgeActivity}
 
 每个题目可能有若干组测试数据，这些数据保存在\textbf{WEB-INF}下的\textbf{data}文件夹，按题目编号分别保存在不同的子文件夹下，从$1$开始编号，每个测试用例的输入文件以\textbf{.in}为后缀，对应的输出文件以\textbf{.out}结尾。
 
 有些开放性的题目存在多个答案，这个时候评测器需要用另外一段程序来判断它是否符合要求。还有一种情况就是结果为浮点数的时候，为了排除浮点误差对结果正确性的干扰，我们需要将用户程序运行结果和标准结果进行比较，一般来说误差小于$10^{-8}$就可以认为两者相同。如果需要进行Special Judge，还需要提供一个\textbf{spj.cc}文件指定Special Judge的代码（见附录\ref{sec:spj}）。
 
+出于使用上的考虑，我们在表\ref{judgecorereturncode}的基础上添加了三种评测状态：
+
+\threelinetable[htbp]{judgecorereturncodeextend}{\textwidth}{lll}{评测状态代码（扩展）}
+{ & 编号 & 结果\\
+}{
+OJ\_JUDGING & 16 & 测评器启动\\
+OJ\_RUNNING & 17 & 正在运行代码\\
+OJ\_REJUDGING & 18 & 重新评测中\\
+}{
+}
+
 \subsection{Web Package详细设计}
-\pic[htbp]{Web Package类图}{}{WebPackage}
 Web Package主要包含的是控制器，以及为控制器服务的一些模块，比如权限验证模块。
+\pic[htbp]{Web Package类图}{}{WebPackage}
 
 \subsubsection{AuthenticationAspect}
 这是本系统的权限验证模块，我们采用了面向侧面的程序设计\footnote{aspect-oriented programming，AOP，又译作面向方面的程序设计、观点导向编程，是计算机科学中的一个术语，指一种程序设计范型。该范型以一种称为侧面（aspect，又译作方面）的语言构造为基础，侧面是一种新的模块化机制，用来描述分散在对象、类或函数中的横切关注点（crosscutting concern）。}思想来完成，既在每个Controller之前``切入''一段指定的代码来进行权限验证。这部分我们使用AspectJ框架来完成，它是以代理（Proxy）的形式实现的。代码见附录\ref{sec:AuthenticationAspect}。
@@ -425,28 +459,51 @@ Bootstrap是一个响应式的框架，利用这个特性，我们为移动客�
 \pic[htbp]{代码提交对话框}{width=0.65\textwidth}{submitDialog}
 
 \subsubsection{题目编辑器}
-以管理员的身份从题目列表或题目页面的入口可以进入题目编辑器。这个编辑器页面上半部分为基本信息编辑框，下半部分是题面描述编辑框。题目编辑框和文章编辑器类似，这里就不赘述了。
+以管理员的身份从题目列表或题目页面的入口可以进入题目编辑器。这个编辑器页面上半部分为基本信息编辑框，下半部分是题面描述编辑框。题目基本信息编辑框见图\ref{ProblemDataEditor}，题目编辑框和文章编辑器类似，这里就不赘述了。
 
 \pic[htbp]{题目基本信息编辑框}{width=\textwidth}{ProblemDataEditor}
 
 管理员添加题目时，需要通过文件上传测试用例。我们规定用户使用一个zip压缩包打包，这个zip包种包含若干测试用例，每个测试用例的输入文件以\textbf{.in}为后缀，对应的输出文件以\textbf{.out}结尾。如果需要进行Special Judge，这个zip包种还应该包含\textbf{spj.cc}文件。上传成功后会有如图\ref{uploadSuccess}所示提示。
 
-\pic[htbp]{题目数据上传成功提示}{width=0.7\textwidth}{uploadSuccess}
+\pic[htbp]{题目数据上传成功提示}{width=0.6\textwidth}{uploadSuccess}
 
 编辑完后点击Submit按钮即可提交这次编辑。
 
 \subsection{评测状态模块详细设计}
 \subsubsection{评测列表页面}
-单击侧边栏中的Status选项或者提交代码后都会进入评测列表页面，评测列表包含了任务ID、提交者用户名、题目编号、评测状态、内存开销、时间开销、编程语言、代码长度、提交时间。
+单击侧边栏中的Status选项或者提交代码后都会进入评测列表页面，评测列表包含了任务ID、提交者用户名、题目编号、评测状态、内存开销、时间开销、编程语言、代码长度、提交时间（见图\ref{StatusList}）。评测列表的高级搜索菜单提供了按评测ID查询、按提交者查询、按提交语言查询、按返回结果查询等等功能。
+\pic[htbp]{评测列表}{width=\textwidth}{StatusList}
+
+用户有权查看自己的代码和编译错误信息，在列表中单击Compile Error链接或代码连接就可以查看相应的信息，图\ref{CodeInfo}展示了编译错误信息窗口。
+
+\pic[htbp]{编译错误信息对话框}{width=0.9\textwidth}{CodeInfo}
 
 \subsubsection{管理员Rejudge流程}
+测试数据不一是完美的，有时候管理员可能要对这些数据进行修改和调整，调整之后对之前已经提交的代码来说可能测试结果会发生变化，有些时候这些变化时很重要的，我们需要对这些测试进行重新测试（Rejudge）操作。整个操作流程如下：
+\begin{enumerate}
+	\item 管理员通过评测列表的高级搜索功能确定需要Rejudge的评测状态。
+	\item 管理员按下Rejudge按钮，然后会有一个弹出窗口提示此次操作将要影响到的评测状态数（见图\ref{Rejudge}）。
+	\item 确认无误后管理员在弹出的窗口中按下确认按钮。
+	\item Rejudge请求被发送，受到影响的评测状态都被更新为OJ\_Rejudge。
+\end{enumerate}
+
+\pic[htbp]{Rejudge操作示例}{width=\textwidth}{Rejudge}
 
 \subsection{比赛模块详细设计}
 \subsubsection{比赛列表页面}
-\pic[htbp]{比赛列表}{width=\textwidth}{contestList}
+\pic[htbp]{比赛列表}{width=0.9\textwidth}{contestList}
 
 单击侧边栏中的Contest选项即可进入比赛列表页面，比赛列表包含了比赛ID、比赛名称、比赛开始时间、比赛长度，如果以管理员身份登陆还有有比赛编辑按钮（一个是隐藏/显示比赛，一个是编辑比赛）和一个添加新比赛的链接。比赛列表的高级搜索菜单提供了按比赛编号查询、按比赛标题查询的查询功能（见图\ref{contestAdvanceSearch}）。
 
 \subsubsection{比赛页面}
-\subsubsection{比赛流程}
+比赛页面集合了题目列表（图\ref{ContestOverview}）、题目页面（图\ref{ContestProblems}）、状态页面（图\ref{ContestStatus}）、在线答疑和比赛排名（图\ref{ContestRankList}）五个页面，由一个标签页组展示给用户。
+
+\pic[htbp]{题目列表}{width=0.9\textwidth}{ContestOverview}
+\pic[htbp]{题目页面}{width=0.9\textwidth}{ContestProblems}
+\pic[htbp]{状态页面}{width=\textwidth}{ContestStatus}
+\pic[htbp]{比赛排名}{width=\textwidth}{ContestRankList}
+
 \subsubsection{比赛编辑器}
+我们提供了一个方便的题目编辑器供管理员编辑题目，它的界面如图\ref{ContestEditor}所示，
+
+\pic[htbp]{比赛编辑器}{width=0.85\textwidth}{ContestEditor}
