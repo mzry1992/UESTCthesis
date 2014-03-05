@@ -1,0 +1,22 @@
+\noindent
+\ttfamily
+\hlstd{}\hllin{001\ }\hlslc{//\ 建立一个浏览器模拟对象}\\
+\hllin{002\ }\hlstd{MockMvc\ mockMvc\ }\hlopt{=\ }\hlstd{}\hlkwd{standaloneSetup}\hlstd{}\hlopt{(}\hlstd{indexController}\hlopt{)}\\
+\hllin{003\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlopt{.}\hlstd{}\hlkwd{setViewResolvers}\hlstd{}\hlopt{(}\hlstd{WebMVCResource}\hlopt{.}\hlstd{}\hlkwd{viewResolver}\hlstd{}\hlopt{())}\\
+\hllin{004\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlopt{.}\hlstd{}\hlkwd{setMessageConverters}\hlstd{}\hlopt{(}\hlstd{WebMVCResource}\hlopt{.}\Righttorque\\
+\hllin{005\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlkwd{messageConverters}\hlstd{}\hlopt{())}\\
+\hllin{006\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlopt{.}\hlstd{}\hlkwd{build}\hlstd{}\hlopt{();}\\
+\hllin{007\ }\hlstd{}\\
+\hllin{008\ }\hlslc{//\ 模拟Get操作，访问/地址}\\
+\hllin{009\ }\hlstd{}\hlslc{//\ 期望结果为：}\\
+\hllin{010\ }\hlstd{}\hlslc{//}\hlstd{\ \ \ \ }\hlslc{返回状态为OK}\\
+\hllin{011\ }\hlstd{}\hlslc{//}\hlstd{\ \ \ \ }\hlslc{视图名字是index/index}\\
+\hllin{012\ }\hlstd{}\hlslc{//}\hlstd{\ \ \ \ }\hlslc{且模型中有期望的消息}\\
+\hllin{013\ }\hlstd{mockMvc}\hlopt{.}\hlstd{}\hlkwd{perform}\hlstd{}\hlopt{(}\hlstd{}\hlkwd{get}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"/"}\hlstd{}\hlopt{))}\\
+\hllin{014\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlopt{.}\hlstd{}\hlkwd{andExpect}\hlstd{}\hlopt{(}\hlstd{}\hlkwd{status}\hlstd{}\hlopt{().}\hlstd{}\hlkwd{isOk}\hlstd{}\hlopt{())}\\
+\hllin{015\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlopt{.}\hlstd{}\hlkwd{andExpect}\hlstd{}\hlopt{(}\hlstd{}\hlkwd{view}\hlstd{}\hlopt{().}\hlstd{}\hlkwd{name}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"index/index"}\hlstd{}\hlopt{))}\\
+\hllin{016\ }\hlstd{}\hlstd{\ \ \ \ \ \ \ \ }\hlstd{}\hlopt{.}\hlstd{}\hlkwd{andExpect}\hlstd{}\hlopt{(}\hlstd{}\hlkwd{model}\hlstd{}\hlopt{().}\hlstd{}\hlkwd{attribute}\hlstd{}\hlopt{(}\hlstd{}\hlstr{"message"}\hlstd{}\hlopt{,\ }\hlstd{}\hlstr{"home\ page.}\Righttorque\\
+\hllin{017\ }\hlstr{}\hlstd{\ \ \ \ \ \ \ \ }\hlstr{"}\hlstd{}\hlopt{));}\hlstd{}\\
+\mbox{}
+\normalfont
+\normalsize

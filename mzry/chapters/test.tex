@@ -31,6 +31,12 @@ Spring使用\textbf{@Bean}注解和\textbf{@Autowired}来完成依赖注入操�
 \input{code/Stubbing.java}
 
 这个桩程序替换了当参数为1000时的problemService的checkProblemExists方法，返回true值。
+
+\subsection{Spring MockMVC}
+Spring框架提供了MockMvc对象来模拟浏览器的真实操作。MockMvc使用\textbf{standaloneSetup}方法来由控制器生成一个模拟的浏览器对象。在成功得到该对象后，就可以使用它的\textbf{perform}方法来进行访问测试了。
+
+\input{code/mockMvc.java}
+
 \section{测试内容}
 \subsection{数据库模块测试}
 这里对Condition模块进行了测试。我们通过Condition类来生成HQL查询语句中的条件语句，它在服务器运行过程中是最常使用到的模块之一，所以对它的测试要求比较高，这部分的测试一共有12组，见表\ref{conditionTest}。
@@ -136,7 +142,7 @@ testCount & 查找所有的tag的个数 & 正常\\
 \longthreelinetable{serviceITTest}{服务集成测试用例表}{3}{lll}
 {测试函数 & 测试内容 & 期望结果\\
 }{
- & \multicolumn{2}{c}{Problem服务测试}\\
+ & \multicolumn{2}{c}{ProblemService测试}\\
  \cmidrule[0.05em]{2-3}
  testGetProblemDTOByProblemId & 按题目ID查询ProblemDTO & 正常\\
  testCount & 题目数量查询 & 正常\\
@@ -147,7 +153,7 @@ testCount & 查找所有的tag的个数 & 正常\\
  testGetProblemListDTOList & 获取题目列表 & 正常\\
  testGetAllVisibleProblemIds & 获取可见题目ID列表 & 正常\\
 
- & \multicolumn{2}{c}{User服务测试}\\
+ & \multicolumn{2}{c}{UserService测试}\\
  \cmidrule[0.05em]{2-3}
 testGetUserByUserId & 按用户ID查询用户 & 正常\\
 testGetUserByUserName & 按用户名查询用户 & 正常\\
@@ -188,11 +194,80 @@ testCount\_byType & 用户数量查询（按类型查询）&正常\\
  & \multicolumn{2}{c}{数组工具测试}\\
  \cmidrule[0.05em]{2-3}
  testParseIntArray & 解析整数数组 & 正常\\
+
+ & \multicolumn{2}{c}{文件比较工具测试}\\
+ \cmidrule[0.05em]{2-3}
+ testSame & 完全相等 & 相等\\
+ testSame\_deletingWhiteSpace & 有多余空格 & 相等\\
+ testSame\_endingSpaces & 末尾空格 & 相等\\
+ testSame\_tabSpaces & 多余tab & 相等\\
+ testDifferent\_endingSpaces & 不同的字符串 & 不等\\
+ testDifferent\_specialCharacter & 不同字符串，特殊字符 & 不等\\
 }{
 }
 
 \subsection{控制器测试}
-在服务测试通过的情况下，我们可以在控制器中设置服务的模拟对象来进行控制器测试。这里面包含了许多子测试，由于篇幅限制我们只给出其中四个控制器的测试用例，见表\ref{serviceITTest}。
+在服务测试通过的情况下，我们可以在控制器中设置服务的模拟对象来进行控制器测试。这里面包含了许多子测试，由于篇幅限制我们只给出其中三个控制器的测试用例，见表\ref{controllerTest}。
+
+\longthreelinetable{controllerTest}{控制器测试用例表}{3}{lll}
+{测试函数 & 测试内容 & 期望结果\\
+}{
+ & \multicolumn{2}{c}{IndexController测试}\\
+ \cmidrule[0.05em]{2-3}
+ testVisitIndex & 主页访问 & 正常\\
+
+ & \multicolumn{2}{c}{ProblemController测试}\\
+ \cmidrule[0.05em]{2-3}
+ testShow\_successful & 题目页面（访问成功） & 正常\\
+ testShow\_problemNotFound & 题目页面（不存在的题目） & 跳转到404页面\\
+ testList & 题目列表页面 & 正常\\
+
+ & \multicolumn{2}{c}{UserController测试}\\
+ \cmidrule[0.05em]{2-3}
+testLogin\_successful & 登陆（成功） & 正常\\
+testLogin\_invalidUserName\_null & 登陆（用户名为空） & 验证失败\\
+testLogin\_invalidUserName\_tooShort & 登陆（用户名太短） & 验证失败\\
+testLogin\_invalidUserName\_tooLong & 登陆（用户名太长） & 验证失败\\
+testLogin\_invalidUserName\_invalid & 登陆（用户名非法） & 验证失败\\
+testLogin\_invalidPassword\_null & 登陆（密码为空） & 验证失败\\
+testLogin\_invalidPassword\_tooShort & 登陆（密码太短） & 验证失败\\
+testLogin\_invalidPassword\_tooLong & 登陆（密码太长） & 验证失败\\
+testLogin\_failed\_wrongUserNameOrPassword & 登陆（密码错误） & 验证失败\\
+testLogin\_failed\_bothUserNameAndPassword\_null & 登陆（用户名密码都为空） & 验证失败\\
+testLogin\_failed\_serviceError & 登陆（系统错误） & 返回错误信息\\
+testLogout\_successful & 登出（成功） & 正常\\
+testRegister\_successfully & 注册（成功） & 正常\\
+testRegister\_failed\_userName\_null & 注册（用户名为空） & 验证失败\\
+testRegister\_failed\_userName\_whiteSpaces & 注册（用户名有空格） & 验证失败\\
+testRegister\_failed\_userName\_tooShort & 注册（用户名太短） & 验证失败\\
+testRegister\_failed\_userName\_tooLong & 注册（用户名太长） & 验证失败\\
+testRegister\_failed\_userName\_invalid & 注册（用户名非法） & 验证失败\\
+testRegister\_failed\_password\_null & 注册（密码为空） & 验证失败\\
+testRegister\_failed\_password\_tooShort & 注册（密码太短） & 验证失败\\
+testRegister\_failed\_password\_tooLong & 注册（密码太长） & 验证失败\\
+testRegister\_failed\_passwordRepeat\_null & 注册（密码确认为空） & 验证失败\\
+testRegister\_failed\_passwordRepeat\_tooShort & 注册（密码确认太短） & 验证失败\\
+testRegister\_failed\_passwordRepeat\_tooLong & 注册（密码确认太长） & 验证失败\\
+testRegister\_failed\_passwordRepeat\_different & 注册（密码确认与密码不同） & 验证失败\\
+testRegister\_failed\_nickName\_null & 注册（昵称为空） & 验证失败\\
+testRegister\_failed\_nickName\_whiteSpaces & 注册（昵称有空格） & 验证失败\\
+testRegister\_failed\_nickName\_tooShort & 注册（昵称太短） & 验证失败\\
+testRegister\_failed\_nickName\_tooLong & 注册（昵称太长） & 验证失败\\
+testRegister\_failed\_nickName\_invalid & 注册（昵称非法） & 验证失败\\
+testRegister\_failed\_email\_invalid & 注册（邮箱错误） & 验证失败\\
+testRegister\_failed\_school\_tooShort & 注册（学校名太短） & 验证失败\\
+testRegister\_failed\_school\_tooLong & 注册（学校名太长） & 验证失败\\
+testRegister\_failed\_departmentId\_null & 注册（学院为空） & 验证失败\\
+testRegister\_failed\_departmentNotFound & 注册（学院不存在） & 验证失败\\
+testRegister\_failed\_studentId\_tooShort & 注册（学号太短） & 验证失败\\
+testRegister\_failed\_studentId\_tooLong & 注册（学号太长） & 验证失败\\
+testRegister\_failed\_usedUserName & 注册（用户名已被占用） & 验证失败\\
+testRegister\_failed\_usedEmail & 注册（邮箱已被占用） & 验证失败\\
+testUser\_register\_login\_logout & 用户注册、登陆、登出操作 & 正常\\
+}{
+}
+
+控制器是直接和用户打交道的函数，我们选择了非常多的数据来检验用户提交表单的各种情况，防止用户的恶意提交对数据库造成破坏。
 
 \section{测试结果}
 在\textbf{trunk}目录下运行\textbf{mvn test}即可进行自动化测试，下面是测试的运行结果：
@@ -220,4 +295,4 @@ Results :
 
 Tests run: 183, Failures: 0, Errors: 0, Skipped: 0
 \end{verbatim}
-可以看到所有183组测试用例全部通过测试。
+可以看到所有测试用例全部通过测试。
