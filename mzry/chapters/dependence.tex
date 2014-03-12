@@ -8,11 +8,11 @@
 
 当时组织CGI/Perl这样的脚本代码太混乱了。CGI伸缩性不是太好(经常是为每个请求分配一个新的进程)，也不太安全(直接使用文件系统或者环境变量)，同时也没提供一种结构化的方式去构造动态应用程序。直到出现了Java Server Pages(JSP)，微软的ASP，以及PHP等技术。
 
-同时，在Google的推广下AJAX（Asynchronous JavaScript and XML，异步的JavaScript与XML技术）开始流行起来，让事情变得很有意思。AJAX允许客户端的JavaScript脚本为局部页面提供请求服务，然后可以在无需回到服务器情况下动态刷新部分页面，也就是更新浏览器中的document对象，通常称作DOM，或者文档对象模型。虽然从服务器端返回的仍然是HTML，但浏览器上的代码能把这HTML片段内嵌到当前页面中。也就是说web应用的响应可以更快，这时我们真正用web应用取代了web页面。谷歌的GMail和谷歌地图都是当时AJAX的杀手级产品。随后用AJAX局部刷新就如雨后春笋般出现。
+同时，在Google的推广下AJAX（Asynchronous JavaScript and XML，异步的JavaScript与XML技术）开始流行起来，让事情变得很有意思。AJAX允许客户端的JavaScript脚本为局部页面提供请求服务，然后可以在无需回到服务器情况下动态刷新部分页面，也就是更新浏览器中的document对象，通常称作DOM，或者文档对象模型。虽然从服务器端返回的仍然是HTML，但浏览器上的代码能把这HTML片段内嵌到当前页面中。也就是说web应用的响应可以更快，这时才真正用web应用取代了web页面。谷歌的GMail和谷歌地图都是当时AJAX的杀手级产品。随后用AJAX局部刷新就如雨后春笋般出现。
 
 在随后的几年时间里，AJAX成为了焦点，但在服务器端仍然使用着旧有的技术。大概在2007年，37signals公司公开其成员——Ruby on Rails。那个基于Ruby on Rails 5分钟构建博客的演示完全征服了全世界的开发者。一夜之间，所以谈论的焦点都是关于Rails，Rails的不同之处在于使用规定的方式去设计你的web应用程序，运用一种已经广泛在桌面应用开发，但未被搬到web应用上的开发模式。这种模式就叫做MVC（Model-View-Controller）模式。
 
-直到今天，MVC模式已经被应用于许许多多的框架之中，例如在服务器端运行的Spring MVC框架，在前端运行的AngularJS。这允许我们能够快速构建web服务，以及基于AngularJS的客户端接口，甚至和其它的服务，如PhoneGap或者其它原生移动开发工具一样，进行移动应用的开发。
+直到今天，MVC模式已经被应用于许许多多的框架之中，例如在服务器端运行的Spring MVC框架，在前端运行的AngularJS。这允许开发者能够快速构建web服务，以及基于AngularJS的客户端接口，甚至和其它的服务，如PhoneGap或者其它原生移动开发工具一样，进行移动应用的开发。
 
 \section{系统架构}
 \subsection{B/S结构}

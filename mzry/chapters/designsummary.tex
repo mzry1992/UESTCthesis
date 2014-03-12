@@ -8,26 +8,44 @@
 	\item 部署环境：运行于Virtual Box下的最新版本Arch Linux
 	\item 建模软件：Visual Paradigm for UML
 	\item 编辑软件：Eclipse、WebStorm、Vim
+	\item 项目管理：Gradle\footnote{Gradle是一个基于Apache Ant和Apache Maven概念的项目自动化建构工具。它使用一种基于Groovy的特定领域语言来声明项目设置，而不是传统的XML。}
 	\item 版本控制：Git
 	\item 持续集成：TeamCity\footnote{一款功能强大的持续集成（Continue Integration）工具，可以让团队快速实现持续继承：IDE工具集成、各种消息通知、各种报表、项目的管理、分布式的编译等等。}
 \end{enumerate}
 
-本系统涉及到了服务器端、浏览器端、评测器三个模块，它们所使用的编程语言也都不同。服务器端我们采用的是JDK7.0标准下的Java语言，项目通过maven来组织和管理。浏览器端核心框架为AngularJS和JQuery，前端UI采用Bootstrap3，项目通过Grunt来组织和管理，编程语言为Less\footnote{LESSCSS是一种动态样式语言，属于CSS预处理语言的一种，它使用类似CSS的语法，为CSS的赋予了动态语言的特性，如变量、继承、运算、函数等，更方便CSS的编写和维护。}和Coffeescript\footnote{CoffeeScript是一套JavaScript的转译语言。受到Ruby、Python与Haskell等语言的启发，CoffeeScript增强了JavaScript的简洁性与可读性。}。评测器采用C++语言，使用32位Linux API实现。
+本系统采用B/S架构，服务器部分采用的是JDK7.0标准下的Java语言，通过Gradle来组织和管理。Web端核心框架为AngularJS，UI采用Bootstrap3，项目通过Grunt来组织和管理，编程语言为Less\footnote{LESSCSS是一种动态样式语言，属于CSS预处理语言的一种，它使用类似CSS的语法，为CSS的赋予了动态语言的特性，如变量、继承、运算、函数等，更方便CSS的编写和维护。}和Coffeescript\footnote{CoffeeScript是一套JavaScript的转译语言。受到Ruby、Python与Haskell等语言的启发，CoffeeScript增强了JavaScript的简洁性与可读性。}。
 
-本项目代码托管在Github上\footnote{项目主页\url{http://uestc-acm.github.io/CDOJ/}。}，评测器内核位于branches文件夹，项目相关文档位于doc文件夹，服务器代码位于trunk文件夹下\footnote{项目最早托管于Google Code上，使用SVN作为版本控制工具，目录结构也是SVN风格的结构。}。评测器内核不在本文的讨论范围内，我们主要说明下trunk目录的结构。
+本项目代码托管在Github上，项目主页：\url{http://uestc-acm.github.io/CDOJ/}。
 
-trunk目录下的pom.xml是maven工程的配置文件，config和script用来保存一些编译脚本和配置文件，所有的代码均在src目录下。
+\section{Web端技术架构}
+传统的Web应用允许用户端填写表单（form），当提交表单时就向Web服务器发送一个请求。服务器接收并处理传来的表单，然后送回一个新的网页，但这个做法浪费了许多带宽，因为在前后两个页面中的大部分HTML码往往是相同的。由于每次应用的沟通都需要向服务器发送请求，应用的回应时间依赖于服务器的回应时间。这导致了用户界面的回应比本机应用慢得多。
 
-\pic[htbp]{src目录结构}{width=\textwidth}{srcdirectorystructure}
+与此不同，AJAX（Asynchronous JavaScript and XML\footnote{实际上数据格式可以由JSON代替，进一步减少数据量，形成所谓的AJAJ。本系统使用的便是更加轻便的JSON数据。}，异步的JavaScript与XML技术）应用可以仅向服务器发送并取回必须的数据，并在客户端采用JavaScript处理来自服务器的回应。因为在服务器和浏览器之间交换的数据大量减少（大约只有原来的5\%）,服务器回应更快了。同时，很多的处理工作可以在发出请求的客户端机器上完成，因此Web服务器的负荷也减少了。
 
-java目录保存java源代码，resources文件夹保存系统配置信息，sql目录下保存数据库脚本，webapp下保存和前端相关的所有文件，包括样式表、图片、JSP文件。
+Web端完全采用AJAX交互方式，和服务器通过JSON数据交互，具体方式有两种，GET和POST方式。GET方式直接向服务器发送请求，服务器返回JSON数据。当客户端需要发送数据给服务器时，需要通过POST方式来传递数据，举个例子来说，当用户在登录窗口登录时，浏览器会将登录窗口的表单打包成一段JSON格式的数据，然后通过POST方式发送给服务器，服务器将登录状态等信息以JSON格式返回给前端，完成一次登录操作。目前本项目域名为\url{http://acm.uestc.edu.cn/}，Web端只有一个页面，既主页，页面切换功能由angularJS框架完成。
 
-\section{服务器端框架}
-\subsection{服务器端总体技术架构}
-为确保系统的互操作性、适用性及长期的扩充性，我们应以标准的、开放的要求进行架构。本文所设计的在线评测系统，是在优化、改造原有设计的基础上，借助于分布式的应用模型及先进的MVC体系结构实现的。在服务器端我们集中安置了系统中的数据库、程序和一些其它的组件，而在客户端我们只需要浏览器，同一数据源为用户提供数据查询服务，如此一来也就确保了数据的完整性与及时性。在很多情况下，用户的需要会随时间的推移而改变，因此在业务的处理逻辑出现变化的情况下，我们只需要在服务器端进行程序的修改，随后就可以重新进行发布，这样就方便了程序的研发及发布，也不会对用户产生影响。本系统总体结构如图\ref{Architecture}所示。
+\pic[htbp]{前端文件目录结构}{width=\textwidth}{cdojuidirectorystructure}
+
+\subsection{浏览器端开发流程}
+
+本系统所用到的样式表和脚本较多，这些文件统一使用GruntJS来维护，位于trunk/src/main/webapp/cdoj下，编译流程如图\ref{GruntJS}所示。
+
+\pic[htbp]{GruntJS编译活动图}{}{GruntJS}
+
+项目中与AngularJS框架相关的脚本文件统一放置在src/angular子目录下，LESS文件在src/less下，相关依赖由bower管理，它们位于bower\_components文件夹，编译后的文件在dist目录下。
+
+%Web端根据功能需要分成了五个部分，如图\ref{front-end-structure}所示。
+%\subsection{网站结构}
+%\pic[htbp]{网站结构图}{}{front-end-structure}
+%
+%根据功能需要将其划分若干部分，如图
+%
+
+\section{服务器技术架构}
+为确保系统的互操作性、适用性及长期的扩充性，本系统应以标准的、开放的要求进行架构。本文所设计的在线评测系统，是在优化、改造原有设计的基础上，借助于分布式的应用模型及先进的MVC体系结构实现的。在服务器端集中安置了系统中的数据库、程序和一些其它的组件，而在客户端只需要浏览器，同一数据源为用户提供数据查询服务，如此一来也就确保了数据的完整性与及时性。在很多情况下，用户的需要会随时间的推移而改变，因此在业务的处理逻辑出现变化的情况下，只需要在服务器端进行程序的修改，随后就可以重新进行发布，这样就方便了程序的研发及发布，也不会对用户产生影响。本系统总体结构如图\ref{Architecture}所示。
 \pic[htbp]{系统总体技术架构}{}{Architecture}
 
-客户端发起一个HTTP请求后，经过一系列中间处理最终被分配到该连接对应的控制器上（Controller）。与标准MVC模型不同的是，我们通过一个叫做服务（Service）的中间件来和模型（Model）进行交互，服务调用Hibernate框架的数据访问对象（DAO）来进行数据的持久化操作。在一系列逻辑操作之后，控制器（Controller）根据结果来选择合适的视图（View）返回给客户端。
+客户端发起一个HTTP请求后，经过一系列中间处理最终被分配到该连接对应的控制器上（Controller）。与标准MVC模型不同的是，本系统通过一个叫做服务（Service）的中间件来和模型（Model）进行交互，服务调用Hibernate框架的数据访问对象（DAO）来进行数据的持久化操作。在一系列逻辑操作之后，控制器（Controller）根据结果来选择合适的视图（View）返回给客户端。
 
 评测器模块作为一个独立的模块存在于web框架之外，它通过服务（Service）来查找等待评测的任务队列、进行评测和更新任务队列。
 
@@ -58,46 +76,4 @@ java目录保存java源代码，resources文件夹保存系统配置信息，sql
 这个模块包含了所有供内部使用的公共API。
 
 \subsubsection{网站模块}
-该模块最主要的部分是控制器（Controller）模块，控制器负责处理来自客户端的HTTP请求，并通过一定的逻辑选择合适的服务（Service）来完成用户的请求，同时根据情况将合适的视图（View）返回给用户。
-
-\section{浏览器端框架}
-\subsection{浏览器端总体技术架构}
-传统的Web应用允许用户端填写表单（form），当提交表单时就向Web服务器发送一个请求。服务器接收并处理传来的表单，然后送回一个新的网页，但这个做法浪费了许多带宽，因为在前后两个页面中的大部分HTML码往往是相同的。由于每次应用的沟通都需要向服务器发送请求，应用的回应时间依赖于服务器的回应时间。这导致了用户界面的回应比本机应用慢得多。
-
-与此不同，AJAX（Asynchronous JavaScript and XML\footnote{实际上数据格式可以由JSON代替，进一步减少数据量，形成所谓的AJAJ。本系统使用的便是更加轻便的JSON数据。}，异步的JavaScript与XML技术）应用可以仅向服务器发送并取回必须的数据，并在客户端采用JavaScript处理来自服务器的回应。因为在服务器和浏览器之间交换的数据大量减少（大约只有原来的5\%）,服务器回应更快了。同时，很多的处理工作可以在发出请求的客户端机器上完成，因此Web服务器的负荷也减少了。
-
-本系统的服务器端提供以下几种资源：
-\begin{enumerate}
-	\item 网页资源
-
-	这类资源包含网页HTML代码、样式列表（CSS）、浏览器脚本（JavaScript）、图片和字体，通过GET方式获得。
-	\item 数据资源
-
-	这类资源均为JSON格式的数据，它有两种不同的获取方式：
-	\begin{enumerate}
-		\item GET方式
-
-		这种方式和获取网页资源操作相同，区别在于服务器返回的是JSON数据。
-		\item POST方式
-
-		当客户端需要发送数据给服务器时，需要通过POST方式来传递数据，举个例子来说，当用户在登录窗口登录时，浏览器会将登录窗口的表单打包成一段JSON格式的数据，然后通过POST方式发送给服务器，服务器将登录状态等信息以JSON格式返回给前端，完成一次登录操作。
-	\end{enumerate}
-\end{enumerate}
-
-在\ref{sec:angularjs}中我们提到了AngularJS框架，它是本系统最底层的框架。
-
-\subsection{网站结构}
-\pic[htbp]{网站结构图}{}{front-end-structure}
-
-目前本项目域名为\url{http://acm.uestc.edu.cn/}，根据功能需要我们将其划分若干部分，如图\ref{front-end-structure}所示。
-
-\subsection{浏览器端开发流程}
-\pic[htbp]{前端文件目录结构}{width=\textwidth}{cdojuidirectorystructure}
-
-本系统所用到的样式表和脚本较多，这些文件统一使用GruntJS来维护，位于trunk/src/main/webapp/plugins/cdoj下。我们用LESS作为样式表的编程语言，CoffeeScript作为脚本的编程语言，编译流程如图\ref{GruntJS}所示。
-
-\pic[htbp]{GruntJS编译活动图}{}{GruntJS}
-
-项目中与AngularJS框架相关的脚本文件统一放置在src/angular子目录下。LESS文件在src/less下。还有部分功能我们用JQuery实现，位于src/jquery下。src/css和src/js被用来保存外部的CSS和JS文件。编译后的文件在dist目录下。
-
-%\pic[htbp]{dist目录结构}{width=0.4\textwidth}{distdirectorystructure}
+该模块最主要的部分是控制器（Controller）模块，控制器负责处理来自客户端的HTTP请求，并通过一定的逻辑选择合适的服务（Service）来完成用户的请求，然后将结果返回给用户。

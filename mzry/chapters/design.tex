@@ -1,9 +1,8 @@
 % !Mode:: "TeX:UTF-8"
 
-
 \chapter{系统详细设计}
 \section{数据库详细设计}
-本系统数据库较为复杂，这里我们简述一下各个数据表的作用，如表\ref{entitytable}所示。我们将这些数据表分成了五个部分，数据结构图见图\ref{ArticleTable}、图\ref{StatusTable}、图\ref{ContestTable}、图\ref{UserTable}和图\ref{ProblemTable}。
+本系统数据库较为复杂，这里简述一下各个数据表的作用，如表\ref{entitytable}所示。根据需求分析中的功能要求，这些数据表分成了五个部分，数据结构图见图\ref{ArticleTable}、图\ref{StatusTable}、图\ref{ContestTable}、图\ref{UserTable}和图\ref{ProblemTable}。
 
 %\longthreelinetable{entitytable}{Entity表}{2}{ll}
 \threelinetable[htbp]{entitytable}{\textwidth}{ll}{Entity表}
@@ -32,99 +31,84 @@ UserSerialKey & 用户激活码\\
 \pic[htbp]{Status相关数据库结构图}{}{StatusTable}
 \pic[htbp]{Contest相关数据库结构图}{}{ContestTable}
 \pic[htbp]{User相关数据库结构图}{}{UserTable}
+\clearpage
 \pic[htbp]{Problem相关数据库结构图}{}{ProblemTable}
 
 \section{服务器端详细设计}
 在服务器端系统设计过程中，最重要的是根据需求分析及用例模型构建系统静态模型和动态模型。顺序图展示对象之间的交互，这些交互是指在场景或用例的事件流中发生的。协作图是一种交互图，强调的是发送和接收消息的对象之间的组织结构，使用协作图来说明系统的动态情况。状态图说明对象在它的生命期中响应事件所经历的状态序列，以及它们对那些事件的响应。活动图是主要用于业务建模时，用于详述业务用例，描述一项业务的执行过程。设计时，描述操作的流程\cite{zhanghaipan1998}。
 
 \subsection{系统顺序图}
-我们用顺序图来说明用户的一次操作在系统之中是如何完成的，通过顺序图来对本系统的工作机制提供一个大概的说明，图\ref{BackendSequence}说明了用户的一次完整操作。
+顺序图可以说明用户的一次操作在系统之中是如何完成的，通过顺序图可以对本系统的工作机制提供一个大概的说明，图\ref{BackendSequence}说明了用户的一次完整操作。
 
 \pic[htbp]{系统顺序图}{width=\textwidth}{BackendSequence}
 
 \subsection{系统包图}
-包图说明了系统各个模块之间的依赖关系，在\ref{sec:serverModelStructure}中我们已经介绍过了系统的模块结构，根据这个结构，本系统的包结构如图\ref{ServerPackage}所示。由于本系统内容比较多，我们这里先给出大概的结构，后面再一一详细描述。
+包图说明了系统各个模块之间的依赖关系，在\ref{sec:serverModelStructure}中本文已经介绍过了系统的模块结构，根据这个结构，本系统的包结构如图\ref{ServerPackage}所示。由于本系统内容比较多，本文这里先给出大概的结构，后面再一一详细描述。
 \pic[htb]{包图}{}{ServerPackage}
 
 \subsection{Config Package详细设计}
 
+Spring框架有两种配置方式，一种是通过XML配置文件进行配置，这种方式将所有的配置信息写入一个指定的XML文件之中，这种方式略显麻烦，在本文中采用了另外一种方式，这种方式是利用Java的Annotation机制来进行配置。Config package保存了整个系统的核心配置，定义了数据库环境、事务管理、组件目录等信息。
+
 \pic[htbp]{Config Package类图}{}{ConfigPackage}
 
-\subsubsection{ApplicationContextConfig}
-ApplicationContextConfig.java见附录\ref{sec:ApplicationContextConfig}。
-
-Spring框架有两种配置方式，一种是通过XML配置文件进行配置，这种方式将所有的配置信息写入一个指定的XML文件之中，这种方式略显麻烦，在本文中我们采用了另外一种方式，这种方式是利用Java的Annotation机制来进行配置。
-
-系统启动时默认将resources.properties文件\footnote{resources.properties见附录\ref{sec:resources}。}中的键值对初始化成一个Environment实例，我们可以通过getProperty(String): String方法来获得对应的值。
-
-有了\textbf{Environment}实例，我们就可以将配置信息从代码中分离开来。
-
-\subsubsection{WebMVCResource}
-WebMVCResource.java见附录\ref{sec:WebMVCResource}。
-
-为了方便进行测试，我们将一些比较特殊的资源从WebMVCConfig.java中独立开来，放到WebMVCResource.java中。这里主要做了两件事情：一个是配置视图解析器，在这里我们设置视图地址的前缀和后缀，方便Controller调用视图。另外一件事就是配置了JSON数据的转换器，用于解析和构建JSON数据，这里我们使用了fastjson\footnote{Fastjson是一个Java语言编写的JSON处理器,由阿里巴巴公司开发。}。
-
-\subsubsection{WebMVCConfig}
-WebMVCConfig.java见附录\ref{sec:WebMVCConfig}
-这个文件是SpringMVC框架的配置文件，与之前的ApplicationContextConfig类似，这里配置了与Web相关的参数。
-
 \subsection{Database Package详细设计}
-\pic[htbp]{Database Package包图}{}{DatabasePackage}
+\pic[!htb]{Database Package包图}{}{DatabasePackage}
 
 这个包在MVC模型中处于Model层，所有与数据库有关的API都被包含在里面。
 
 \subsubsection{Entity}
 \pic[htbp]{Entity Package类图}{}{EntityPackage}
 
-Entity即为实体，对应着MVC模型中的Model，它和数据库中的内容有着直接的一对一映射关系。
+Entity即为实体，对应着MVC模型中的Model，它和数据库中的内容通过Hibernate提供的注解来进行映射关系配置。通过注册可以设置字段的属性、限制等等，对于不满足要求的字段Hibernate框架将会提前告知，保护数据库内容的完整性。
 
 \subsubsection{DTO}
-\pic[htbp]{DTO Package类图}{}{DTOPackage}
+\pic[!htb]{DTO Package类图}{}{DTOPackage}
 
-数据传输对象DTO有两种，一种是客户端向服务器传输的数据，一种是模型向上层传输的数据。前者我们通过一个简单的类可以实现。
+数据传输对象DTO有两种，一种是客户端向服务器传输的数据，一种是模型向上层传输的数据。前者通过一个简单的类可以实现。
 
-Hibernate自带的数据库API较为复杂，为了提升效率和简化代码维护成本，我们自己构建了一套用来提取数据库数据的工具。在这类DTO中，我们使用了一个\textbf{@Fields}注解来注明这个DTO的信息来自数据库中的哪些域，然后通过这个field来构建HQL查询语言的\textbf{SELECT}命令。如下所示为UserListDTO.java的部分内容：
-
-\input{code/FieldAnnotation.java}
-
-对应生成的HQL语句为\textbf{SELECT userId, email, userName, nickName, type, school, motto, lastLogin, solved, tried FROM User}，配合接下来要介绍到的Condition，我们可以组合出基本的HQL查询语句。
-
-在得到这些域后，我们调用对应的EntityDTOBuilder的build方法来得到这些值。
+Hibernate自带的数据库API较为复杂，为了提升效率和简化代码维护成本，本文构建了一套用来提取数据库数据的工具。在这类DTO中使用\textbf{@Fields}注解来注明这个DTO的信息来自数据库中的哪些域，然后通过这个field来构建HQL查询语言的\textbf{SELECT}命令。配合接下来要介绍到的Condition，系统可以组合出基本的HQL查询语句。
 
 \subsubsection{Condition}
 \pic[htbp]{Condition Package类图}{}{ConditionPackage}
 
-我们在本系统中使用Hibernate作为持久层框架，它提供了强大的HQL查询语言，Condition包的主要功能就是提供了Condition组件，它可以翻译成HQL查询语言的where条件，来限定检索范围。
+本系统使用Hibernate作为持久层框架，它提供了强大的HQL查询语言，Condition包的主要功能就是提供了Condition组件，它可以翻译成HQL查询语言的where条件，来限定检索范围。
 
 根据实际情况，本系统设计的Condition支持三种条件：
 \begin{enumerate}
 	\item Order条件：用来限定返回结果的顺序。
 	\item PageInfo条件：用来实现返回结果的分页功能。
-	\item 普通条件：既Entry，它既可以是一条普通的条件，如\textbf{userId = 5}，也可以是一个Condition。在枚举类型ConditionType中，我们定义了许多常用的条件，如等于、不等于、小于、like、属于等等。
+	\item 普通条件：既Entry，它既可以是一条普通的条件，如\textbf{userId = 5}，也可以是一个Condition。在枚举类型ConditionType中定义了许多常用的条件，如等于、不等于、小于、like、属于等等。
 \end{enumerate}
+
+\pic[!htb]{DAO Package类图}{}{DAOPackage}
 
 对于每个数据库实体类型Entity，都有一个对应的EntityCondition类，如Problem实体有对应的ProblemCondition。这些EntityCondition类都必须继承自BaseCondition类，并且实现它的\textbf{getCondition()}方法。
 
-对于一些比较简单的条件，我们提供了一个\textbf{@Exp}注解，例如在StatusCondition.java中有如下变量：
-
-\input{code/ExpAnnotation.java}
-
-如果这两个成员变量不是空，那么最后我们会得到一个形式如同\textbf{WHERE ... userId $>=$ userId and userByUserId $=$ userId ...}的HQL查询语句。
-
-对于一些比较复杂的条件，开发者可以在\textbf{getCondition()}方法中实现复杂的逻辑。
+对于一些比较简单的条件可以使用\textbf{@Exp}注解来设置map field和map type。对于一些比较复杂的条件可以在\textbf{getCondition()}方法中实现。
 
 \subsubsection{DAO}
-\pic[htbp]{DAO Package类图}{}{DAOPackage}
 
-DAO提供了基础的数据库操作API，例如添加数据、修改、删除、查询等等，通过与DTO和Condition的配合使用，我们可以方便的进行数据库操作，而不需要为每种情况都生成一段冗长的HQL语句。
+DAO提供了基础的数据库操作API，例如添加数据、修改、删除、查询等等，通过与DTO和Condition的配合使用，系统可以方便的进行数据库操作，而不需要为每种情况都生成一段冗长的HQL语句。
 
 \subsection{Service Package详细设计}
 \pic[htbp]{Service Package类图}{}{ServicePackage}
 
-Service为上层应用提供了一系列特定的数据库操作，根据接口隔离原则\cite{szyperski2002component}，我们不希望上层应用直接调用底层的数据库API来进行操作，我们通过Service来隔离它们。在这里，每个EntityService都完成与指定Entity相关的操作，不允许出现跨Entity的调用。
+Service为上层应用提供了一系列特定的数据库操作，根据接口隔离原则\cite{szyperski2002component}，上层应用不应该直接调用底层的数据库API来操作，而要通过Service来隔离它们，在这里通过Service将晦涩的数据库原语装换成了有意义的服务。根据前面对系统模块的划分，主要五个Service，分别见图\ref{UserService}、图\ref{ProblemService}、图\ref{StatusService}、图\ref{ContestService}和图\ref{ArticleService}。
+
+\pic[htbp]{UserService类图}{}{UserService}
+	
+\pic[htbp]{ProblemService类图}{}{ProblemService}
+	
+\pic[htbp]{StatusService类图}{}{StatusService}
+
+\pic[htbp]{ContestService类图}{}{ContestService}
+
+\pic[htbp]{ArticleService类图}{}{ArticleService}
 
 \subsection{Judge Package详细设计}
 这个Package包含了与评测器服务相关的内容。
+\pic[!htb]{Judge Package类图}{}{JudgePackage}
 
 \subsubsection{评测器内核}
 评测器内核负责编译、运行、评测用户代码，是一个控制台程序，通过命令行参数来设定评测任务。评测器内核的主函数参数表见表\ref{judgecoredescription}。
@@ -150,7 +134,7 @@ Service为上层应用提供了一系列特定的数据库操作，根据接口�
 
 评测结束后，它返回三个整数，分别代表评测结果编号（含义见表\ref{judgecorereturncode}）、内存开销、时间开销。
 
-\threelinetable[htbp]{judgecorereturncode}{\textwidth}{lll}{Judge Core结果代码}
+\threelinetable[!htb]{judgecorereturncode}{\textwidth}{lll}{Judge Core结果代码}
 { & 编号 & 结果\\
 }{
 OJ\_WAIT & 0 & 等待评测开始\\
@@ -173,222 +157,145 @@ OJ\_RE\_JAVA & 15 & Java运行时错误\\
 }
 
 \subsubsection{JudgeService}
-\pic[htbp]{Judge Package类图}{}{JudgePackage}
-JudgeService在系统启动时开始运行\footnote{见附录\ref{sec:ApplicationContextConfig}的22-26行。}，在这个类中我们用队列judgeQueue作为评测器的调度队列。它生成schedulerThread线程用来等待评测任务的到来，它每隔一定的时间间隔（在这里我们设置为3秒）调用StatusService查找所有等待测试的任务，将其标记为OJ\_JUDGING状态，并加入到judgeQueue中。它还配置了若干个JudgeThread线程用来进行多线程评测操作。每个JudgeThread不停的扫描judgeQueue，直到任务的到来，它首先将代码保存至工作目录下，然后构造控制台命令调用\textbf{Runtime.getRuntime().exec(shellCommand)}来和评测器内核交互，并得到结果，然后依据结果来做出相应的更新。如图\ref{JudgeActivity}所示。
-
-\pic[htbp]{Judge Service活动图}{}{JudgeActivity}
+JudgeService在系统启动时开始运行，在这个类中队列judgeQueue为评测器的调度队列。该类生成schedulerThread线程用来等待评测任务的到来，并每隔一定的时间间隔（默认为3秒）调用StatusService查找所有等待测试的任务，而后将其标记为OJ\_JUDGING状态，加入到judgeQueue中。该类还配置了若干个JudgeThread线程用来进行多线程评测操作，每个JudgeThread不停的扫描judgeQueue，直到任务的到来。JudgeThread首先将代码保存至工作目录下，然后构造控制台命令调用\textbf{Runtime.getRuntime().exec(shellCommand)}和评测器内核交互，并得到结果，然后依据结果来做出相应的更新。
 
 每个题目可能有若干组测试数据，这些数据保存在\textbf{WEB-INF}下的\textbf{data}文件夹，按题目编号分别保存在不同的子文件夹下，从$1$开始编号，每个测试用例的输入文件以\textbf{.in}为后缀，对应的输出文件以\textbf{.out}结尾。
 
-有些开放性的题目存在多个答案，这个时候评测器需要用另外一段程序来判断它是否符合要求。还有一种情况就是结果为浮点数的时候，为了排除浮点误差对结果正确性的干扰，我们需要将用户程序运行结果和标准结果进行比较，一般来说误差小于$10^{-8}$就可以认为两者相同。如果需要进行Special Judge，还需要提供一个\textbf{spj.cc}文件指定Special Judge的代码（见附录\ref{sec:spj}）。
+有些开放性的题目存在多个答案，这个时候评测器需要用另外一段程序来判断它是否符合要求。还有一种情况就是结果为浮点数的时候，为了排除浮点误差对结果正确性的干扰，系统需要将用户程序运行结果和标准结果进行比较，一般来说误差小于$10^{-8}$就可以认为两者相同。如果需要进行Special Judge，还需要提供一个\textbf{spj.cc}文件指定Special Judge的代码。
 
-出于使用上的考虑，我们在表\ref{judgecorereturncode}的基础上添加了三种评测状态：
+出于使用上的考虑，在表\ref{judgecorereturncode}的基础上系统添加了三种评测状态：
 \begin{itemize}
 	\item OJ\_JUDGING，编号：16，作用：测评器启动
 	\item OJ\_RUNNING，编号：17，作用：正在运行代码
 	\item OJ\_REJUDGING，编号：18，作用：重新评测中
 \end{itemize}
-%\threelinetable[htbp]{judgecorereturncodeextend}{\textwidth}{lll}{评测状态代码（扩展）}
-%{ & 编号 & 结果\\
-%}{
-%}{
-%}
 
 \subsection{Web Package详细设计}
-Web Package主要包含的是控制器，以及为控制器服务的一些模块，比如权限验证模块。
-\pic[htbp]{Web Package类图}{}{WebPackage}
-
-\subsubsection{AuthenticationAspect}
-这是本系统的权限验证模块，我们采用了面向侧面的程序设计\footnote{aspect-oriented programming，AOP，又译作面向方面的程序设计、观点导向编程，是计算机科学中的一个术语，指一种程序设计范型。该范型以一种称为侧面（aspect，又译作方面）的语言构造为基础，侧面是一种新的模块化机制，用来描述分散在对象、类或函数中的横切关注点（crosscutting concern）。}思想来完成，既在每个Controller之前``切入''一段指定的代码来进行权限验证。这部分我们使用AspectJ框架来完成，它是以代理（Proxy）的形式实现的。代码见附录\ref{sec:AuthenticationAspect}。
-
-我们在图\ref{AuthenticationSequence}给出了验证成功和验证失败的两个顺序图，可以看到当验证失败时，我们不会调用原Controller，达到了权限限制的目的。
+%\pic[htbp]{Web Package类图}{}{WebPackage}
+Web Package主要包含的是控制器，以及为控制器服务的一些模块，比如权限验证模块。AuthenticationAspect是本系统的权限验证模块，本文采用了面向侧面的程序设计\footnote{aspect-oriented programming，AOP，又译作面向方面的程序设计、观点导向编程，是计算机科学中的一个术语，指一种程序设计范型。该范型以一种称为侧面（aspect，又译作方面）的语言构造为基础，侧面是一种新的模块化机制，用来描述分散在对象、类或函数中的横切关注点（crosscutting concern）。}思想来完成，既在每个Controller之前``切入''一段指定的代码来进行权限验证。这部分本系统使用AspectJ框架来完成，它是以代理（Proxy）的形式实现的。在每次操作开始前，首先系统从session中获得当前用户的信息，并判断该用户是否具有当前操作的权限。图\ref{AuthenticationSequence}给出了验证成功和验证失败的两个顺序图，当验证失败时，系统不会调用原Controller，达到了权限限制的目的。
 
 \begin{pics}[htbp]{权限验证顺序图}{AuthenticationSequence}
 \addsubpic{一次失败的权限验证}{}{ControllerSequenceFail}
 \addsubpic{一次成功的权限验证}{}{ControllerSequenceSuccess}
 \end{pics}
 
-\subsubsection{Controller}
-Spring MVC框架提供了很强大的Controller，我们只需要在一个类上使用\textbf{@Controller}注解就可以将一个类声明为控制器。在本项目中，我们按照域名的分布来划分Controller，在前面的图\ref{front-end-structure}中我们已经给出网站的结构。
+Spring MVC框架提供了很强大的Controller，只需要在一个类上使用\textbf{@Controller}注解就可以将一个类声明为控制器。在控制器上可以完成地址解析、POST数据注入、获取session的操作，系统统一使用\textbf{@ResponseBody Map$<$String, Object$>$}作为返回值，FastJson框架会自动将\textbf{@ResponseBody Map$<$String, Object$>$}转换成JSON格式的内容返回给Web端。
 
-根据返回值的不同，控制器分为两种类型：一种是返回一个代表视图地址的\textbf{String}的控制器，一种是返回一个代表JSON数据的\textbf{@ResponseBody Map$<$String, Object$>$}的控制器。
+控制器调用Service来进行数据操作，控制器本身只作为一个逻辑流程的执行者，不参与数据库的操作。为了方便管理，本系统控制器遵守的命名规则为每个Entity对应一个相应的EntityController，该EntityController中的method方法对应的URL请求地址为\textbf{/entity/method}，例如UserController下的login方法对应了\textbf{/user/login}，Web端通过这个地址来请求该方法。和Service一样，根据前面对系统模块的划分，主要有如下五个Controller：
+\begin{enumerate}
+	\item UserController
 
-视图保存在项目的webapp目录下，如\textbf{webapp/WEB-INF/views/index/index.jsp}，此视图对应的地址为\textbf{/WEB-INF/views/index/index.jsp}，但是我们在WebMVCResource.java（附录\ref{sec:WebMVCResource}）中的\textbf{viewResolver()}设置了地址的前缀和后缀，我们可以将其简写为\textbf{index/index}。如果控制器返回了一个视图地址，那么服务器会将对应的页面返回给用户。
+	\pic[htbp]{UserController类图}{}{UserController}
 
-对于返回\textbf{@ResponseBody Map$<$String, Object$>$}的控制器，FastJson框架会将这个\textbf{@ResponseBody Map$<$String, Object$>$}转换成JSON各式的文本返回给用户。
+	\item ProblemController
 
-下面我们用用户登陆相关的控制器来说明它是如何工作的（代码省略了其余部分）。
+	\pic[htbp]{ProblemController类图}{}{ProblemController}
 
-\input{code/UserController.java}
+	\item StatusController
 
-我们使用\textbf{@RequestMap}注解来声明方法所对应的网址，\textbf{@LoginPermit}定义了该地址的权限。因为Spring通过反射机制来进行自动注入，控制器方法的参数可以以任意顺序排列而不需要指定顺序。在login方法中，除了\textbf{HttpSession session}参数以外，另外两个和前端POST来的数据相关，\textbf{@RequestBody @Valid UserLoginDTO userLoginDTO}用来保存前端POST来的数据，我们使用了Java验证框架来对前端传递的数据进行一个初步的合法性验证，\textbf{@Valid}注解说明了我们需要对\textbf{userLoginDTO}进行验证，验证的结果保存在\textbf{BindingResult validateResult}中，下面是\textbf{UserLoginDTO}的部分代码：
+	\pic[htbp]{StatusController类图}{}{StatusController}
 
-\input{code/UserLoginDTO.java}
+	\item ContestController
+	
+	\pic[!htb]{ContestController类图}{}{ContestController}
 
-顺利登陆之后，前端可以接收到类似如下格式的一段数据：
+	\item ArticleController
+	
+	\pic[!htb]{ArticleController类图}{}{ArticleController}
 
-\input{code/loginResult.txt}
+\end{enumerate}
 
-\subsubsection{网站地图}
-上面我们举例说明了UserController的login方法的实现，限于篇幅限制其余的部分我们不一一描述，在这里我们给出整个网站的网站地图，一共有47个不同的方法，我们只介绍各个控制器的作用和返回给前端的数据类型。
+%下面我们用用户登陆相关的控制器来说明它是如何工作的（代码省略了其余部分）。
+%
+%\input{code/UserController.java}
+%
+%我们使用\textbf{@RequestMap}注解来声明方法所对应的网址，\textbf{@LoginPermit}定义该地址的权限。因为Spring通过反射机制来进行自动注入，控制器方法的参数可以以任意顺序排列而不需要指定顺序。
+%在login方法中，除了\textbf{HttpSession session}参数以外，另外两个和前端POST来的数据相关，\textbf{@RequestBody @Valid UserLoginDTO userLoginDTO}用来保存前端POST来的数据，我们使用了Java验证框架来对前端传递的数据进行一个初步的合法性验证，\textbf{@Valid}注解说明了我们需要对\textbf{userLoginDTO}进行验证，验证的结果保存在\textbf{BindingResult validateResult}中，下面是\textbf{UserLoginDTO}的部分代码：
+%
+%\input{code/UserLoginDTO.java}
+%
+%顺利登陆之后，前端可以接收到类似如下格式的一段数据：
+%
+%\input{code/loginResult.txt}
 
-\longthreelinetable{sitemap}{网站地图}{4}{llll}
-{
-地址 & 方法 & 作用 & 返回类型\\
-}{
- & \multicolumn{3}{c}{AdminController}\\
- \cmidrule[0.05em]{2-4}
-/admin/ & index & 管理员面板 & HTML\\
 
-\midrule[0.05em]
- & \multicolumn{3}{c}{ArticleController}\\
- \cmidrule[0.05em]{2-4}
-/article/data/ & data & 文章数据 & JSON\\
-/article/show/ & show & 文章页面 & HTML\\
-/article/search & search & 文章查找 & JSON\\
-/article/editor/ & editor & 文章编辑器 & HTML\\
-/article/edit & edit & 文章编辑 & JSON\\
-/article/operator & operator & 文章操作 & JSON\\
+\section{Web端详细设计}
+一个好的Web应用不仅仅要拥有功能完善的后台，还应该拥有一个友好的界面。这部分主要介绍客户端的基本框架以及使用的编程方法。
+\pic[!htb]{网站前端设计}{width=\textwidth}{UI}
 
-\midrule[0.05em]
- & \multicolumn{3}{c}{ContestController}\\
- \cmidrule[0.05em]{2-4}
-/contest/status/ & status & 比赛评测结果 & JSON\\
-/contest/rankList/ & rankList & 比赛排名 & JSON\\
-/contest/data/ & data & 比赛数据 & JSON\\
-/contest/show/ & show & 比赛页面 & HTML\\
-/contest/list/ & list & 比赛列表 & HTML\\
-/contest/search & search & 比赛查找 & JSON\\
-/contest/operator/ & operator & 比赛操作 & JSON\\
-/contest/editor/ & editor & 比赛编辑器 & HTML\\
-/contest/edit & edit & 比赛编辑 & JSON\\
+\subsection{Web端结构}
 
-\midrule[0.05em]
- & \multicolumn{3}{c}{ErrorController}\\
- \cmidrule[0.05em]{2-4}
-/error/authenticationError & authenticationError & 权限错误页面 & HTML\\
 
-\midrule[0.05em]
- & \multicolumn{3}{c}{IndexController}\\
- \cmidrule[0.05em]{2-4}
-/ & index & 主页 & HTML\\
-/globalData & globalData & 全局变量 & JSON\\
+整个网站可以分为三个部分：侧边栏、顶部导航和页面主体部分。页面的主体部分是一个带有\textbf{ng-view}属性标记的标签，在Web端运行过程中，AngularJS通过替换这个标签的内容来响应用户的操作。使用\textbf{ng-view}的好处有三点：第一点是统一了页面的布局，所有页面都共享同一个导航栏、同一个侧边栏和同样的样式表，整个Web应用具有统一的风格；第二点是在用户操作过程中，只需要加载很少的数据量，节约了带宽；第三点是用户在操作过程中浏览器始终保持在一个页面上，不会发生因为刷新操作而导致的用户信息丢失（例如未完成的表单）。
 
-\midrule[0.05em]
- & \multicolumn{3}{c}{PictureController}\\
- \cmidrule[0.05em]{2-4}
-/picture/uploadPicture/ & uploadPicture & 图片上传 & JSON\\
+AngularJS在每次操作过程中，通过在当前浏览器地址后面加上\textbf{\#}符号来设置当前页面的地址，只要\textbf{\#}符号前的地址不变，浏览器就会一直保持在一个页面上，而\textbf{\#}后面的内容则是真正的地址。
+%为了统一所有页面的样式，我们使用了SiteMesh框架\footnote{SiteMesh是由一个基于Web页面布局、装饰以及与现存Web应用整合的框架。它能帮助我们在由大量页面构成的项目中创建一致的页面布局和外观，如一致的导航条，一致的banner，一致的版权，等等。 它不仅仅能处理动态的内容，如jsp，php，asp等产生的内容，它也能处理静态的内容，如htm的内容，使得它的内容也符合你的页面结构的要求。甚至于它能将HTML文件象include那样将该文件作为一个面板的形式嵌入到别的文件中去。所有的这些，都是GOF的Decorator模式的最生动的实现。}，它通过对用户请求进行过滤，并对服务器向客户端响应也进行过滤，然后给原始页面加入一定的装饰（header,footer等），然后把结果返回给客户端。通过SiteMesh的页面装饰，可以提供更好的代码复用，所有的页面装饰效果耦合在目标页面中，无需再使用include指令来包含装饰效果，目标页与装饰页完全分离，如果所有页面使用相同的装饰器，可以是
 
-\midrule[0.05em]
- & \multicolumn{3}{c}{ProblemController}\\
- \cmidrule[0.05em]{2-4}
-/problem/data/ & data & 题目数据 & JSON\\
-/problem/show/ & show & 题目页面 & HTML\\
-/problem/list & list & 题目列表 & HTML\\
-/problem/search & search & 题目查找 & JSON\\
-/problem/operator/ & operator & 题目操作 & JSON\\
-/problem/query/ & query & 题目数据 & JSON\\
-/problem/editor/ & editor & 题目编辑器 & HTML\\
-/problem/edit & edit & 题目编辑 & JSON\\
-/problem/uploadProblemDataFile/ & uploadProblemData & 题目测试数据上传 & JSON\\
+%首先，我们定义了一个全局的装饰器，所有的页面都使用这个装饰器装饰。
 
-\midrule[0.05em]
- & \multicolumn{3}{c}{StatusController}\\
- \cmidrule[0.05em]{2-4}
-/status/list & list & 评测状态列表 & HTML\\
-/status/search & search & 评测状态查找 & JSON\\
-/status/count & count & 评测状态统计 & JSON\\
-/status/rejudge & rejudge & 重新评测 & JSON\\
-/status/submit & submit & 提交代码 & JSON\\
-/status/info/ & info & 评测状态信息 & JSON\\
+%\input{code/decDefault.jsp}
 
-\midrule[0.05em]
- & \multicolumn{3}{c}{UserController}\\
- \cmidrule[0.05em]{2-4}
-/user/login & login & 用户登录 & JSON\\
-/user/logout & logout & 用户登出 & JSON\\
-/user/register & register & 用户注册 & JSON\\
-/user/list & list & 用户列表 & HTML\\
-/user/search & search & 用户查找 & JSON\\
-/user/center/ & center & 用户页面 & HTML\\
-/user/edit & edit & 用户账户修改 & JSON\\
-/user/adminEdit & adminEdit & 用户账户修改（管理员） & JSON\\
-/user/sendSerialKey/ & sendSerialKey & 用户激活请求 & JSON\\
-/user/profile/ & profile & 用户信息 & JSON\\
-/user/activate/ & activate & 用户激活页面 & HTML\\
-/user/resetPassword & resetPassword & 用户密码重置 & JSON\\
-}
+%\textbf{header.jsp}文件包含了网站head标签内的所有信息，head元素是所有头部元素的容器，指引浏览器找到样式表，提供元信息。
 
-\section{浏览器端详细设计}
-一个好的Web应用不仅仅要拥有功能完善的后台，还应该拥有一个友好的界面。这部分我们介绍下客户端的基本框架以及使用的编程方法。
+%\pic[htbp]{SiteMesh装饰器结构图}{width=\textwidth}{SiteMesh}
 
-本系统用到的样式表和
-\subsection{客户端结构}
+%body标签首先包含的是\textbf{navbarTop.jsp}，这个文件是网站的顶部导航部分。接着是一个双栏格式的div，左侧包含的\textbf{navbarList.jsp}是网站的侧边栏部分，右侧的\textbf{$<$decorator:body/$>$}是网站的主体部分。最后两个部分\textbf{modal.jsp}和\textbf{footer.jsp}分别保存网站中的对话框元素和网站的脚本文件。如图\ref{SiteMesh}所示。
 
-整个网站可以分为三个部分：侧边栏、顶部导航和页面主体部分。为了统一所有页面的样式，我们使用了SiteMesh框架\footnote{SiteMesh是由一个基于Web页面布局、装饰以及与现存Web应用整合的框架。它能帮助我们在由大量页面构成的项目中创建一致的页面布局和外观，如一致的导航条，一致的banner，一致的版权，等等。 它不仅仅能处理动态的内容，如jsp，php，asp等产生的内容，它也能处理静态的内容，如htm的内容，使得它的内容也符合你的页面结构的要求。甚至于它能将HTML文件象include那样将该文件作为一个面板的形式嵌入到别的文件中去。所有的这些，都是GOF的Decorator模式的最生动的实现。}，它通过对用户请求进行过滤，并对服务器向客户端响应也进行过滤，然后给原始页面加入一定的装饰（header,footer等），然后把结果返回给客户端。通过SiteMesh的页面装饰，可以提供更好的代码复用，所有的页面装饰效果耦合在目标页面中，无需再使用include指令来包含装饰效果，目标页与装饰页完全分离，如果所有页面使用相同的装饰器，可以是整个Web应用具有统一的风格。
+%当控制器返回一个视图地址时（如index/index），SiteMesh会自动用\textbf{index/index.jsp}文件替换掉\textbf{$<$decorator:body/$>$}标签，得到一个完整的文件。
 
-首先，我们定义了一个全局的装饰器，所有的页面都使用这个装饰器装饰。
+在样式方面本系统采用了Bootstrap3作为网站前端的UI框架，原因有以下两点：首先，Bootstrap出自twitter，并且开源，久经考验，减少了测试的工作量。同时，Bootstrap的代码有着非常良好的代码规范，从中也可以学习到很多，在Bootstrap的基础之上创建项目，日后代码的维护也变得异常简单清晰。
 
-\input{code/decDefault.jsp}
+Bootstrap是一个响应式的框架，利用这个特性，本系统为移动客户端进行了一些优化，让客户端能够在手机等小屏幕设备上正常浏览。图\ref{UI}是最终的整体效果图。
 
-\textbf{header.jsp}文件包含了网站head标签内的所有信息，head元素是所有头部元素的容器，指引浏览器找到样式表，提供元信息。
+%\subsection{客户端加载流程}
+%客户端加载完成后，首先运行下面这段代码：
 
-\pic[htbp]{SiteMesh装饰器结构图}{width=\textwidth}{SiteMesh}
+%\input{code/globalInit.py}
 
-body标签首先包含的是\textbf{navbarTop.jsp}，这个文件是网站的顶部导航部分。接着是一个双栏格式的div，左侧包含的\textbf{navbarList.jsp}是网站的侧边栏部分，右侧的\textbf{$<$decorator:body/$>$}是网站的主体部分。最后两个部分\textbf{modal.jsp}和\textbf{footer.jsp}分别保存网站中的对话框元素和网站的脚本文件。如图\ref{SiteMesh}所示。
+%这句话定义了一个叫做cdoj的angular module，后面的数组是本module引用到的外部库。接下来向/globalData这个地址获取用户的基本信息和一些常量。在AngularJS中每个元素都有一个自己的Scope（作用域），整个系统中还有一个rootScope，所有元素都能访问这个Scope，我们将从/globalData获取的全局信息放到rootScope中便于日后使用。
 
-当控制器返回一个视图地址时（如index/index），SiteMesh会自动用\textbf{index/index.jsp}文件替换掉\textbf{$<$decorator:body/$>$}标签，得到一个完整的文件。
+%\input{code/globalFetchGlobalData.py}
 
-\pic[htbp]{网站前端设计}{width=\textwidth}{UI}
+%完成上诉步骤后，AngularJS分析整个网页的文档树，然后将各个Controller和Directive应用到各部分中。
 
-在样式方面，我们采用了Bootstrap3作为网站前端的UI框架，原因有以下两点：首先，Bootstrap出自twitter，并且开源，久经考验，减少了测试的工作量。同时，Bootstrap的代码有着非常良好的代码规范，从中也可以学习到很多，在Bootstrap的基础之上创建项目，日后代码的维护也变得异常简单清晰。
+\subsection{内容渲染}
+\begin{pics}[!htb]{内容编辑器}{flandreEditor}
+\addsubpic{编辑模式}{width=0.48\textwidth}{editor}
+\addsubpic{预览模式}{width=0.48\textwidth}{editorPreview}
+\end{pics}
+为了保证网站内容格式的统一，本系统采用Markdown语言作为页面内容的排版语言\footnote{Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）和亚伦·斯沃茨（Aaron Swartz）。它允许人们``使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML（或者HTML）文档''。这种语言吸收了很多在电子邮件中已有的纯文本标记的特性。}\footnote{本系统中使用marked.js来将Markdown内容转换成HTML。}，同时本系统还支持在内容中插入\LATEX格式的数学公式\footnote{本系统使用MathJax插件来渲染数学公式。}，代码由Prettify插件渲染。在这三个插件的帮助下，管理员可以用很简单的方式排版出漂亮的格式。为了满足这些需求，本系统实现了一个简单的Markdown编辑器。它具有编辑模式和预览模式两种状态，通过一个Preview开关来切换，工具栏目前只有两个工具，一个是表情工具，这个部分是给用户讨论功能准备的，另一个工具是上传图片，用于向文章中插入一些描述性的图，如图\ref{flandreEditor}所示。
 
-Bootstrap是一个响应式的框架，利用这个特性，我们为移动客户端进行了一些优化，让客户端能够在手机等小屏幕设备上正常浏览。图\ref{UI}是最终的整体效果图，我们通过调整浏览器的大小来模拟不同的屏幕尺寸，在实际中效果也很好。
-
-\subsection{客户端加载流程}
-客户端加载完成后，首先运行下面这段代码：
-
-\input{code/globalInit.py}
-
-这句话定义了一个叫做cdoj的angular module，后面的数组是本module引用到的外部库。接下来向/globalData这个地址获取用户的基本信息和一些常量。在AngularJS中每个元素都有一个自己的Scope（作用域），整个系统中还有一个rootScope，所有元素都能访问这个Scope，我们将从/globalData获取的全局信息放到rootScope中便于日后使用。
-
-\input{code/globalFetchGlobalData.py}
-
-完成上诉步骤后，AngularJS分析整个网页的文档树，然后将各个Controller和Directive应用到各部分中。
-
-\subsection{顶部导航详细设计}
+\subsection{用户模块详细设计}
 \subsubsection{用户菜单设计}
-顶部导航栏有两部分组成：搜索框和用户菜单。搜索框将在后面介绍，这里先介绍用户菜单。
-
-在用户未登录时用户菜单显示的是一个Sign in按钮，而在登录之后显示的是用户的头像\footnote{我们使用了Gravatar（英语：Globally Recognized Avatar）头像服务。只要用户在Gravatar的服务器上上传了自己的头像，用户便可以在其他任何支持Gravatar的博客、论坛等地方使用它。}。登陆前菜单由一个登录表单组成，登录之后菜单内容变成了与用户相关的内容。见图\ref{userMenu}。
+用户菜单位于顶部导航栏上，在用户未登录时用户菜单显示的是一个Sign in按钮，而在登录之后显示的是用户的头像\footnote{本系统使用了Gravatar（英语：Globally Recognized Avatar）头像服务。只要用户在Gravatar的服务器上上传了自己的头像，用户便可以在其他任何支持Gravatar的博客、论坛等地方使用它。}。登陆前菜单由一个登录表单组成，登录之后菜单内容变成了与用户相关的内容。见图\ref{userMenu}。
 
 \begin{pics}[htbp]{用户菜单}{userMenu}
 \addsubpic{登陆前的用户菜单}{width=0.5\textwidth}{userMenuBeforeLogin}
 \addsubpic{登录后的用户菜单}{width=0.27\textwidth}{userMenuAfterLogin}
 \end{pics}
 
-在\ref{sec:angularjs}中我们介绍了AngularJS框架，网页的html标签中我们用\textbf{ng-app="cdoj"}定义了app的作用域。在HTML中用户菜单只有如下一个标签（详细代码见附录\ref{sec:navbarTop}）：
 
-\input{code/navbarTopUser.jsp}
+%在\ref{sec:angularjs}中本文介绍了AngularJS框架，网页的html标签中我们用\textbf{ng-app="cdoj"}定义了app的作用域。在HTML中用户菜单只有如下一个标签（详细代码见附录\ref{sec:navbarTop}）：
 
-\textbf{ng-controller="UserController"}声明了这个li标签对应的控制器，我们将一个叫做UserController的控制器绑定到了这个标签上，在这个控制器中，我们实现了如下功能：
-\begin{enumerate}
-	\item 用户菜单各个按钮事件的绑定。
-	\item 根据rootScope中的hasLogin变量来决定用户的登录状况以及根据情况展示相应的内容。
-\end{enumerate}
+%\input{code/navbarTopUser.jsp}
 
-我们在整个用户操作过程中都使用AJAX，这样做的好处是用户可以在原网页上登陆，而不用离开当前页面。
+%\textbf{ng-controller="UserController"}声明了这个li标签对应的控制器，我们将一个叫做UserController的控制器绑定到了这个标签上，在这个控制器中，我们实现了如下功能：
+%\begin{enumerate}
+%	\item 用户菜单各个按钮事件的绑定。
+%	\item 根据rootScope中的hasLogin变量来决定用户的登录状况以及根据情况展示相应的内容。
+%\end{enumerate}
+
+%我们在整个用户操作过程中都使用AJAX，这样做的好处是用户可以在原网页上登陆，而不用离开当前页面。
 
 \subsubsection{用户注册流程}
+\pic[!htb]{注册对话框}{width=0.7\textwidth}{RegisterModal}
 打开Sign in菜单（图\ref{userMenuBeforeLogin}），单击Register后弹出注册对话框（图\ref{RegisterModal}）。对话框中包含一个注册表单，表单的每个输入框都是一个Angular Model，通过在input标签中添加相应的属性将其绑定到指定的变量上去，除此之外还可以进行浏览器端的表单验证。
 
-\pic[htbp]{注册对话框}{width=0.7\textwidth}{RegisterModal}
+%\input{code/RegisterModalPart.jsp}
 
-\input{code/RegisterModalPart.jsp}
+AngularJS的绑定是双向的，也就是说当变量改变时，输入框内的数据也会发生变化，同理当输入框变化是变量会自动变化。同时AngularJS还支持表单验证，当数据不满足条件时，AngularJS会自动给该输入框添加一个\textbf{ng-invalid}的class。
 
-\textbf{ng-model}指定了绑定的变量名\textbf{scope.userRegisterDTO.userName}，这种绑定是双向的，也就是说当变量改变时，输入框内的数据也会发生变化，同理当输入框变化是变量会自动变化。\textbf{ng-required}和\textbf{ng-pattern}指定了表单验证的条件。当数据不满足条件时，AngularJS会自动给该输入框添加一个\textbf{ng-invalid}的class。
-
-当用户填写完所有项目后，便可以单击Register按钮完成注册。如果表单中存在错误，我们会给出相应的提示（图\ref{RegisterValidateError}），否则对话框消失，注册完成，此时新注册的用户自动登陆在系统之中。为了保证用户密码的安全，我们在浏览器端使用Crypto-JS库\footnote{CryptoJS是一个纯javascript写的加密类库。}对用户的密码进行加密，然后将加密后的密码和账号传给后台。
+当用户填写完所有项目后，便可以单击Register按钮完成注册。如果表单中存在错误，系统会有相应的错误提示（图\ref{RegisterValidateError}），否则对话框消失，注册完成，此时新注册的用户自动登陆在系统之中。为了保证用户密码的安全，本系统在浏览器端使用Crypto-JS库\footnote{CryptoJS是一个纯javascript写的加密类库。}对用户的密码进行加密，然后将加密后的密码和账号传给后台。
 
 \pic[htbp]{表单错误提示示例}{width=0.6\textwidth}{RegisterValidateError}
 
@@ -399,63 +306,54 @@ Bootstrap是一个响应式的框架，利用这个特性，我们为移动客�
 登陆之后，在用户菜单中（图\ref{userMenuAfterLogin}单击Logout即可安全退出。
 
 \subsubsection{用户密码找回流程}
-我们给忘记密码的用户提供了一个找回密码的功能，单击Sign in菜单（图\ref{userMenuBeforeLogin}）中的Forget password按钮可以弹出一个找回密码的对话框，用户在里面将自己的用户名填入后单击Send email按钮（图\ref{ForgetPasswordDialog}），服务器会向用户注册时填写的邮箱中发送一封找回密码用的邮件，并弹出成功提示。
+对于忘记了密码的用户，本系统提供了一个找回密码的功能，单击Sign in菜单（图\ref{userMenuBeforeLogin}）中的Forget password按钮可以弹出一个找回密码的对话框，用户在里面将自己的用户名填入后单击Send email按钮（图\ref{ForgetPasswordDialog}），服务器会向用户注册时填写的邮箱中发送一封找回密码用的邮件，并弹出成功提示。
 
-\pic[htbp]{密码找回对话框（单击Send email后）}{width=0.7\textwidth}{ForgetPasswordDialog}
+\pic[!htb]{密码找回对话框（单击Send email后）}{width=0.7\textwidth}{ForgetPasswordDialog}
 
 邮件中包含了一个形如\url{http://acm.uestc.edu.cn/user/activate/UESTC_Izayoi/96ac3b16d84a4bb335bfd8321c7a32f61f70f99f}的地址，这个地址由用户名和一个SerialKey组成。为了保证安全，每个SerialKey只有30分钟的有效期，且只能使用一次，这个地址会将用户带到一个密码重置页面（图\ref{ResetPasswordPage}）。
 
-\pic[htbp]{找回密码页面}{width=\textwidth}{ResetPasswordPage}
+\pic[!htb]{找回密码页面}{width=\textwidth}{ResetPasswordPage}
 
 \subsubsection{用户账户修改}
 登陆之后，在用户菜单中（图\ref{userMenuAfterLogin}单击Edit profile后会弹出一个用户信息编辑对话框，在这个对话框中用户能修改一部分基本信息，如密码、学号、学院信息等，但是不允许修改用户名。
 
-\subsection{内容渲染}
-\begin{pics}[htbp]{内容编辑器}{flandreEditor}
-\addsubpic{编辑模式}{width=0.48\textwidth}{editor}
-\addsubpic{预览模式}{width=0.48\textwidth}{editorPreview}
-\end{pics}
-为了保证网站内容格式的统一，本系统采用Markdown语言作为页面内容的排版语言\footnote{Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）和亚伦·斯沃茨（Aaron Swartz）。它允许人们``使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML（或者HTML）文档''。这种语言吸收了很多在电子邮件中已有的纯文本标记的特性。}\footnote{本系统中使用marked.js来将Markdown内容转换成HTML。}，同时我们还支持在内容中插入\LATEX格式的数学公式\footnote{本系统使用MathJax插件来渲染数学公式。}，代码由Prettify插件渲染。在这三个插件的帮助下，我们可以用很简单的方式排版出漂亮的格式。为了满足这些需求，我们实现了一个简单的Markdown编辑器，代码见附录\ref{sec:flandre}。它具有编辑模式和预览模式两种状态，通过一个Preview开关来切换，工具栏目前只有两个工具，一个是表情插入，这个部分是给用户讨论功能准备的，另一个工具是上传图片，用于向文章中插入一些描述性的图，如图\ref{flandreEditor}所示。
+\subsubsection{用户列表页面}
+\pic[htbp]{用户列表}{width=\textwidth}{UserList}
+单击侧边栏中的User选项即可进入用户列表页面，用户列表以名片墙的形式展示用户信息，按题目通过数量排序。用户列表提供了按用户编号查询、按用户名查询、按用户学校查询等等高级搜索功能。名片左上角还有一个管理员的编辑按钮，方便管理员对用户进行操作，如图\ref{UserList}所示。
 
-\subsection{列表页面}
-本系统一共有有许多信息通过列表的形式呈现给用户，所以我们设计了一个简单的列表控制器\textbf{ListController}来复用一些重复的代码（见附录\ref{sec:listController}）。每个列表的HTML代码都是如下形式：
+\subsubsection{用户中心页面}
+在网页中任何一个地方单击用户名都会进入该用户的用户中心，这个用户中心用来展示该用户的一些信息，如基本信息、题目通过情况等，如图\ref{UserCenter}所示。
+\pic[!htb]{用户中心}{width=0.9\textwidth}{UserCenter}
 
-\input{code/listPage.jsp}
+%\subsection{列表页面}
+%本系统一共有有许多信息通过列表的形式呈现给用户，所以我们设计了一个简单的列表控制器\textbf{ListController}来复用一些重复的代码（见附录\ref{sec:listController}）。每个列表的HTML代码都是如下形式：
 
-列表在\textbf{ng-init}属性中定义了初始化查询条件\textbf{condition}和查询操作的链接。列表查询表单中的各个输入框与\textbf{scope.condition}中的元素绑定，当用户修改查询条件时列表会自动更新。而后通过\textbf{ng-repeat}标签来定义列表的主体，AngularJS会自动将查询到的列表中的每一个元素应用到这个模板中去。
+%\input{code/listPage.jsp}
 
-在列表页面，顶部导航栏中的搜索框将会开始起作用，在它的右侧会有一个小箭头，通过它可以打开高级搜索下拉菜单，既之前说的列表查询表单。如图\ref{contestAdvanceSearch}所示。
+%列表在\textbf{ng-init}属性中定义了初始化查询条件\textbf{condition}和查询操作的链接。列表查询表单中的各个输入框与\textbf{scope.condition}中的元素绑定，当用户修改查询条件时列表会自动更新。而后通过\textbf{ng-repeat}标签来定义列表的主体，AngularJS会自动将查询到的列表中的每一个元素应用到这个模板中去。
 
-\pic[htbp]{比赛列表中的高级搜索菜单}{width=0.5\textwidth}{contestAdvanceSearch}
+%在列表页面，顶部导航栏中的搜索框将会开始起作用，在它的右侧会有一个小箭头，通过它可以打开高级搜索下拉菜单，既之前说的列表查询表单。如图\ref{contestAdvanceSearch}所示。
 
-列表的每一页只显示20个项目，如果查询得到的项目超过这个数量，页面会显示一个分页栏对结果进行划分。
+%\pic[htbp]{比赛列表中的高级搜索菜单}{width=0.5\textwidth}{contestAdvanceSearch}
 
-\pic[htbp]{分页栏}{width=0.4\textwidth}{pageInfo}
+%列表的每一页只显示20个项目，如果查询得到的项目超过这个数量，页面会显示一个分页栏对结果进行划分。
 
-\subsection{主页设计}
-\pic[htbp]{网站主页}{width=\textwidth}{HomepageLong2}
-主页是一个网站的入口，它由三个部分组成：网站标志，重要公告，日志。我们将一些重要的公告放置在醒目的位置。其余部分就是近期的一些日志，例如系统简介、常见问答等，如图\ref{HomepageLong2}所示。
+%\pic[htbp]{分页栏}{width=0.4\textwidth}{pageInfo}
 
 \subsection{文章模块详细设计}
-该模块包含两个页面，一个是文章页面，一个是文章编辑器。以管理员身份打开文章页面后在文章标题下方会有一个编辑连接，通过它可以编辑该文章，如图\ref{articlePages}所示。
+%\pic[htbp]{网站主页}{width=\textwidth}{HomepageLong2}
+系统的文章显示在网站的主页，一些重要的文章被放置在醒目的位置，其余文章以列表形式展现给用户。通常来说这些文章都是管理员负责编辑的，内容多为系统简介、常见问答等。
+
+除主页外两个页面，一个是文章页面，一个是文章编辑器。以管理员身份打开文章页面后在文章标题下方会有一个编辑连接，通过它可以编辑该文章，如图\ref{articlePages}所示。
+
+\subsection{题目模块详细设计}
+\subsubsection{题目列表页面}
+单击侧边栏中的Problem选项即可进入题目列表页面，题目列表包含了题目ID、题目名称、题目来源、通过人数，如果以管理员身份登陆还有有题目编辑按钮（一个是隐藏/显示题目，一个是编辑题目）和一个添加新题目的链接。题目列表的高级搜索菜单提供了按题目编号查询、按题目难度查询、按题目标题查询、按题目来源查询等查询功能。
 
 \begin{pics}[htbp]{文章相关页面}{articlePages}
 \addsubpic{文章页面}{width=0.48\textwidth}{articlePage}
 \addsubpic{文章编辑器}{width=0.48\textwidth}{articleEditor}
 \end{pics}
-
-\subsection{用户模块详细设计}
-\subsubsection{用户列表页面}
-\pic[htbp]{用户列表}{width=\textwidth}{UserList}
-单击侧边栏中的User选项即可进入用户列表页面，用户列表以名片墙的形式展示用户信息，按题目通过数量排序。用户列表的高级搜索菜单提供了按用户编号查询、按用户名查询、按用户学校查询等等高级搜索功能。名片左上角还有一个管理员的编辑按钮，方便管理员对用户进行操作，如图\ref{UserList}所示。
-
-\subsubsection{用户中心页面}
-在网页中任何一个地方单击用户名都会进入该用户的用户中心，这个用户中心用来展示该用户的一些信息，如基本信息、题目通过情况等，如图\ref{UserCenter}所示。
-\pic[htbp]{用户中心}{width=0.9\textwidth}{UserCenter}
-
-\subsection{题目模块详细设计}
-\subsubsection{题目列表页面}
-单击侧边栏中的Problem选项即可进入题目列表页面，题目列表包含了题目ID、题目名称、题目来源、通过人数，如果以管理员身份登陆还有有题目编辑按钮（一个是隐藏/显示题目，一个是编辑题目）和一个添加新题目的链接。题目列表的高级搜索菜单提供了按题目编号查询、按题目难度查询、按题目标题查询、按题目来源查询等查询功能。
 
 \pic[htbp]{题目列表}{width=\textwidth}{ProblemListPage}
 
@@ -474,13 +372,13 @@ Bootstrap是一个响应式的框架，利用这个特性，我们为移动客�
 
 \pic[htbp]{题目基本信息编辑框}{width=\textwidth}{ProblemDataEditor}
 
-管理员添加题目时，需要通过文件上传测试用例。我们规定用户使用一个zip压缩包打包，这个zip包种包含若干测试用例，每个测试用例的输入文件以\textbf{.in}为后缀，对应的输出文件以\textbf{.out}结尾。如果需要进行Special Judge，这个zip包种还应该包含\textbf{spj.cc}文件。上传成功后会有如图\ref{uploadSuccess}所示提示。
+管理员添加题目时，需要通过文件上传测试用例。系统规定用户使用一个zip压缩包打包，这个zip包种包含若干测试用例，每个测试用例的输入文件以\textbf{.in}为后缀，对应的输出文件以\textbf{.out}结尾。如果需要进行Special Judge，这个zip包种还应该包含\textbf{spj.cc}文件。上传成功后会有如图\ref{uploadSuccess}所示提示。
 
 \pic[htbp]{题目数据上传成功提示}{width=0.6\textwidth}{uploadSuccess}
 
 编辑完后点击Submit按钮即可提交这次编辑。
 
-\subsection{评测状态模块详细设计}
+\subsection{评测模块详细设计}
 \subsubsection{评测列表页面}
 单击侧边栏中的Status选项或者提交代码后都会进入评测列表页面，评测列表包含了任务ID、提交者用户名、题目编号、评测状态、内存开销、时间开销、编程语言、代码长度、提交时间（见图\ref{StatusList}）。评测列表的高级搜索菜单提供了按评测ID查询、按提交者查询、按提交语言查询、按返回结果查询等等功能。
 \pic[htbp]{评测列表}{width=\textwidth}{StatusList}
@@ -515,6 +413,5 @@ Bootstrap是一个响应式的框架，利用这个特性，我们为移动客�
 \pic[htbp]{状态页面}{width=\textwidth}{ContestStatus}
 
 \subsubsection{比赛编辑器}
-我们提供了一个方便的题目编辑器供管理员编辑题目，它的界面如图\ref{ContestEditor}所示，
-
 \pic[htbp]{比赛编辑器}{width=0.85\textwidth}{ContestEditor}
+我们提供了一个方便的题目编辑器供管理员编辑题目，它的界面如图\ref{ContestEditor}所示。

@@ -1,0 +1,89 @@
+\subsubsection{网站地图}
+上面我们举例说明了UserController的login方法的实现，限于篇幅限制其余的部分我们不一一描述，在这里我们给出整个网站的网站地图，一共有47个不同的方法，我们只介绍各个控制器的作用和返回给前端的数据类型。
+
+\longthreelinetable{sitemap}{网站地图}{4}{llll}
+{
+地址 & 方法 & 作用 & 返回类型\\
+}{
+ & \multicolumn{3}{c}{AdminController}\\
+ \cmidrule[0.05em]{2-4}
+/admin/ & index & 管理员面板 & HTML\\
+
+\midrule[0.05em]
+ & \multicolumn{3}{c}{ArticleController}\\
+ \cmidrule[0.05em]{2-4}
+/article/data/ & data & 文章数据 & JSON\\
+/article/show/ & show & 文章页面 & HTML\\
+/article/search & search & 文章查找 & JSON\\
+/article/editor/ & editor & 文章编辑器 & HTML\\
+/article/edit & edit & 文章编辑 & JSON\\
+/article/operator & operator & 文章操作 & JSON\\
+
+\midrule[0.05em]
+ & \multicolumn{3}{c}{ContestController}\\
+ \cmidrule[0.05em]{2-4}
+/contest/status/ & status & 比赛评测结果 & JSON\\
+/contest/rankList/ & rankList & 比赛排名 & JSON\\
+/contest/data/ & data & 比赛数据 & JSON\\
+/contest/show/ & show & 比赛页面 & HTML\\
+/contest/list/ & list & 比赛列表 & HTML\\
+/contest/search & search & 比赛查找 & JSON\\
+/contest/operator/ & operator & 比赛操作 & JSON\\
+/contest/editor/ & editor & 比赛编辑器 & HTML\\
+/contest/edit & edit & 比赛编辑 & JSON\\
+
+\midrule[0.05em]
+ & \multicolumn{3}{c}{ErrorController}\\
+ \cmidrule[0.05em]{2-4}
+/error/authenticationError & authenticationError & 权限错误页面 & HTML\\
+
+\midrule[0.05em]
+ & \multicolumn{3}{c}{IndexController}\\
+ \cmidrule[0.05em]{2-4}
+/ & index & 主页 & HTML\\
+/globalData & globalData & 全局变量 & JSON\\
+
+\midrule[0.05em]
+ & \multicolumn{3}{c}{PictureController}\\
+ \cmidrule[0.05em]{2-4}
+/picture/uploadPicture/ & uploadPicture & 图片上传 & JSON\\
+
+\midrule[0.05em]
+ & \multicolumn{3}{c}{ProblemController}\\
+ \cmidrule[0.05em]{2-4}
+/problem/data/ & data & 题目数据 & JSON\\
+/problem/show/ & show & 题目页面 & HTML\\
+/problem/list & list & 题目列表 & HTML\\
+/problem/search & search & 题目查找 & JSON\\
+/problem/operator/ & operator & 题目操作 & JSON\\
+/problem/query/ & query & 题目数据 & JSON\\
+/problem/editor/ & editor & 题目编辑器 & HTML\\
+/problem/edit & edit & 题目编辑 & JSON\\
+/problem/uploadProblemDataFile/ & uploadProblemData & 题目测试数据上传 & JSON\\
+
+\midrule[0.05em]
+ & \multicolumn{3}{c}{StatusController}\\
+ \cmidrule[0.05em]{2-4}
+/status/list & list & 评测状态列表 & HTML\\
+/status/search & search & 评测状态查找 & JSON\\
+/status/count & count & 评测状态统计 & JSON\\
+/status/rejudge & rejudge & 重新评测 & JSON\\
+/status/submit & submit & 提交代码 & JSON\\
+/status/info/ & info & 评测状态信息 & JSON\\
+
+\midrule[0.05em]
+ & \multicolumn{3}{c}{UserController}\\
+ \cmidrule[0.05em]{2-4}
+/user/login & login & 用户登录 & JSON\\
+/user/logout & logout & 用户登出 & JSON\\
+/user/register & register & 用户注册 & JSON\\
+/user/list & list & 用户列表 & HTML\\
+/user/search & search & 用户查找 & JSON\\
+/user/center/ & center & 用户页面 & HTML\\
+/user/edit & edit & 用户账户修改 & JSON\\
+/user/adminEdit & adminEdit & 用户账户修改（管理员） & JSON\\
+/user/sendSerialKey/ & sendSerialKey & 用户激活请求 & JSON\\
+/user/profile/ & profile & 用户信息 & JSON\\
+/user/activate/ & activate & 用户激活页面 & HTML\\
+/user/resetPassword & resetPassword & 用户密码重置 & JSON\\
+}

@@ -29,9 +29,10 @@
 
 \NeedsTeXFormat{LaTeX2e}[2011/06/27]
 \ProvidesClass{uestcthesis}
-    [2014/03/01 v0.6.5 UESTC thesis class]
+    [2014/03/12 v1.0.0 UESTC thesis class]
 \LoadClass[cs4size,UTF8,fancyhdr,hyperref,fntef,openany]{ctexbook}[2011/03/11]
 \RequirePackage{mathptmx}
+\DeclareSymbolFont{symbols} {OMS}{cmsy}{m}{n}
 \renewcommand{\ttfamily}{\CTEX@save@ttfamily \CJKfamily {\CTEX@rm@family }}
 \RequirePackage{etoolbox}[2011/01/03]
 \RequirePackage{ifthen}
@@ -292,7 +293,7 @@
 \sbox{\tempsubpiccaptionbox}{\parbox{\textwidth}%
 {\zihao{5}图~\thefigure~\subpiccaption}}%
 \settowidth{\tempsubpiccaptionheadindent}{\zihao{5}图~\thefigure~}%
-\ifthenelse{\lengthtest{\ht\tempsubpiccaptionbox > 8pt}}{%THEN
+\ifthenelse{\lengthtest{\ht\tempsubpiccaptionbox > 16pt}}{%THEN
 \noindent\caption{\subpiccaption}\label{\subpiclabel}\par%
 \noindent\hspace*{\tempsubpiccaptionheadindent}%
 \parbox{\textwidth-\tempsubpiccaptionheadindent}{\zihao{5}\allsubpiccaptions}%
@@ -347,13 +348,13 @@
 ##5
 \midrule[0.05em]
 \endfirsthead
-\multicolumn{##3}{r}{\footnotesize 接上页}\\
+\multicolumn{##3}{c}{续表\ref{##1}}\\
 \toprule[0.1em]
 ##5
 \midrule[0.05em]
 \endhead
 \bottomrule[0.1em]
-\multicolumn{##3}{r}{\footnotesize 接下页}\\
+%\multicolumn{##3}{r}{\footnotesize 接下页}\\
 \endfoot
 \bottomrule[0.1em]
 \endlastfoot
@@ -392,18 +393,14 @@
 \fancyfoot[C]{\zihao{-5}\thepage}%页码位于页面底端，居中打印。
 }
 \newcommand{\glossarymatterfancy}{%定义主要符号表版式设置
-\fancypagestyle{plain}{
 \fancyhf{}
 \fancyhead[C]{\zihao{5}\glossaryname@uestcthesis}%
 \fancyfoot[C]{\zihao{-5}\thepage}%
 }
-}
 \newcommand{\acronymnamematterfancy}{%定义缩略词表版式设置
-\fancypagestyle{plain}{
 \fancyhf{}
 \fancyhead[C]{\zihao{5}\acronymname@uestcthesis}%
 \fancyfoot[C]{\zihao{-5}\thepage}%
-}
 }
 \newcommand{\Cabstractmatter}{
 \setcounter{page}{1}%页码重置为1
@@ -450,6 +447,16 @@
 \pagestyle{fancy}
 \tableslistmatterfancy
 \fancypagestyle{plain}{\tableslistmatterfancy}
+}
+\newcommand{\glossarymatter}{
+\pagestyle{fancy}
+\glossarymatterfancy
+\fancypagestyle{plain}{\glossarymatterfancy}
+}
+\newcommand{\acronymnamematter}{
+\pagestyle{fancy}
+\acronymnamematterfancy
+\fancypagestyle{plain}{\acronymnamematterfancy}
 }
 \newcommand{\stuid}[1]{
 \newcommand{\@stuid}{#1}
@@ -3441,7 +3448,7 @@ pdfkeywords={\@pdfckeywords}%在pdf元信息中加入关键字
 \renewcommand*\l@subsection{\@dottedtocline{2}{4em}{1em}}
 \renewcommand*\l@subsubsection{\@dottedtocline{3}{6em}{1em}}
 }
-\RequirePackage{amsmath,amsfonts,amssymb}
+\RequirePackage{amsmath,amsfonts,amssymb,bm}
 \renewcommand{\theequation}{\arabic{chapter}\textendash\arabic{equation}}
 \RequirePackage[amsmath,thmmarks]{ntheorem}
 \theorembodyfont{\normalfont}%字体
@@ -3484,7 +3491,7 @@ pdfkeywords={\@pdfckeywords}%在pdf元信息中加入关键字
 \RequirePackage[hang,perpage]{footmisc}
 \setlength{\footnotemargin}{5.2mm}
 \renewcommand{\footnoterule}{\vfill\noindent
-\vspace*{-3pt}\hspace{7.4mm}\rule{5.05cm}{0.02cm}\vspace*{2.6pt}}
+\vspace*{0.9mm}\hspace{7.4mm}\rule{5.05cm}{0.02cm}\vspace*{2.6pt}}
 \RequirePackage{pifont}
 \def\@circlednumber#1{\ifcase#1\or \ding{192}\or \ding{193}\or \ding{194}\or
  \ding{195}\or \ding{196}\or \ding{197}\or \ding{198}\or \ding{199}
@@ -3553,7 +3560,7 @@ pdfpagelayout={TwoPageRight}
 \newcommand{\fuhao}[3]{%
 \newglossaryentry{#3}{name={#1},description={#2},sort=#3}%
 }
-\newglossarystyle{acronymwithtranslation}{%
+\newglossarystyle{acronymwithtranslation}{%缩略词表样式定义
 \setglossarystyle{long3colheader}%在long3colheader基础上修改
 \renewcommand*{\glossaryheader}{%重定义表头
 \bfseries\acronymheader@uestcthesis&\bfseries\acronymfull@uestcthesis&
@@ -3594,10 +3601,10 @@ pdfpagelayout={TwoPageRight}
 \insertlof%插入图目录
 \insertlot%插入表目录
 \clearpage{\pagestyle{empty}\cleardoublepage}%目录之后另起一页，这样无论目录后有没有主要符号表，主要符号表的页眉设置命令都会应用到下一页。
-\acronymnamematterfancy%设置缩略词表版式
+\acronymnamematter%设置缩略词表版式
 \printacronyms[style=acronymwithtranslation]
 \clearpage{\pagestyle{empty}\cleardoublepage}
-\glossarymatterfancy%设置主要符号表版式。
+\glossarymatter%设置主要符号表版式。
 \printglossary%插入主要符号表
 \clearpage{\pagestyle{empty}\cleardoublepage}
 \mainmatter%修正主要符号表版式，这里是受目录版式的影响，必须在此加入\mainmatter。
@@ -3704,7 +3711,8 @@ pdfpagelayout={TwoPageRight}
 \CTEXoptions[ bibname={\publicationsname@degree}]%设置攻博/硕期间发表的论文章题目
 \phantomsection%手动添加目录项之前需要这个命令，用以更新目录超链接的跳转页码。
 \addcontentsline{toc}{chapter}{\publicationsname@degree}%将攻博/硕期间发表的论文编入目录
-{\zihao{5}
+{\zihao{5}%
+\def\footnotehint{}%
 \bibliographypublications{contents/publications}%插入攻博/硕期间发表的论文
 }}{}
 }

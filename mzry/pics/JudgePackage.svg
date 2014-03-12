@@ -48,9 +48,12 @@
       ><path d="M0 0 L200 0 L200 12 L0 12 L0 0 Z"
       /></clipPath
       ><clipPath clipPathUnits="userSpaceOnUse" id="clipPath15"
-      ><path d="M0 0 L104 0 L104 142 L0 142 L0 0 Z"
+      ><path d="M0 0 L203 0 L203 213 L0 213 L0 0 Z"
       /></clipPath
       ><clipPath clipPathUnits="userSpaceOnUse" id="clipPath16"
+      ><path d="M0 0 L104 0 L104 132 L0 132 L0 0 Z"
+      /></clipPath
+      ><clipPath clipPathUnits="userSpaceOnUse" id="clipPath17"
       ><path d="M0 0 L104 0 L104 352 L0 352 L0 0 Z"
       /></clipPath
     ></defs
@@ -224,20 +227,21 @@
     ><text x="77" xml:space="preserve" y="9" clip-path="url(#clipPath14)" stroke="none"
       >JudgeItem</text
     ></g
-    ><g font-size="11" stroke-linecap="butt" transform="translate(210,111)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke-linejoin="round" stroke="black" stroke-opacity="1"
-    ><line y2="88" fill="none" x1="50" clip-path="url(#clipPath15)" x2="50" y1="74"
-      /><polygon points=" 50 50 44 62 50 74 56 62" clip-path="url(#clipPath15)" stroke="none"
-      /><polygon fill="none" points=" 50 50 44 62 50 74 56 62" clip-path="url(#clipPath15)"
+    ><g font-size="11" stroke-linecap="butt" transform="translate(241,40)" stroke-dashoffset="1" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke-linejoin="round" stroke-dasharray="5" stroke="black" stroke-opacity="1"
+    ><line y2="50" fill="none" x1="50" clip-path="url(#clipPath15)" x2="149" y1="50"
+      /><line y2="159" fill="none" x1="149" clip-path="url(#clipPath15)" x2="149" y1="50"
+      /><line stroke-dashoffset="0" clip-path="url(#clipPath15)" fill="none" x1="149" x2="155" y1="159" y2="147" stroke-dasharray="none"
+      /><line stroke-dashoffset="0" clip-path="url(#clipPath15)" fill="none" x1="149" x2="143" y1="159" y2="147" stroke-dasharray="none"
     /></g
-    ><g font-size="11" stroke-linecap="butt" transform="translate(170,111)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke-linejoin="round" stroke="black" stroke-opacity="1"
-    ><line y2="298" fill="none" x1="50" clip-path="url(#clipPath16)" x2="50" y1="74"
-      /><polygon points=" 50 50 44 62 50 74 56 62" clip-path="url(#clipPath16)" stroke="none"
-      /><polygon fill="none" points=" 50 50 44 62 50 74 56 62" clip-path="url(#clipPath16)"
+    ><g font-size="11" stroke-linecap="butt" transform="translate(50,111)" stroke-dashoffset="1" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke-linejoin="round" stroke-dasharray="5" stroke="black" stroke-opacity="1"
+    ><line y2="78" fill="none" x1="50" clip-path="url(#clipPath16)" x2="50" y1="50"
+      /><line stroke-dashoffset="0" clip-path="url(#clipPath16)" fill="none" x1="50" x2="56" y1="78" y2="66" stroke-dasharray="none"
+      /><line stroke-dashoffset="0" clip-path="url(#clipPath16)" fill="none" x1="50" x2="44" y1="78" y2="66" stroke-dasharray="none"
     /></g
-    ><g font-size="11" stroke-linecap="butt" transform="translate(150,321)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke-linejoin="round" stroke="black" stroke-opacity="1"
-    ><line y2="50" fill="none" x1="50" clip-path="url(#clipPath15)" x2="50" y1="64"
-      /><polygon points=" 50 88 56 76 50 64 44 76" clip-path="url(#clipPath15)" stroke="none"
-      /><polygon fill="none" points=" 50 88 56 76 50 64 44 76" clip-path="url(#clipPath15)"
+    ><g font-size="11" stroke-linecap="butt" transform="translate(170,111)" stroke-dashoffset="1" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke-linejoin="round" stroke-dasharray="5" stroke="black" stroke-opacity="1"
+    ><line y2="298" fill="none" x1="50" clip-path="url(#clipPath17)" x2="50" y1="50"
+      /><line stroke-dashoffset="0" clip-path="url(#clipPath17)" fill="none" x1="50" x2="56" y1="298" y2="286" stroke-dasharray="none"
+      /><line stroke-dashoffset="0" clip-path="url(#clipPath17)" fill="none" x1="50" x2="44" y1="298" y2="286" stroke-dasharray="none"
     /></g
     ></g
 ></svg
