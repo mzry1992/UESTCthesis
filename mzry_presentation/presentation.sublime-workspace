@@ -8,10 +8,10 @@
 	"buffers":
 	[
 		{
-			"file": "contents/titlepage.tex",
+			"file": "presentation.tex",
 			"settings":
 			{
-				"buffer_size": 178,
+				"buffer_size": 4931,
 				"line_ending": "Unix"
 			}
 		}
@@ -65,20 +65,19 @@
 	},
 	"file_history":
 	[
-		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/introduction.tex",
-		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/analytics.tex",
-		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/designsummary.tex",
-		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/design.tex",
-		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/uestcthesis.cls",
-		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/contents/titlepage.tex",
-		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/test.tex",
-		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/end.tex",
-		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/testcontent.tex",
 		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/contents/appendix.tex",
+		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/testcontent.tex",
 		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/sitemap.tex",
 		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/dependence.tex",
 		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/thesis.tex",
+		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/contents/titlepage.tex",
 		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/contents/reference.bib",
+		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/analytics.tex",
+		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/test.tex",
+		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/uestcthesis.cls",
+		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/design.tex",
+		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/introduction.tex",
+		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/end.tex",
 		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/code/spj.cc",
 		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/code/listPage.jsp",
 		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/code/flandre.py",
@@ -88,6 +87,7 @@
 		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/code/UserControllerWatcher.py",
 		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/code/globalFetchGlobalData.py",
 		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/code/globalInit.py",
+		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/chapters/designsummary.tex",
 		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/code/controller.userController.py",
 		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/code/global.py",
 		"/Users/mzry1992/Documents/project/bachelorThesis/mzry/code/controller",
@@ -127,7 +127,7 @@
 	],
 	"find":
 	{
-		"height": 35.0
+		"height": 25.0
 	},
 	"find_in_files":
 	{
@@ -141,8 +141,6 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"titlepage",
-			"title",
 			"我们",
 			"htbp",
 			"我们",
@@ -176,27 +174,27 @@
 			[
 				{
 					"buffer": 0,
-					"file": "contents/titlepage.tex",
+					"file": "presentation.tex",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 178,
+						"buffer_size": 4931,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								178,
-								178
+								620,
+								620
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/LaTeXing/support/LaTeX.tmLanguage"
+							"syntax": "Packages/LaTeXing/support/LaTeX Beamer.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 251.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -240,10 +238,10 @@
 	{
 		"height": 0.0
 	},
-	"project": "mzry.sublime-project",
+	"project": "presentation.sublime-project",
 	"replace":
 	{
-		"height": 64.0
+		"height": 46.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -274,7 +272,7 @@
 	{
 	},
 	"show_minimap": true,
-	"show_open_files": false,
+	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
 	"side_bar_width": 234.0,
